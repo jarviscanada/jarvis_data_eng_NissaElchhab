@@ -27,7 +27,6 @@ if [ $# -ne 5 ]; then
   exit 1
 fi
 
-
 # lscpu fields
 lscpu_info=$(lscpu) # lscpu is part of util-linux package; ftp://ftp.kernel.org/pub/linux/utils/util-linux/
 cpu_number_key="^CPU\(s\):"
