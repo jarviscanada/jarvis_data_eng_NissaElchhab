@@ -11,22 +11,30 @@
 # TODO include local hardware refresh timer, or possibly, detect hardware changes (hash change?)
 # TODO include expiration time
 
-# global constants
+# global declarations
 debug=1
-# ./scripts/host_info.sh psql_host psql_port db_name psql_user psql_password
+validate_args () {
+  if [ $# -ne 5 ]; then
+    echo "Validation: wrong number of arguments"
+    exit 1
+  fi
+}
+
+# definitions
+validate_args "$1" "$2" "$3" "$4" "$5"
+validation_status=$?
+if [ $validation_status -ne  0 ]; then
+  echo "Error: validation failed."
+  echo "Usage: host_info.sh psql_host psql_port db_name psql_user psql_password"
+  exit 1
+fi
+
 psql_host=$1
 psql_port=$2
 db_name=$3
 psql_user=$4
 psql_password=$5
 psql_table_name='hosts_info'
-
-if [ $# -ne 5 ]; then
-  echo "Error: wrong number of arguments"
-  echo "Usage: host_info.sh psql_host psql_port db_name psql_user psql_password"
-  exit 1
-fi
-
 # lscpu fields
 lscpu_info=$(lscpu) # lscpu is part of util-linux package; ftp://ftp.kernel.org/pub/linux/utils/util-linux/
 cpu_number_key="^CPU\(s\):"
@@ -34,6 +42,7 @@ cpu_architecture_key="^Architecture:"
 cpu_model_key="^Model\ name:"
 cpu_mhz_key="^CPU MHz:"
 L2_cache_key="^L2\ cache:"
+
 lscpu_value () {
   echo "$lscpu_info" | egrep "$1" | awk --field-separator ":" '{print $2}' | xargs
 }

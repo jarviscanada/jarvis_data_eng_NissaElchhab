@@ -37,7 +37,7 @@ psql_password=$5
 psql_table_name='hosts_usage'
 vmstat_in_mb=$(echo "$(vmstat -t --unit M)" | tail -1)
 
-host_id=$(hostid)                     #host id from `hosts` table
+host_id=$(hostid)               #host id from `hosts` table "(SELECT id FROM host_info WHERE hostname='$hostname')";
 memory_free=$(echo "$vmstat_in_mb" | awk --field-separator " " '{print $4}' | xargs)
 cpu_idle=$(echo "$vmstat_in_mb" | awk --field-separator " " '{print $15}' | xargs)                   #in percentage
 cpu_kernel=$(echo "$vmstat_in_mb" | awk --field-separator " " '{print $14}' | xargs)                  #in percentage
