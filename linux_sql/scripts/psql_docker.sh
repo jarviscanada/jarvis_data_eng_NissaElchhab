@@ -1,5 +1,6 @@
 #! /bin/sh
 # This script creates a postgresql docker container, and provides facilities to start and stop it
+# after the creation of the container, it also creates the host_info and host_usage tables
 # TODO add more checks for different artifacts for docker and postgresql's docker, such as volume
 # TODO add a remove and/or cleanup option for previously existing containers
 # TODO add a volume check and options such as backup/remove/rename to ensure postgres volume data is safe
@@ -53,6 +54,7 @@ try_running() {
     exit $?
   else
     echo "$out" | head -3
+    echo "(Output truncated to 3 lines. See the logs for more details)"
     echo "Ok: $3"
   fi
 }
@@ -62,7 +64,7 @@ validate_args "$@" # TODO check and replace argument logic "$1" "$2" "$3" with a
 cmd=$1
 postgres_user=$2
 postgres_password="$3"
-postgres_db=$postgres_user # postgres docker default in case not specified, as per docs
+postgres_db='host_agent' # postgres docker default in case not specified, as per docs
 export PGPASSWORD="$postgres_password" # TODO POSSIBLE SECURITY ISSUE; export to make psql on admins' workstation easier
 container_name='jrvs-psql'
 image_name='postgres:9.6-alpine'
@@ -71,7 +73,8 @@ pgdata_local='pgdata'
 port_container='5432'
 port_local=$port_container
 #local_ipv4_addr=$("127.0.0.1") # TODO in case of deploy of a remote docker host
-ddl_file_path='../sql/ddl.sql'
+working_dir=$(dirname "$0")
+ddl_file_path="$working_dir/../sql/ddl.sql"
 
 try_running 'Checking if docker service is available...' \
 'sudo systemctl status docker || systemctl systemctl start docker' \
@@ -102,18 +105,12 @@ case $cmd in
 	"Volume NOT created. Please check logs with: docker volume ls -a"
 
 	docker run --name $container_name -e POSTGRES_USER=$postgres_user -e POSTGRES_PASSWORD="$postgres_password" \
-	-e POSTGRES_DB="postgres_db" -d -v "$pgdata_local":"$pgdata_container" -p $port_local:$port_container $image_name
+	-e POSTGRES_DB="$postgres_db" -d -v "$pgdata_local":"$pgdata_container" -p $port_local:$port_container $image_name
 
-	psql_url="postgresql://$postgres_user:$postgres_password@localhost:$port_local/$postgres_db"
-	echo "<DEBUG>"
-	echo "$psql_url"
-	echo "</DEBUG>"
-	# TODO uncomment the following when ddl.sql ready
-  # try_running "Creating tables..." \
-  #  "psql $psql_url -c -f $ddl_file_path" \
-  #  "Tables created successfully. Exiting" \
-  #  "Failed to create tables. Exiting"
-
+    sleep 5s
+    echo "Waiting for the container to start..."
+	psql_url="postgresql://$postgres_user:$postgres_password@127.0.0.1:$port_local/$postgres_db"
+    psql $psql_url -a -f "$ddl_file_path"
     exit $?
 	;;
 
