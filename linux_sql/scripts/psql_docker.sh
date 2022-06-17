@@ -110,12 +110,7 @@ case $cmd in
     sleep 5s
     echo "Waiting for the container to start..."
 	psql_url="postgresql://$postgres_user:$postgres_password@127.0.0.1:$port_local/$postgres_db"
-	# psql $psql_url -a -f "$ddl_file_path" #TODO REMOVEME
-    try_running "Creating tables..." \
-    "psql $psql_url -a -f \"$ddl_file_path\"" \
-    "Tables created successfully. Exiting" \
-    "Failed to create tables. Exiting"
-
+    psql $psql_url -a -f "$ddl_file_path"
     exit $?
 	;;
 

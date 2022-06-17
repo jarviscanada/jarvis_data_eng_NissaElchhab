@@ -53,9 +53,10 @@ total_mem=$(echo "$(free --kilo)" | egrep "^Mem:" | awk  --field-separator " " '
 timestamp=$(TZ="UTC0" date '+%F %T')  #Current time in UTC time zone TODO read from vmstat instead
 
 # build SQL command
-sql_cmd="INSERT INTO $psql_table_name" # TODO verify if table name should be quoted instead
-sql_cmd="$sql_cmd (hostname, cpu_number, cpu_architecture, cpu_model, cpu_mhz, L2_cache, total_mem, timestamp)"
-sql_cmd="$sql_cmd VALUES ($hostname, $cpu_number, $cpu_architecture, $cpu_model, $cpu_mhz, $L2_cache, $total_mem, $timestamp);"
+sql_cmd="INSERT INTO $psql_table_name \
+ (hostname, cpu_number, cpu_architecture, cpu_model, cpu_mhz, L2_cache, total_mem, timestamp) \
+ VALUES ('$hostname', $cpu_number, '$cpu_architecture', '$cpu_model', $cpu_mhz, $L2_cache, $total_mem, '$timestamp');"
+
 psql_invoke="psql postgresql://$psql_user:$psql_password@$psql_host:$psql_port/$db_name -c \"$sql_cmd\" "
 
 if [ $debug -eq 1 ]; then
@@ -65,7 +66,8 @@ if [ $debug -eq 1 ]; then
   echo
 fi
 
-psql postgresql://"$psql_user":"$psql_password"@"$psql_host":$psql_port/"$db_name" -c \"$sql_cmd\"  #> /dev/null 2>&1
+#psql postgresql://"$psql_user":"$psql_password"@"$psql_host":$psql_port/"$db_name" -c \"$sql_cmd\"  #> /dev/null 2>&1
+eval "$psql_invoke"
 if [ $? -ne 0 ]; then
   echo "Error: problem updating table \"$psql_table_name\" on database \"$db_name\" on host $psql_host:$psql_port"
   echo "Error: \"$psql_invoke\" returned a non-zero exit code $? "

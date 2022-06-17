@@ -39,8 +39,8 @@ timestamp=$(echo "$vmstat_in_mb" | awk --field-separator " " '{print  $18 " " $1
 
 if [ -z "$HOST_AGENT_HOST_ID" ]; then
   hostname=$(hostname -f)
-  sql_cmd="SELECT id FROM host_info WHERE hostname=$hostname"
-  HOST_AGENT_HOST_ID=$(psql postgresql://$psql_user:$psql_password@$psql_host:$psql_port/$db_name -c \"$sql_cmd\")
+  HOST_AGENT_HOST_ID=$(psql postgresql://$psql_user:$psql_password@$psql_host:$psql_port/$db_name \
+  -c "SELECT id FROM host_info WHERE hostname='$hostname'" | head -3 | tail -1)
   if [ -z "$HOST_AGENT_HOST_ID" ]; then
     echo "Error: Cannot get host_id from $db_name. Exiting"
     exit 1
@@ -53,9 +53,9 @@ host_id=$HOST_AGENT_HOST_ID
 echo "Info: host_id is $host_id"
 
 # build SQL command
-sql_cmd="INSERT INTO $psql_table_name" # TODO verify if table name should be quoted instead
+sql_cmd="INSERT INTO $psql_table_name"
 sql_cmd="$sql_cmd (host_id, memory_free, cpu_idle, cpu_kernel, disk_io, disk_available, timestamp)"
-sql_cmd="$sql_cmd VALUES ($host_id, $memory_free, $cpu_idle, $cpu_kernel, $disk_io, $disk_available, $timestamp);"
+sql_cmd="$sql_cmd VALUES ($host_id, $memory_free, $cpu_idle, $cpu_kernel, $disk_io, $disk_available, '$timestamp');"
 psql_invoke="psql postgresql://$psql_user:$psql_password@$psql_host:$psql_port/$db_name -c \"$sql_cmd\" "
 
 
@@ -67,7 +67,8 @@ if [ $debug -eq 1 ]; then
 fi
 
 
-psql postgresql://"$psql_user":"$psql_password"@"$psql_host":$psql_port/"$db_name" -c \"$sql_cmd\"  #> /dev/null 2>&1
+#psql postgresql://"$psql_user":"$psql_password"@"$psql_host":$psql_port/"$db_name" -c \"$sql_cmd\"  #> /dev/null 2>&1
+eval "$psql_invoke"
 if [ $? -ne 0 ]; then
   echo "Error: problem updating table \"$psql_table_name\" on database \"$db_name\" on host $psql_host:$psql_port"
   echo "Error: \"$psql_invoke\" returned a non-zero exit code $? "
