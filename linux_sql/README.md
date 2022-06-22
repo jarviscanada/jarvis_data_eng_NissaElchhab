@@ -3,7 +3,7 @@
 # Introduction
 The Jarvis Linux Cluster Administration team (LCA) manages a cluster of Linux nodes at the Company (Jarvis Consulting).
 The LCA needs to collect data about the Linux nodes it's using, for multiple purposes, including documenting its assets
-as automatically as possible, nodes enumeration and monitoring, and in order to generate reports for future resource
+as automatically as possible, node enumeration and monitoring, and in order to generate reports for future resource
 planning and provisioning.
 
 ## Overview and Business Needs
@@ -19,9 +19,9 @@ everywhere and use the platform's available tools.
 
 The deployment itself, for now, is going to be handled by the LCA team.
 
-## Prerequsites and Environement Survey:
-The current Linux cluster is comprised of 10 nodes of Centos Linux 7, a derivative of RedHat Enterprise Linux(tm) and
-a POSIX-compliant Linux distribution, or distro, which comes by default with GNU and Systemd userspace.
+## Prerequisites and Environment Survey:
+The current Linux cluster comprises 10 nodes of Centos Linux 7, a derivative of RedHat Enterprise Linux(tm) and
+a POSIX-compliant Linux distribution (or distro) which comes by default with GNU and Systemd userspace.
 
 ### Available Free and Open Source Software tools:
 The userspace includes:
@@ -41,59 +41,44 @@ The userspace includes:
     - an FOSS dockerized and verified copy of postgresql pulled from dockerhub (official docker images repository)
 
 ### Networking
-These nodes are internally connected through a switch. The host agents do not need, for now, any specific configuration
-The nodes are assigned ipv4 addresses and a hostname through internal DHCP and DNS servers.
-The host agents will need to communicate (write-only) with the LCMA DB using its hostname or ip address.
+These nodes are internally connected through a L2 network switch. The host agents do not need, for now, any specific
+configuration. The nodes are assigned ipv4 addresses and a hostname through internal DHCP and DNS servers.
+The host agents will need to communicate (write-only) with the LCMA DB using its hostname or ipv4 address.
 That information will need to be updated manually on the scripts before they're redeployed manually.
 
 ### Preliminary Security Considerations:
-(Security should be considered early in the design. Due to the MVP nature of this project, at this stage, these security
-considerations are important to keep in mind but are to be implemented for a future release.)
-
-Due to the need for hardware access, the tools running on the nodes will need privilegied access in read-only mode.
-This still could pose a potential security risk. Some readily available solutions can minimize the risks:
-- Using the correct Default Unix Discrete Access Control, by creating a dedicated user/group (TBD)
-- If available, using optionally SELinux more advanced access control and auditing features
-- GPG/PGP signing the scripts, and/or using sha256 checksums, as the host agent scripts are not supposed to be
-  updated frequently
-- Using ssh to encrypt and tunnel communications between the nodes and the main database, to prevent or limit network
-  recon and/or Machine In The Middle attack (MITM)
-- Configuring local hosts auditing and alerting in case of a detected modification, as well as the database
-  invalidation
-
-The MVP will contain hardcoded configuration information. Extra-caution needs to be taken when deploying it on a git
-repo, including if it's an internal one. If pushed to a public git hosting such as Github, the hardcoded information
-*must be removed* and replaced by environment variables.
-
-For the time being, the MVP will be deployed on a few local machines and servers within the IT network.
-
-The MVP is configured with debug mode to display extra information about its execution. This can be turned off or removed
-later, and has no impact on its execution.
+Security should be considered early in the design. Due to the MVP nature of this project, at this stage, the security
+considerations are important to keep in mind but are to be implemented for a future release.
 
 # Quick Start
-- Start a psql instance using `psql_docker.sh`
-- Create tables using `ddl.sql`
-- Insert hardware specs data into the DB using `host_info.sh`
-- Insert hardware usage data into the DB using `host_usage.sh`
-- Crontab setup
+- Start a container instance using `psql_docker.sh`
+- The previous step will create the tables, but these can also be created manually using `ddl.sql`
+- Insert initial hardware specs data into the database using `host_info.sh`
+- configure crontab to execute periodically `host_usage.sh`. 
+- The previous step will insert hardware usage data into the database, but the script can also be used manually.
 
-# Implemenation
-The project will be implemented using the Agile methodology to be able to test frequently if each feature fits the MVP
+# Implementation
+The project will be implemented using the Agile methodology, to be able to test frequently if each feature fits the MVP
 requirements and the LCA team business needs.
 
 The Linux Cluster Monitoring Agent (LCMA) and The Linux Monitoring Database (LCMDB) can be developed independently
 of each other.
 
 The LCMA is sub-divided into 2 scripts:
+
 - `host_info.sh` gathers the local host hardware information, during its first startup after deployment, or on
 demand. The info will be inserted into the LCMDB using psql, a local cli/shell database client.
+
 - `host_usage.sh` is triggered each minute by `cron` (or similar), gather current host statistic in a reasonable time
 (miliseconds) and insert that data into the LCMDB, again using `psql` command.
+
 - Note: `host_info.sh` must be the first script to start, in order to initialize relevant host information in the DB,
 that `host_usage.sh` will make use of.
+
 - In order to create the cronjob, at this stage, a manual edit of contabs can be performed by a sysadmin.
 An improvement on this design could be that host_info.sh updates the crontab itself on lauch, and host_usage.sh will
 error if it's started before `host_info.sh` and/or a crontab entry was not present.
+
 - The scripts can be started on boot by adding the relevant startup scripts in `/etc/rc.d` or on the systemd entries.
 
 The LCMDB has 2 components:
@@ -103,7 +88,7 @@ The LCMDB has 2 components:
 - start that container (by default named "jrvs-psql")
 - create a new DB (by default "host_agent")
 - and finally configure its schema, before starting to listen on the postgrsql port (by default `5432`).
-- Note: A sysadmin needs to ensure the postgresql DB port is mapped to an ingress open port on the LCA
+- __Note__: A sysadmin needs to ensure the postgresql DB port is mapped to an ingress open port on the LCA
 workstation's firewall, or manually open it. That step can be later automated.
 - The `psql_docker.sh` can also start and stop the LCMDB container. This option is convenient to hide the docker usage
 details for the LCA admins and make the script usage more intuitive and portable if another container technology is
@@ -135,10 +120,11 @@ Here are the shell scripts included in the project, as well as some gotchas and 
 
 ### `psql_docker.sh`
 Usage: `psql_docker.sh start|stop|create [db_username][db_password]`
+
 Example: `./scripts/host_info.sh "localhost" 5432 "host_agent" "lca_username" "lca_password"`
 
-This script must be run on the admin workstation. It creates, sets up and starts a new Postgresql docker container
-(and pulls it in case there is no container image).
+This script must be run on the admin workstation. 
+It creates, sets up and starts a new Postgresql docker container (and pulls it in case there is no container image).
 Its defaults are:
   - Container name: "jrvs-psql"
   - Image name: "postgres:9.6-alpine"
@@ -155,6 +141,7 @@ container or image.
 
 ### `host_info.sh`
 Usage: `host_info.sh psql_host psql_port psql_db_name psql_username psql_password`
+
 Example: `./scripts/host_info.sh "remote_host" 5432 "host_agent" "lca_username" "lca_mypassword`
 
 This script is intended to be run first, manually, or automatically, right after the deployment.
@@ -164,6 +151,7 @@ this script.
 
 ### `host_usage.sh`
 Usage: `host_usage.sh psql_host psql_port db_name psql_user psql_password`
+
 Example: `./scripts/host_info.sh "localhost" 5432 "host_agent" "lca_username" "lca_password"`
 
 This script is intended to be run or triggered periodically by `crontab`
@@ -177,7 +165,8 @@ Please issue these commands on the cli (or consult with your sysadmin for furthe
 postgres password > /tmp/host_usage.log
 ```
 
-crontab content can be verified with `crontab -l`
+__Note__: crontab content can be verified with `crontab -l`. Please refer to `man crontab` for further options.
+
 For troubleshooting, run your host_info.sh script command using the full path (with no contab syntax, i.e the 5 `*`)
 If you don't get any error message, it means that the command (with full path and arguments) is running correctly, and 
 ready to be added as it is to the cron table using `crontab -e` and the above syntax above (`\` should not be
@@ -187,7 +176,7 @@ entered, as it shows a line continuation. Instead, the whole line should be ente
 The project includes some SQL queries requested by the LCA team. 
 These are included in the `sql/queries.sql` folder.
 
-#### Query to rank nodes by a basic performance ranking (Number of CPU, memroy sizes)
+#### Query to rank nodes by a basic performance ranking (Number of CPU, memory sizes)
 This query groups hosts by CPU number, then sorts them by their memory size in descending order.
 This can give the LCA team a simple but good overview about 2 of the most important hardware capabilities of the nodes.
 
@@ -208,13 +197,11 @@ The "host_agent" database schema is defined in the `ddl/sql` file.
 It is used by `psql_docker.sh` after it sets up and start the postgresql docker container to create the tables used by
 the 2 other scripts running on the host nodes.
 
-- `host_info`
+`host_info`
 |id|hostname|cpu_number|cpu_architecture|cpu_model|cpu_mhz|L2_cache|total_mem|timestamp|
 
-
-- `host_usage
+`host_usage`
 |host_id|memory_free|cpu_idle|cpu_kernel|disk_io|disk_available|timestamp|
-
 
 # Test
 The tests consist of running the agents and the database in a known environment and comparing the accuracy and timeness
@@ -224,7 +211,6 @@ software states created by stress testing the VMs and/or modifying virtual hardw
 
 # Deployment
 The tool deployment has 2 sides:
-
 1. The Database and the RDBMS can be deployed manually by the LCA sysadmins on their local machines.
    (note: multiple simultaneous deployments of the database can exist without conflicting, considering that collected
 data is immutable)
@@ -234,10 +220,43 @@ agent repository updates, pulling the latest one and running it locally. A simpl
 so far 10 machines, would be to deploy and run the agents manually on each node.
 
 # Improvements
+
+### Deployment
 - Deploy using Ansible/Puppet/Chef
 - Update bash script to make it POSIX compliant for portability (in case FreeBSD nodes were deployed later)
-- Create a dedicated user/group and enforce Mandatory and Discretionary Access Control (MAC and DAC) using SELinux to
-ensure the agents privileged software and hardware access is as restricted as possible.
+
+### Fault-tolerance
 - Update the agents to record locally the collected data in case of network failure
+
+### Security considerations
+Due to the need for hardware access, the tools running on the nodes will need privileged access in read-only mode.
+This could still pose potential security risks. Some readily available solutions can minimize these risks:
+
+- Create a dedicated user/group and enforce Mandatory and Discretionary Access Control (MAC and DAC) using SELinux to
+  ensure the agents privileged software and hardware access is as restricted as possible.
+- If available, using optionally SELinux more advanced access control and auditing features
+- GPG/PGP signing the scripts, and/or using sha256 checksums, as the host agent scripts are not supposed to be
+  updated frequently
+- Using ssh to encrypt and tunnel communications between the nodes and the main database, to prevent or limit network
+  recon and/or Machine In The Middle attack (MITM)
+- Configuring local hosts auditing and alerting in case of a detected modification, as well as the database
+  invalidation
 - Add to the database schema a key/token for the agent authentication and integrity checking to prevent tampering
+
+The MVP will contain hardcoded configuration information. Extra-caution needs to be taken when deploying it on a git
+repo, including if it's an internal one. If pushed to a public git hosting such as Github, the hardcoded information
+**must be removed** and replaced by environment variables.
+
+For the time being, the MVP will be deployed on a few local machines and servers within the IT network.
+
+The MVP is configured with debug mode to display extra information about its execution. This can be turned off or removed
+later, and has no impact on its execution.
+
+
+- Create a dedicated user/group and enforce Mandatory and Discretionary Access Control (MAC and DAC) using SELinux to
+  ensure the agents privileged software and hardware access is as restricted as possible.
+
+Nissa N. Elchhab
+
+
 
