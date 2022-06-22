@@ -133,18 +133,65 @@ configured through a debug variable or parameter.
 
 
 ## Scripts
-Shell script description and usage (use markdown code block for script usage)
+Shell scripts included in the project:
+
 - psql_docker.sh
+    Usage: `psql_docker.sh start|stop|create [db_username][db_password]`
+- ./scripts/host_info.sh "localhost" 5432 "host_agent" "postgres" "mypassword"
+    Thuis script must be run on the A admin workstation. It creates, sets up and starts a new Postgresql docker
+    container (and pulls it in case there is no container image).
+    Its defaults are:
+        - Container name: jrvs-psql
+        - Image name: postgres:9.6-alpine
+        - Default port mapping (local:container): 5432:5432
+        - Default host: 127.0.0.1
+        - Default database name: "host_agent"
+        - Default local (persistent) volume: "pgdata"
+
+    The script issues warning if trying to start or stop a container in the wrong state.
+    Please note that stopping a container with `./psql_docker.sh stop` will not remove it.
+    You will need to issue manually a `docker container rm`
+    After the removal of the container, the data will persist in "pgdata", as it doesn't get removed automatically.
+    This ensures that the data can be backed up or recovered independently from the postgresql docker container or image. 
+
 - host_info.sh
+  - Usage: host_info.sh psql_host psql_port db_name psql_user psql_password"
+  - ./scripts/host_info.sh "localhost" 5432 "host_agent" "postgres" "mypassword"
+    - This script is intented to be run first, manually, or automatically, right after the deployement.
+    - This script gathers local machine hardware info and populate the database table of the same name
+    - running this script before running `host_usage.sh` is critical as host_usage.sh depends on the host id created for
+    - this script.
+    
 - host_usage.sh
+  - Usage: host_usage.sh psql_host psql_port db_name psql_user psql_password"
+  - ./scripts/host_info.sh "localhost" 5432 "host_agent" "postgres" "mypassword"
+  - 
+  - 
 - crontab
+  - The cron table must be edited to trigger running `host_usage.sh` periodically
+  - The period is fixed to 1 minute
+  - Please issue these commands on the cli (or consult with your sysadmin for further information)
+  
+  - `* * * * * bash /home/centos/dev/jrvs/bootcamp/linux_sql/host_agent/scripts/host_usage.sh \
+  localhost 5432 host_agent postgres password > /tmp/host_usage.log`
+  
+  - crontab content can be verified with `crontab -l`
+  - For troubleshooting, run your host_info.sh script command using the full path (with no contab syntax, i.e the 5 `*`)
+  - If you don't get any error message, it means that the command (with full path and arguments) is running correctly,
+  - and ready to be added as it is to the cron table using `crontab -e` and the above syntax above (`\` should not be
+  - entered, as it shows a line continuation. Instead, the whole line should be entered with no backslash)
+  - 
+    - 
 - queries.sql (describe what business problem you are trying to resolve)
+  - 
 
 ## Database Modeling
 TBD
 Describe the schema of each table using markdown table syntax (do not put any sql code)
 - `host_info`
-- `host_usage`
+- `host_usage
+- 
+
 
 # Test
 The tests consist of running the agents and the database in a known environement and comparing the accuracy and timeness
