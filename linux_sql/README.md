@@ -119,6 +119,7 @@ configured through a debug variable or parameter.
 Here are the shell scripts included in the project, as well as some gotchas and examples:
 
 ### `psql_docker.sh`
+====================
 Usage: `psql_docker.sh start|stop|create [db_username][db_password]`
 
 Example: `./scripts/host_info.sh "localhost" 5432 "host_agent" "lca_username" "lca_password"`
@@ -140,6 +141,7 @@ removed automatically.   This ensures that the data can be backed up or recovere
 container or image.
 
 ### `host_info.sh`
+==================
 Usage: `host_info.sh psql_host psql_port psql_db_name psql_username psql_password`
 
 Example: `./scripts/host_info.sh "remote_host" 5432 "host_agent" "lca_username" "lca_mypassword`
@@ -150,6 +152,7 @@ running this script before running `host_usage.sh` is critical as the latter dep
 this script.
 
 ### `host_usage.sh`
+===================
 Usage: `host_usage.sh psql_host psql_port db_name psql_user psql_password`
 
 Example: `./scripts/host_info.sh "localhost" 5432 "host_agent" "lca_username" "lca_password"`
@@ -157,6 +160,7 @@ Example: `./scripts/host_info.sh "localhost" 5432 "host_agent" "lca_username" "l
 This script is intended to be run or triggered periodically by `crontab`
 
 ### `crontab`
+=============
 The cron table must be edited to trigger running `host_usage.sh` periodically. The period is defined to be 1 minute.
 Please issue these commands on the cli (or consult with your sysadmin for further information)
 
@@ -173,6 +177,7 @@ ready to be added as it is to the cron table using `crontab -e` and the above sy
 entered, as it shows a line continuation. Instead, the whole line should be entered with no backslash)
 
 ### `queries.sql`
+=================
 The project includes some SQL queries requested by the LCA team. 
 These are included in the `sql/queries.sql` folder.
 
