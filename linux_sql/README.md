@@ -1,13 +1,12 @@
 # Linux Cluster Monitoring Agent
 
 # Introduction
-
-## Overview
 The Jarvis Linux Cluster Administration team (LCA) manages a cluster of Linux nodes at the Company (Jarvis Consulting).
 The LCA needs to collect data about the Linux nodes it's using, for multiple purposes, including documenting its assets 
 as automatically as possible, nodes enumeration and monitoring, and in order to generate reports for future resource
 planning and provisioning.
 
+## ## Overview and Business Needs
 This project aims to provide the LCA team a set of tools (the Linux Cluster Monitoring Agent) to gather the hardware 
 specifications of each node of the Linux cluster that the team manages, to gather each node's resource usage in as close
 to real-time as reasonable for this purpose, and to collect all that data in a centralized RDBMS that can be easily 
@@ -36,8 +35,10 @@ monitoring tools in the distro.
    - iptables for network stack management/query
    - default Centos 7 repositories include:
      - git for Source Versionning System
-     - Postgresql for RDBMS
+     - Postgresql as the RDBMS for the LCMDB
+     - psql, a cli/shell postgresql client, to write data on the remote DB instance.
      - Docker as a container technology.
+     - an FOSS dockerized and verified copy of postgresql pulled from dockerhub (official docker images repository)
 
 ### Networking
 These nodes are internally connected through a switch. The host agents do not need, for now, any specific configuration
@@ -79,10 +80,57 @@ TBD
 - Crontab setup
 
 # Implemenation
-TBD
+The project will be implemented using the Agile methodology to be able to test frequently if each feature fits the MVP
+requirements and the LCA team business needs.
+
+The Linux Cluster Monitoring Agent (LCMA) and The Linux Monitoring Database (LCMDB) can be developed independently 
+of each other.
+
+The LCMA is sub-divided into 2 scripts:
+    - host_info.sh will gather the local host hardware information, during its first startup after deployment, or on
+demand. The info will be inserted into the LCMDB using psql, a local cli/shell database client.
+    - host_usage.sh will be triggered each minute by cron, gather current host statistic in a reasonable time 
+(miliseconds) and insert that data into the LCMDB, again using psql.
+    - Note: host_info.sh must be the first script to start, in order to initialize relevant host information in the DB,
+that host_usage.sh will make use of.
+    - In order to create the cronjob, at this stage, a manual edit of contabs can be performed by a sysadmin.
+An improvement on this design could be that host_info.sh updates the crontab itself on lauch, and host_usage.sh will
+error if it's started before host_info.sh and/or a crontab entry was not present.
+    - The scripts can be started on boot by adding the relevant startup scripts in /etc/rc.d or on the systemd entries.
+
+The LCMDB has 2 components:
+    - A psql_docker.sh script that serves to:
+        - download and/or setup a postgresql docker container
+        - create a postgresql local volume (to persist the DB independently of the docker container)
+        - start that container (by default named jrvs-psql)
+        - create a new DB (by default host_agent) 
+        - and finally configure its schema, before starting to listen on the postgrsql port (by default 5432).
+        - Note: A sysadmin needs to ensure the postgresql DB port is mapped to an ingress open port on the LCA
+    workstation's firewall, or manually open it. That step can be later automated.
+    - The psql_docker.sh can also start and stop the LCMDB container. This option is convenient to hide the docker usage
+details for the LCA admins and make the script usage more intuitive and portable if another container technology is
+chosen instead of docker at a later time.
+
+The implementation will use bash scripting, and try to stick to the most POSIX-ly correct way for a Unix shell script,
+for future portability. In case a "bashism" is needed, that choice must be documented.
+For the same purpose, the script will use the most common Linux monitoring commands or utilities, such as vmstat, for
+becuase these have well documented behaviour and have known equivalent in other operating systems.
+The choice of the OS monitoring tools will have to go through the Tech Lead/Senior Developer for validation.
+
+The scripts will make sure to validate:
+    - The environement compatibility, including environement variables that the scripts will need
+    - The availability and/or correctness of the Network time sService (NTP) as these script use timestamps
+    - The availability of the tools that are used by the scripts, including docker, psql, sed, awk, vmstat, cron etc...
+    - The input arguments (first checking their syntax and number, then later, their types and other constraints)
+    - The availability of netwoking by ping'ing the remote host/port, and preferably the remote postgresql instance
+    - The success or failure of each step by checking the last exist code for non-zero/failure/error codes
+
+Each operation that the script is doing should be displayed on stderr for troubleshooting. However, that option can be
+configured through a debug variable or parameter.
 
 ## Architecture
-TBD
+Draw a cluster diagram with three Linux hosts, a DB, and agents (use draw.io website). Image must be saved to the `assets` directory.
+
 
 ## Scripts
 Shell script description and usage (use markdown code block for script usage)
