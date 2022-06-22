@@ -172,8 +172,10 @@ This script is intended to be run or triggered periodically by `crontab`
 The cron table must be edited to trigger running `host_usage.sh` periodically. The period is defined to be 1 minute.
 Please issue these commands on the cli (or consult with your sysadmin for further information)
 
-`* * * * * bash /home/centos/dev/jrvs/bootcamp/linux_sql/host_agent/scripts/host_usage.sh  localhost 5432 host_agent \ 
-postgres password > /tmp/host_usage.log`
+```
+* * * * * bash /home/centos/dev/jrvs/bootcamp/linux_sql/host_agent/scripts/host_usage.sh  localhost 5432 host_agent \ 
+postgres password > /tmp/host_usage.log
+```
 
 crontab content can be verified with `crontab -l`
 For troubleshooting, run your host_info.sh script command using the full path (with no contab syntax, i.e the 5 `*`)
@@ -181,39 +183,61 @@ If you don't get any error message, it means that the command (with full path an
 ready to be added as it is to the cron table using `crontab -e` and the above syntax above (`\` should not be
 entered, as it shows a line continuation. Instead, the whole line should be entered with no backslash)
 
-- queries.sql (describe what business problem you are trying to resolve)
-  - 
+### `queries.sql`
+The project includes some SQL queries requested by the LCA team. 
+These are included in the `sql/queries.sql` folder.
+
+#### Query to rank nodes by a basic performance ranking (Number of CPU, memroy sizes)
+This query groups hosts by CPU number, then sorts them by their memory size in descending order.
+This can give the LCA team a simple but good overview about 2 of the most important hardware capabilities of the nodes.
+
+#### Query to find out the average used memory in percentage for each host
+This query computes the average used memory, in percentage, for each host. 
+To approximate the value, the calculation is made over a 5 minutes interval for each host. Ideally, 5 data points will
+be available to measure the 5 minutes average. Used memory is computed from (total memory - free memory).
+
+#### Query to detect host failure
+The assumption is that an active host is collecting one usage datapoint per minute. This means that if a host is down or
+experiencing difficulties, the number of queries will get closer to 0. In order to take into account other random issues
+including network problems and intermittent issues, 2 data points or less, per 5 minutes has been deemed representative
+of this metric. 
+Thus we can assume that a server is failed when it inserts strictly less than three data points within 5-min interval.
 
 ## Database Modeling
-TBD
-Describe the schema of each table using markdown table syntax (do not put any sql code)
+The "host_agent" database schema is defined in the `ddl/sql` file.
+It is used by `psql_docker.sh` after it sets up and start the postgresql docker container to create the tables used by
+the 2 other scripts running on the host nodes.
+
 - `host_info`
+|id|hostname|cpu_number|cpu_architecture|cpu_model|cpu_mhz|L2_cache|total_mem|timestamp|
+
+
 - `host_usage
--
+|host_id|memory_free|cpu_idle|cpu_kernel|disk_io|disk_available|timestamp|
 
 
 # Test
-The tests consist of running the agents and the database in a known environement and comparing the accuracy and timeness
+The tests consist of running the agents and the database in a known environment and comparing the accuracy and timeness
 of the recorded data with the information locally validated. At this stage, a visual comparison is enough.
-Future tests can involved simulating different network conditions using Centos 7 test VMs, and different hardware and
+Future tests can involve simulating different network conditions using Centos 7 test VMs, and different hardware and
 software states created by stress testing the VMs and/or modifying virtual hardware on the fly.
 
 # Deployment
 The tool deployment has 2 sides:
-1. The Database and the RDBMS can be deployed manually by the LCA sysadmins on their local machines.
-   (note: multiple simulataneous deplyments of the databse can exist without conflicting, considering that collected
-2. data is immutable)
 
-3. The node's local agents can be deployed using either Kickstart unattended install for Centos 7, and/or by adding the
-4. agent source code to the team hosted Github repository and manually modifying `crontab` to periodically check for the
-5. agent repository updates, pulling the latest one and running it locally. A simpler option, considering that there are
-6. so far 10 machines, would be to deploy and run the agents manually on earch node.
+1. The Database and the RDBMS can be deployed manually by the LCA sysadmins on their local machines.
+   (note: multiple simultaneous deployments of the database can exist without conflicting, considering that collected
+data is immutable)
+2. The node's local agents can be deployed using either Kickstart unattended install for Centos 7, and/or by adding the
+agent source code to the team hosted Github repository and manually modifying `crontab` to periodically check for the
+agent repository updates, pulling the latest one and running it locally. A simpler option, considering that there are
+so far 10 machines, would be to deploy and run the agents manually on each node.
 
 # Improvements
 - Deploy using Ansible/Puppet/Chef
-- update bash script to make it POSIX compliant for portability (in case FreeBSD nodes were deployed later)
-- Create a dedicated user/group and enforce Mandatory and Discretianory Access Control (MAC and DAC) using SELinux to
-- ensure the agents privilegied software and hardware access is as restricted as possible.
+- Update bash script to make it POSIX compliant for portability (in case FreeBSD nodes were deployed later)
+- Create a dedicated user/group and enforce Mandatory and Discretionary Access Control (MAC and DAC) using SELinux to
+ensure the agents privileged software and hardware access is as restricted as possible.
 - Update the agents to record locally the collected data in case of network failure
-- Add to the databse schema a key/token for the agent authentication and integrity checking to prevent tampering
+- Add to the database schema a key/token for the agent authentication and integrity checking to prevent tampering
 
