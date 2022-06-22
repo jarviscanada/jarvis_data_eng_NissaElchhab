@@ -76,7 +76,7 @@ demand. The info will be inserted into the LCMDB using psql, a local cli/shell d
 that `host_usage.sh` will make use of.
 
 - In order to create the cronjob, at this stage, a manual edit of contabs can be performed by a sysadmin.
-An improvement on this design could be that host_info.sh updates the crontab itself on lauch, and host_usage.sh will
+An improvement on this design could be that `host_info.sh` updates the crontab itself on lauch, and host_usage.sh will
 error if it's started before `host_info.sh` and/or a crontab entry was not present.
 
 - The scripts can be started on boot by adding the relevant startup scripts in `/etc/rc.d` or on the systemd entries.
@@ -120,6 +120,7 @@ Here are the shell scripts included in the project, as well as some gotchas and 
 
 ### `psql_docker.sh`
 ====================
+
 Usage: `psql_docker.sh start|stop|create [db_username][db_password]`
 
 Example: `./scripts/host_info.sh "localhost" 5432 "host_agent" "lca_username" "lca_password"`
@@ -142,6 +143,7 @@ container or image.
 
 ### `host_info.sh`
 ==================
+
 Usage: `host_info.sh psql_host psql_port psql_db_name psql_username psql_password`
 
 Example: `./scripts/host_info.sh "remote_host" 5432 "host_agent" "lca_username" "lca_mypassword`
@@ -153,6 +155,7 @@ this script.
 
 ### `host_usage.sh`
 ===================
+
 Usage: `host_usage.sh psql_host psql_port db_name psql_user psql_password`
 
 Example: `./scripts/host_info.sh "localhost" 5432 "host_agent" "lca_username" "lca_password"`
@@ -161,6 +164,7 @@ This script is intended to be run or triggered periodically by `crontab`
 
 ### `crontab`
 =============
+
 The cron table must be edited to trigger running `host_usage.sh` periodically. The period is defined to be 1 minute.
 Please issue these commands on the cli (or consult with your sysadmin for further information)
 
@@ -178,6 +182,7 @@ entered, as it shows a line continuation. Instead, the whole line should be ente
 
 ### `queries.sql`
 =================
+
 The project includes some SQL queries requested by the LCA team. 
 These are included in the `sql/queries.sql` folder.
 
@@ -203,10 +208,18 @@ It is used by `psql_docker.sh` after it sets up and start the postgresql docker 
 the 2 other scripts running on the host nodes.
 
 `host_info`
-|id|hostname|cpu_number|cpu_architecture|cpu_model|cpu_mhz|L2_cache|total_mem|timestamp|
+
+| id          | hostname     | cpu_number | cpu_architecture | cpu_model | cpu_mhz | L2_cache | total_mem | timestamp |
+|-------------|--------------|------------|------------------|-----------|---------|----------|-----------|-----------|
+| SERIAL (PK) | VARCHAR(255) | INTEGER    | VARCHAR          | VARCHAR   | REAL    | INTEGER  | INTEGER   | TIMESTAMP |
+
 
 `host_usage`
-|host_id|memory_free|cpu_idle|cpu_kernel|disk_io|disk_available|timestamp|
+
+| host_id | memory_free | cpu_idle        | cpu_kernel      | disk_io  | disk_available | timestamp  |
+|---------|-------------|-----------------|-----------------|----------|----------------|------------|
+| FK (id) | INTEGER     | INTEGER/PERCENT | INTEGER/PERCENT | INTEGER  | INTEGER        | TIMESTAMP  |
+
 
 # Test
 The tests consist of running the agents and the database in a known environment and comparing the accuracy and timeness
@@ -258,10 +271,11 @@ The MVP is configured with debug mode to display extra information about its exe
 later, and has no impact on its execution.
 
 
-- Create a dedicated user/group and enforce Mandatory and Discretionary Access Control (MAC and DAC) using SELinux to
-  ensure the agents privileged software and hardware access is as restricted as possible.
+
+
 
 Nissa N. Elchhab
+Linux_SQL Development Team
 
 
 
