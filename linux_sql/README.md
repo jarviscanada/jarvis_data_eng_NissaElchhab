@@ -129,7 +129,7 @@ Each operation that the script is doing should be displayed on stderr for troubl
 configured through a debug variable or parameter.
 
 ## Architecture
-Draw a cluster diagram with three Linux hosts, a DB, and agents (use draw.io website). Image must be saved to the `assets` directory.
+(A schematic diagram included)
 
 
 ## Scripts
