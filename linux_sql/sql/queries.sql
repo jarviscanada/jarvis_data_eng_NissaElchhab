@@ -26,4 +26,16 @@ FROM (
                 OVER( PARTITION BY round_ts_5min(u.timestamp) ) as avg_used_memory_percent
          FROM host_usage u INNER JOIN host_info i ON u.host_id = i.id) AS time_interval_table
 GROUP BY host_id, hostname, timestamp_5min_intervals, avg_used_memory_percent
-ORDER BY host_id , timestamp_5min_intervals ;
+ORDER BY host_id , timestamp_5min_intervals;
+
+-- The cron job is supposed to insert a new entry to the host_usage table every minute when the server is healthy.
+-- We can assume that a server is failed when it inserts less than three data points within 5-min interval.
+-- Please write a query to detect host failures.
+
+SELECT data_points.host_id host_id, data_points.ts ts, data_points.num_data_points num_data_points
+FROM (
+         SELECT u.host_id host_id, round_ts_5min(u.timestamp) ts,
+                count(*) over(partition by u.host_id, round_ts_5min(u.timestamp)) AS num_data_points
+         FROM host_usage u) AS data_points
+GROUP BY host_id, ts, num_data_points
+ORDER BY host_id, ts, num_data_points;
