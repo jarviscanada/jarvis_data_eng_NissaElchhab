@@ -1,4 +1,4 @@
-# Core Java Apps
+# Core Java Apps: Practice 
 This project consists of three Java applications below
 
 1. [Java Grep App](./grep)
