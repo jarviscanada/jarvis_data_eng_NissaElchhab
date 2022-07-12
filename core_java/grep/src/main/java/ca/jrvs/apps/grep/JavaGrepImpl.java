@@ -6,6 +6,26 @@ import java.util.List;
 
 public class JavaGrepImpl implements JavaGrep {
 
+  /* TODO: basic assumed constants for validation
+  OS dependent.env. variables. Assuming JavaGrep is Linux only for now
+  MAX_REGEX_LENGTH
+  MAX_PATH_LENGTH
+  MIN_PATH_LENGTH
+  */
+  public static final int MAX_REGEX_LENGTH;
+  public static final int MAX_PATH_LENGTH;
+  public static final int MIN_PATH_LENGTH;
+
+  static {
+    MAX_REGEX_LENGTH = Byte.MAX_VALUE * 2;
+    MAX_PATH_LENGTH = Short.MAX_VALUE * 2;
+    MIN_PATH_LENGTH = 1;
+  }
+
+  private String regex;
+  private String rootPath;
+  private String outFile;
+
   /**
    * Top level search workflow
    *
@@ -13,6 +33,15 @@ public class JavaGrepImpl implements JavaGrep {
    */
   @Override
   public void process() throws IOException {
+
+/*
+matchedLines = []
+for file in listFilesRecursively(rootDir)
+  for line in readLines(file)
+      if containsPattern(line)
+        matchedLines.add(line)
+writeToFile(matchedLines)
+ */
 
   }
 
@@ -66,31 +95,46 @@ public class JavaGrepImpl implements JavaGrep {
 
   @Override
   public String getRootPath() {
-    return null;
+    return rootPath; // TODO QUESTION: favour this.x or not , inheritance question
   }
 
   @Override
   public void setRootPath(String rootPath) {
-
+    if (rootPath.length() >= MIN_PATH_LENGTH && rootPath.length() < MAX_PATH_LENGTH) {
+      this.rootPath = rootPath;
+    } else {
+      // log
+      throw new IllegalArgumentException("`rootPath` is out of length boundaries");
+    }
   }
 
   @Override
   public String getRegex() {
-    return null;
+    return regex;
   }
 
   @Override
   public void setRegex(String regex) {
-
+    if (regex.length() >= 0 && regex.length() < MAX_REGEX_LENGTH) {
+      this.regex = regex;
+    } else {
+      // log
+      throw new IllegalArgumentException("`regex` is out of length boundaries");
+    }
   }
 
   @Override
   public String getOutfile() {
-    return null;
+    return outFile;
   }
 
   @Override
   public void setOutFile(String outFile) {
-
+    if (outFile.length() >= MIN_PATH_LENGTH && outFile.length() < MAX_PATH_LENGTH) {
+      this.outFile = outFile;
+    } else {
+      // log
+      throw new IllegalArgumentException("`outFile` is out of length boundaries");
+    }
   }
 }
