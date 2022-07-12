@@ -2,6 +2,9 @@ package ca.jrvs.apps.grep;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 
 public class JavaGrepImpl implements JavaGrep {
@@ -53,7 +56,9 @@ writeToFile(matchedLines)
    */
   @Override
   public List<File> listFiles(String rootDir) {
-    return null;
+    List<File> files = Collections.emptyList();
+    Path rootPath = Paths.get(rootDir);
+    return files;
   }
 
   /**
@@ -100,11 +105,14 @@ writeToFile(matchedLines)
 
   @Override
   public void setRootPath(String rootPath) {
-    if (rootPath.length() >= MIN_PATH_LENGTH && rootPath.length() < MAX_PATH_LENGTH) {
-      this.rootPath = rootPath;
-    } else {
+    if (rootPath == null) {
       // log
-      throw new IllegalArgumentException("`rootPath` is out of length boundaries");
+      throw new IllegalArgumentException("`rootPath` can't be null");
+    } else if (rootPath.length() < MIN_PATH_LENGTH && rootPath.length() >= MAX_PATH_LENGTH) {
+      // log
+      throw new IllegalArgumentException("`rootPath` can't be  out of length boundaries");
+    } else {
+      this.rootPath = rootPath;
     }
   }
 
@@ -115,11 +123,14 @@ writeToFile(matchedLines)
 
   @Override
   public void setRegex(String regex) {
-    if (regex.length() >= 0 && regex.length() < MAX_REGEX_LENGTH) {
-      this.regex = regex;
-    } else {
+    if (regex == null) {
       // log
-      throw new IllegalArgumentException("`regex` is out of length boundaries");
+      throw new IllegalArgumentException("`regex` can't be null");
+    } else if (regex.length() >= MAX_REGEX_LENGTH) {
+      // log
+      throw new IllegalArgumentException("`regex` can't be out of length boundaries");
+    } else {
+      this.regex = regex;
     }
   }
 
@@ -130,11 +141,14 @@ writeToFile(matchedLines)
 
   @Override
   public void setOutFile(String outFile) {
-    if (outFile.length() >= MIN_PATH_LENGTH && outFile.length() < MAX_PATH_LENGTH) {
-      this.outFile = outFile;
-    } else {
+    if (outFile == null) {
       // log
-      throw new IllegalArgumentException("`outFile` is out of length boundaries");
+      throw new IllegalArgumentException("`outFile` can't be null");
+    } else if (outFile.length() < MIN_PATH_LENGTH && outFile.length() >= MAX_PATH_LENGTH) {
+      // log
+      throw new IllegalArgumentException("`outFile` can't be out of length boundaries");
+    } else {
+      this.outFile = outFile;
     }
   }
 }
