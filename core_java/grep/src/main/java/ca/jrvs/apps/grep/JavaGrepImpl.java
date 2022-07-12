@@ -2,10 +2,13 @@ package ca.jrvs.apps.grep;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JavaGrepImpl implements JavaGrep {
 
@@ -55,9 +58,12 @@ writeToFile(matchedLines)
    * @return files under the rootDir
    */
   @Override
-  public List<File> listFiles(String rootDir) {
+  public List<File> listFiles(String rootDir) throws IOException {
     List<File> files = Collections.emptyList();
-    Path rootPath = Paths.get(rootDir);
+    files = Files.walk(Paths.get(rootDir), Integer.MAX_VALUE, FileVisitOption.FOLLOW_LINKS)
+        .filter(path -> !Files.isRegularFile(path))
+        .map(Path::toFile)
+        .collect(Collectors.toList());
     return files;
   }
 

@@ -15,8 +15,10 @@ public interface JavaGrep {
    * Traverse a given directory and returns all files
    * @param rootDir input directory
    * @return files under the rootDir
+   * @throws IOException on file system errors
+   *
    */
-  List<File> listFiles(String rootDir);
+  List<File> listFiles(String rootDir) throws IOException;
 
   /**
    * Read a file and returns all the lines
