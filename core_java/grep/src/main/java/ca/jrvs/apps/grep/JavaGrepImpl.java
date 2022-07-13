@@ -49,17 +49,15 @@ public class JavaGrepImpl implements JavaGrep {
   @Override
   public void process() throws IOException {
     this.pattern = Pattern.compile(this.regex);
-
-
-/*
-matchedLines = []
-for file in listFilesRecursively(rootDir)
-  for line in readLines(file)
-      if containsPattern(line)
-        matchedLines.add(line)
-writeToFile(matchedLines)
- */
-
+    List<String> matchesLines = Collections.emptyList();
+    for (File file : listFiles(rootPath)) {
+      for (String line : readLines(file)) {
+        if (containsPattern(line)) {
+          matchesLines.add(line);
+        }
+      }
+    }
+    writeToFile(matchesLines);
   }
 
   /**
@@ -128,14 +126,14 @@ writeToFile(matchedLines)
    */
   @Override
   public void writeToFile(List<String> lines) throws IOException {
-   try ( BufferedWriter br = new BufferedWriter(new FileWriter(this.outFile))) {
-     for (String line : lines) {
-       br.write(line);
-       br.newLine();
-     }
-   } catch (IOException e) {
-     throw new IOException("IO error while writing to file: `" + this.outFile + "`");
-   }
+    try (BufferedWriter br = new BufferedWriter(new FileWriter(this.outFile))) {
+      for (String line : lines) {
+        br.write(line);
+        br.newLine();
+      }
+    } catch (IOException e) {
+      throw new IOException("IO error while writing to file: `" + this.outFile + "`");
+    }
   }
 
   @Override
