@@ -1,6 +1,9 @@
 package ca.jrvs.apps.grep;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
@@ -82,7 +85,17 @@ writeToFile(matchedLines)
       throw new IllegalArgumentException("`inputFile` not a `File`");
     }
     List<String> lines = Collections.emptyList();
-
+    try (BufferedReader br = new BufferedReader(new FileReader(inputFile))) {
+      for (String line = br.readLine(); line != null; line = br.readLine()) {
+        lines.add(line);
+      }
+    } catch (FileNotFoundException e) {
+      // log
+      throw new RuntimeException(e); // TODO
+    } catch (IOException e) {
+      // log
+      throw new RuntimeException(e); // TODO
+    }
     return lines;
   }
 
