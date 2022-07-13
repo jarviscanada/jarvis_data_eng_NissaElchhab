@@ -61,7 +61,7 @@ writeToFile(matchedLines)
   public List<File> listFiles(String rootDir) throws IOException {
     List<File> files = Collections.emptyList();
     files = Files.walk(Paths.get(rootDir), Integer.MAX_VALUE, FileVisitOption.FOLLOW_LINKS)
-        .filter(path -> !Files.isRegularFile(path))
+        .filter(Files::isRegularFile)
         .map(Path::toFile)
         .collect(Collectors.toList());
     return files;
