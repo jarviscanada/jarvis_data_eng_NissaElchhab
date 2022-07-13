@@ -78,7 +78,12 @@ writeToFile(matchedLines)
    */
   @Override
   public List<String> readLines(File inputFile) throws IllegalArgumentException {
-    return null;
+    if (!(inputFile instanceof File)) {
+      throw new IllegalArgumentException("`inputFile` not a `File`");
+    }
+    List<String> lines = Collections.emptyList();
+
+    return lines;
   }
 
   /**
