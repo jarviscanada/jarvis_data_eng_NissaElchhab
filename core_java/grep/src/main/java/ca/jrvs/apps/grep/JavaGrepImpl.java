@@ -1,9 +1,11 @@
 package ca.jrvs.apps.grep;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
@@ -11,6 +13,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 public class JavaGrepImpl implements JavaGrep {
@@ -32,6 +37,7 @@ public class JavaGrepImpl implements JavaGrep {
   }
 
   private String regex;
+  private Pattern pattern;
   private String rootPath;
   private String outFile;
 
@@ -42,6 +48,8 @@ public class JavaGrepImpl implements JavaGrep {
    */
   @Override
   public void process() throws IOException {
+    this.pattern = Pattern.compile(this.regex);
+
 
 /*
 matchedLines = []
@@ -91,10 +99,10 @@ writeToFile(matchedLines)
       }
     } catch (FileNotFoundException e) {
       // log
-      throw new RuntimeException(e); // TODO
+      throw new RuntimeException("File Not Found"); // TODO
     } catch (IOException e) {
       // log
-      throw new RuntimeException(e); // TODO
+      throw new RuntimeException("IO Exception"); // TODO
     }
     return lines;
   }
@@ -107,7 +115,8 @@ writeToFile(matchedLines)
    */
   @Override
   public boolean containsPattern(String line) {
-    return false;
+    Matcher matcher = pattern.matcher(line);
+    return matcher.matches();
   }
 
   /**
@@ -119,7 +128,14 @@ writeToFile(matchedLines)
    */
   @Override
   public void writeToFile(List<String> lines) throws IOException {
-
+   try ( BufferedWriter br = new BufferedWriter(new FileWriter(this.outFile))) {
+     for (String line : lines) {
+       br.write(line);
+       br.newLine();
+     }
+   } catch (IOException e) {
+     throw new IOException("IO error while writing to file: `" + this.outFile + "`");
+   }
   }
 
   @Override
