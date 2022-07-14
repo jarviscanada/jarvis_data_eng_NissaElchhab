@@ -1,41 +1,51 @@
 package ca.jrvs.apps.grep;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public interface Getopts {
-    /**
-     * validates argument list
-     * @param argv
-     * @return true if all arguments are valid
-     */
-    boolean isValid(String[] argv);
+class Getopts {
 
-    /**
-     *
-     * @param argv
-     * @param argvList
-     */
-    void parsePositionalArgs(String[] argv,  List<String> argvList);
+  private String[] positionalArgs;
+  private static int nextArgPos;
+  public final String NO_NEXT_ARGUMENT = "";
+  // TODO change to enums, Maps, and namedArguments as well
+  // TODO validation constraints should be associated with the parameter/enum class
 
-    /**
-     * parses then assigns names to a Map<K,V>
-     * @param argv command line arguments' list
-     * @param argvMap Map<argumentName, argumentValue>
-     */
-    void parsePositionalArgs(String[] argv,  Map<String, String> argvMap);
+  public Getopts(int expectedArgc, String[] positionalArgs) {
+    if (positionalArgs.length != expectedArgc) {
+      throw new IllegalArgumentException(
+          "Argument count:" + positionalArgs.length + " is invalid");
+    }
+    if (!isValid(positionalArgs)) {
+      throw new IllegalArgumentException("Argument(s) invalid");
+    }
+    this.positionalArgs = positionalArgs;
+    nextArgPos = 0;
+  }
 
-    /**
-     * returns next arg from the positional args
-     * @return
-     */
-    String getArg();
+  /**
+   * validates argument list
+   *
+   * @param argv argument vector
+   * @return true if arguments are  valid
+   */
+  boolean isValid(String[] argv) {
+    return true;
+  }
 
-    /**
-     * returns argument value associated with argument's key
-     * @param argKey
-     * @return
-     */
-    String getArg(String argKey);
-
+  /**
+   * returns next arg from the positional args
+   *
+   * @return
+   */
+  String getArg() {
+    if (nextArgPos < this.positionalArgs.length) {
+      ++nextArgPos;
+      return this.positionalArgs[nextArgPos];
+    } else {
+      // log
+      return NO_NEXT_ARGUMENT;
+    }
+  }
 }
