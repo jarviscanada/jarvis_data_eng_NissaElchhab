@@ -1,11 +1,14 @@
 package ca.jrvs.apps.grep;
 
+import com.sun.org.slf4j.internal.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 class Getopts {
 
+  private static final Logger logger = LoggerFactory.getLogger(Getopts.class);
   private String[] positionalArgs;
   private static int nextArgPos;
   public final String NO_NEXT_ARGUMENT = "";
@@ -44,7 +47,7 @@ class Getopts {
       ++nextArgPos;
       return this.positionalArgs[nextArgPos];
     } else {
-      // log
+      logger.warn("Reached the end of positional arguments: No Next argument.");
       return NO_NEXT_ARGUMENT;
     }
   }

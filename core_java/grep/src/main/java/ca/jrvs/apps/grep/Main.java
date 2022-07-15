@@ -6,6 +6,7 @@ import java.io.IOException;
 
 class Main {
 
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
   public static void main(String[] args) {
     final Getopts getopts = new Getopts(3, args);
@@ -17,7 +18,7 @@ class Main {
     try {
       javaGrep.process();
     } catch (Exception e) {
-     // log
+      logger.error("JavaGrep exception: " + e.getMessage());
     }
   }
 

@@ -1,5 +1,7 @@
 package ca.jrvs.apps.grep;
 
+import com.sun.org.slf4j.internal.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,6 +21,8 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 public class JavaGrepImpl implements JavaGrep {
+
+  private static final Logger logger = LoggerFactory.getLogger(JavaGrepImpl.class);
 
   /* TODO: basic assumed constants for validation
   OS dependent.env. variables. Assuming JavaGrep is Linux only for now
@@ -96,10 +100,10 @@ public class JavaGrepImpl implements JavaGrep {
         lines.add(line);
       }
     } catch (FileNotFoundException e) {
-      // log
+      logger.error("File `" + inputFile.toString() + "` Not found");
       throw new RuntimeException("File Not Found"); // TODO
     } catch (IOException e) {
-      // log
+      logger.error("Undefined IO Exception");
       throw new RuntimeException("IO Exception"); // TODO
     }
     return lines;
@@ -144,11 +148,10 @@ public class JavaGrepImpl implements JavaGrep {
   @Override
   public void setRootPath(String rootPath) {
     if (rootPath == null) {
-      // log
       throw new IllegalArgumentException("`rootPath` can't be null");
     } else if (rootPath.length() < MIN_PATH_LENGTH && rootPath.length() >= MAX_PATH_LENGTH) {
-      // log
-      throw new IllegalArgumentException("`rootPath` can't be  out of length boundaries");
+      logger.error("rootPath `" + rootPath.toString() + "` is out of length boundaries`");
+      throw new IllegalArgumentException("`rootPath` can't be out of length boundaries");
     } else {
       this.rootPath = rootPath;
     }
@@ -162,10 +165,9 @@ public class JavaGrepImpl implements JavaGrep {
   @Override
   public void setRegex(String regex) {
     if (regex == null) {
-      // log
       throw new IllegalArgumentException("`regex` can't be null");
     } else if (regex.length() >= MAX_REGEX_LENGTH) {
-      // log
+      logger.error("regex argument: `" + regex.toString() + "`");
       throw new IllegalArgumentException("`regex` can't be out of length boundaries");
     } else {
       this.regex = regex;
@@ -180,10 +182,9 @@ public class JavaGrepImpl implements JavaGrep {
   @Override
   public void setOutFile(String outFile) {
     if (outFile == null) {
-      // log
       throw new IllegalArgumentException("`outFile` can't be null");
     } else if (outFile.length() < MIN_PATH_LENGTH && outFile.length() >= MAX_PATH_LENGTH) {
-      // log
+      logger.error("outFile  argument: `" + outFile.toString() + "`");
       throw new IllegalArgumentException("`outFile` can't be out of length boundaries");
     } else {
       this.outFile = outFile;
