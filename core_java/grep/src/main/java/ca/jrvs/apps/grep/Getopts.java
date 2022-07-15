@@ -44,8 +44,8 @@ class Getopts {
    */
   String getArg() {
     if (nextArgPos < this.positionalArgs.length) {
-      ++nextArgPos;
-      return this.positionalArgs[nextArgPos];
+      logger.debug("nextArgPos: " + nextArgPos + " ||| positionalArgs: " + positionalArgs[nextArgPos].toString());
+      return this.positionalArgs[nextArgPos++];
     } else {
       logger.warn("Reached the end of positional arguments: No Next argument.");
       return NO_NEXT_ARGUMENT;
