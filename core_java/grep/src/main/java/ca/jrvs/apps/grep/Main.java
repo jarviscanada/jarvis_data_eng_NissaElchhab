@@ -10,7 +10,7 @@ class Main {
 
   public static void main(String[] args) {
     final Getopts getopts = new Getopts(3, args);
-    final JavaGrepImpl javaGrep = new JavaGrepImpl();
+    final JavaGrep javaGrep = new JavaGrepImpl();
     javaGrep.setRegex(getopts.getArg());
     javaGrep.setRootPath(getopts.getArg());
     javaGrep.setOutFile(getopts.getArg());
@@ -18,7 +18,8 @@ class Main {
     try {
       javaGrep.process();
     } catch (Exception e) {
-      logger.error("JavaGrep exception: " + e.getMessage());
+      logger.error("JavaGrep exception: " + " toString: " + javaGrep.toString());
+      e.printStackTrace();
     }
   }
 
