@@ -19,7 +19,6 @@ class Main {
       javaGrep.process();
     } catch (Exception e) {
       logger.error("JavaGrep exception: " + " toString: " + javaGrep.toString());
-      e.printStackTrace();
     }
   }
 
