@@ -99,4 +99,48 @@ public interface LambdaStreamExc {
    */
   Consumer<String> getLambdaPrinter(String prefix, String suffix);
 
+  /**
+   * Print each message with a given printer
+   * Please use `getLambdaPrinter` method
+   *
+   * e.g.
+   * String[] messages = {"a","b", "c"};
+   * lse.printMessages(messages, lse.getLambdaPrinter("msg:", "!") );
+   *
+   * sout:
+   * msg:a!
+   * msg:b!
+   * msg:c!
+   *
+   * @param messages
+   * @param printer
+   */
+  void printMessages(String[] messages, Consumer<String> printer);
+
+  /**
+   * Print all odd number from a intStream.
+   * Please use `createIntStream` and `getLambdaPrinter` methods
+   *
+   * e.g.
+   * lse.printOdd(lse.createIntStream(0, 5), lse.getLambdaPrinter("odd number:", "!"));
+   *
+   * sout:
+   * odd number:1!
+   * odd number:3!
+   * odd number:5!
+   *
+   * @param intStream
+   * @param printer
+   */
+  void printOdd(IntStream intStream, Consumer<String> printer);
+
+  /**
+   * Square each number from the input.
+   * Please write two solutions and compare difference
+   *   - using flatMap
+   *
+   * @param ints
+   * @return
+   */
+  Stream<Integer> squareIntStream(int[] ints);
 }
