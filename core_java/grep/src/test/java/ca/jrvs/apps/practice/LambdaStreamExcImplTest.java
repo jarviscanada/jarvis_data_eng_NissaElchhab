@@ -3,6 +3,10 @@ package ca.jrvs.apps.practice;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.IntStream.Builder;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +15,11 @@ import org.junit.jupiter.api.Assertions.*;
 
 class LambdaStreamExcImplTest {
 
-  String[] strings = {"s0", "ss1", "sss2", "str3", "STR4", "Str5", "6"};
+  String[] strings = {"s0", "sa1", "sss2", "astr3", "STR4", "Str5A", "6"};
+  int[] ints = {0, 10, 21, 33, 45, 57};
+  Stream<Object> anObjectStream = Stream.of(strings);
   LambdaStreamExc lse = new LambdaStreamExcImpl();
+
   @BeforeEach
   void setUp() {
 
@@ -23,54 +30,65 @@ class LambdaStreamExcImplTest {
   }
 
   @Test
-  void createStrStream() {
+  void testCreateStrStream() {
+    Stream<String> ss = lse.createStrStream(strings);
+    assertArrayEquals(strings, ss.toArray());
   }
 
   @Test
-  void toUpperCase() {
+  void testToUpperCase() {
+    Stream<String> ss = lse.createStrStream(strings);
+    assertArrayEquals(Arrays.stream(strings).map(String::toUpperCase).toArray(),
+        lse.toUpperCase(strings).toArray());
   }
 
   @Test
-  void filter() {
-  }
+  void testFilter() {
+    String[] stringsMinusA = (String[]) Arrays.stream(strings).filter(s -> !s.contains("a"))
+        .toArray();
+    assertArrayEquals(stringsMinusA, lse.filter(lse.createStrStream(strings), "a").toArray());
 
-  @Test
-  void createIntStream() {
-  }
-
-  @Test
-  void toList() {
-  }
-
-  @Test
-  void testToList() {
   }
 
   @Test
   void testCreateIntStream() {
+    Builder intStreamBuilder = IntStream.builder();
+    intStreamBuilder.accept(ints[0]);
+    intStreamBuilder.accept(ints[1]);
+    intStreamBuilder.accept(ints[2]);
+    intStreamBuilder.accept(ints[3]);
+    intStreamBuilder.accept(ints[4]);
+    intStreamBuilder.accept(ints[5]);
+    assertArrayEquals(lse.createIntStream(ints).toArray(), intStreamBuilder.build().toArray());
   }
 
   @Test
-  void squareRootIntStream() {
+  void testToList() {
+    List<Object> anObjectList = anObjectStream.collect(Collectors.toList());
+    assertIterableEquals(anObjectList, lse.toList(anObjectStream));
   }
 
   @Test
-  void getOdd() {
+  void testSquareRootIntStream() {
   }
 
   @Test
-  void getLambdaPrinter() {
+  void testGetOdd() {
   }
 
   @Test
-  void printMessages() {
+  void testGetLambdaPrinter() {
   }
 
   @Test
-  void printOdd() {
+  void testPrintMessages() {
   }
 
   @Test
-  void squareIntStream() {
+  void testPrintOdd() {
+  }
+
+  @Test
+  void testSquareIntStream() {
   }
 }
