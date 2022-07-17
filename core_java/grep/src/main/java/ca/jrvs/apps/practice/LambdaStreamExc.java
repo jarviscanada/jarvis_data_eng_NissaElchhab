@@ -1,4 +1,4 @@
-package ca.jrvs.apps.grep;
+package ca.jrvs.apps.practice;
 
 import java.util.List;
 import java.util.function.Consumer;
