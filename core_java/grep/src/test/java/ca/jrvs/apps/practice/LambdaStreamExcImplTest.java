@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Assertions.*;
 class LambdaStreamExcImplTest {
 
   String[] strings = {"s0", "sa1", "sss2", "astr3", "STR4", "Str5A", "6"};
+  String[] stringsMinusA = {"s0", "sss2",  "STR4", "Str5A", "6"};
+
   int[] ints = {0, 10, 21, 33, 45, 57};
   int[] oddInts = {1, 5, 7, 13, 17, 19, 23, 29, 31, 37, 59};
   Stream<Object> anObjectStream = Stream.of(strings);
@@ -46,8 +48,6 @@ class LambdaStreamExcImplTest {
 
   @Test
   void testFilter() {
-    String[] stringsMinusA = (String[]) Arrays.stream(strings).filter(s -> !s.contains("a"))
-        .toArray();
     assertArrayEquals(stringsMinusA, lse.filter(lse.createStrStream(strings), "a").toArray());
 
   }
@@ -55,12 +55,11 @@ class LambdaStreamExcImplTest {
   @Test
   void testCreateIntStreamFromInts() {
     Builder intStreamBuilder = IntStream.builder();
-    intStreamBuilder.accept(ints[0]);
-    intStreamBuilder.accept(ints[1]);
-    intStreamBuilder.accept(ints[2]);
-    intStreamBuilder.accept(ints[3]);
-    intStreamBuilder.accept(ints[4]);
-    intStreamBuilder.accept(ints[5]);
+    int to = Math.abs(new Random().nextInt(254));
+    int from = new Random().nextInt(to);
+    for (int i = from; i <= to; ++i) {
+      intStreamBuilder.add(i);
+    }
     assertArrayEquals( intStreamBuilder.build().toArray(), lse.createIntStream(ints).toArray());
   }
 
@@ -73,7 +72,7 @@ class LambdaStreamExcImplTest {
   @Test
   void testCreateIntStreamFromInterval() {
     Builder intStreamBuilder = IntStream.builder();
-    int to = new Random().nextInt();
+    int to = Math.abs(new Random().nextInt(254));
     int from = new Random().nextInt(to);
     for (int i = from; i <= to; ++i) {
       intStreamBuilder.add(i);
@@ -84,7 +83,7 @@ class LambdaStreamExcImplTest {
   @Test
   void testSquareRootIntStream() {
     Builder intStreamBuilder = IntStream.builder();
-    int to = new Random().nextInt();
+    int to = Math.abs(new Random().nextInt(254));
     int from = new Random().nextInt(to);
     for (int i = from; i <= to; ++i) {
       intStreamBuilder.add(i);

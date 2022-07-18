@@ -7,7 +7,7 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class LambdaStreamExcImpl implements LambdaStreamExc{
+public class LambdaStreamExcImpl implements LambdaStreamExc {
 
   /**
    * Create a  string stream from array note: an arbitrary number of values will be stored in an
@@ -29,7 +29,7 @@ public class LambdaStreamExcImpl implements LambdaStreamExc{
    */
   @Override
   public Stream<String> toUpperCase(String... strings) {
-    return null;
+    return Arrays.stream(strings).map(String::toUpperCase);
   }
 
   /**
@@ -42,7 +42,7 @@ public class LambdaStreamExcImpl implements LambdaStreamExc{
    */
   @Override
   public Stream<String> filter(Stream<String> stringStream, String pattern) {
-    return null;
+    return stringStream.filter(s -> !s.contains(pattern));
   }
 
   /**
