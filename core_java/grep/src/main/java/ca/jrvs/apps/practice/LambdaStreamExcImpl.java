@@ -3,6 +3,7 @@ package ca.jrvs.apps.practice;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -53,7 +54,7 @@ public class LambdaStreamExcImpl implements LambdaStreamExc {
    */
   @Override
   public IntStream createIntStream(int[] arr) {
-    return null;
+    return Arrays.stream(arr);
   }
 
   /**
@@ -64,7 +65,7 @@ public class LambdaStreamExcImpl implements LambdaStreamExc {
    */
   @Override
   public <E> List<E> toList(Stream<E> stream) {
-    return null;
+    return stream.collect(Collectors.toList());
   }
 
   /**
@@ -75,7 +76,7 @@ public class LambdaStreamExcImpl implements LambdaStreamExc {
    */
   @Override
   public List<Integer> toList(IntStream intstream) {
-    return null;
+    return this.toList(intstream.boxed());
   }
 
   /**
@@ -87,7 +88,8 @@ public class LambdaStreamExcImpl implements LambdaStreamExc {
    */
   @Override
   public IntStream createIntStream(int start, int end) {
-    return null;
+
+    return IntStream.rangeClosed(start,end);
   }
 
   /**
@@ -98,7 +100,8 @@ public class LambdaStreamExcImpl implements LambdaStreamExc {
    */
   @Override
   public DoubleStream squareRootIntStream(IntStream intStream) {
-    return null;
+
+    return intStream.asDoubleStream().map(Math::sqrt);
   }
 
   /**
@@ -109,7 +112,7 @@ public class LambdaStreamExcImpl implements LambdaStreamExc {
    */
   @Override
   public IntStream getOdd(IntStream intStream) {
-    return null;
+    return intStream.filter(i->(i%2)!=0);
   }
 
   /**

@@ -22,6 +22,7 @@ class LambdaStreamExcImplTest {
   int[] ints = {0, 10, 21, 33, 45, 57};
   int[] oddInts = {1, 5, 7, 13, 17, 19, 23, 29, 31, 37, 59};
   Stream<Object> anObjectStream = Stream.of(strings);
+  Stream<Object> anotherObjectStream = Stream.of(strings);
   LambdaStreamExc lse = new LambdaStreamExcImpl();
 
   @BeforeEach
@@ -60,13 +61,14 @@ class LambdaStreamExcImplTest {
     for (int i = from; i <= to; ++i) {
       intStreamBuilder.add(i);
     }
-    assertArrayEquals( intStreamBuilder.build().toArray(), lse.createIntStream(ints).toArray());
+    int[] ints = intStreamBuilder.build().toArray();
+    assertArrayEquals( ints, lse.createIntStream(ints).toArray());
   }
 
   @Test
   void testToList() {
     List<Object> anObjectList = anObjectStream.collect(Collectors.toList());
-    assertIterableEquals(anObjectList, lse.toList(anObjectStream));
+    assertIterableEquals(anObjectList, lse.toList(anotherObjectStream));
   }
 
   @Test
@@ -77,7 +79,9 @@ class LambdaStreamExcImplTest {
     for (int i = from; i <= to; ++i) {
       intStreamBuilder.add(i);
     }
-    assertArrayEquals(intStreamBuilder.build().toArray(),lse.createIntStream(from, to).toArray() );
+    int[] ints = intStreamBuilder.build().toArray();
+
+    assertArrayEquals(ints,lse.createIntStream(from, to).toArray() );
   }
 
   @Test
