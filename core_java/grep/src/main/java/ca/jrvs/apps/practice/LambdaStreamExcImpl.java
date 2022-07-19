@@ -89,7 +89,7 @@ public class LambdaStreamExcImpl implements LambdaStreamExc {
   @Override
   public IntStream createIntStream(int start, int end) {
 
-    return IntStream.rangeClosed(start,end);
+    return IntStream.rangeClosed(start, end);
   }
 
   /**
@@ -112,7 +112,7 @@ public class LambdaStreamExcImpl implements LambdaStreamExc {
    */
   @Override
   public IntStream getOdd(IntStream intStream) {
-    return intStream.filter(i->(i%2)!=0);
+    return intStream.filter(i -> (i % 2) != 0);
   }
 
   /**
@@ -129,7 +129,7 @@ public class LambdaStreamExcImpl implements LambdaStreamExc {
    */
   @Override
   public Consumer<String> getLambdaPrinter(String prefix, String suffix) {
-    return null;
+    return s -> System.out.println(prefix + s + suffix);
   }
 
   /**
@@ -145,6 +145,7 @@ public class LambdaStreamExcImpl implements LambdaStreamExc {
    */
   @Override
   public void printMessages(String[] messages, Consumer<String> printer) {
+    Arrays.stream(messages).forEach(printer);
 
   }
 
@@ -161,6 +162,7 @@ public class LambdaStreamExcImpl implements LambdaStreamExc {
    */
   @Override
   public void printOdd(IntStream intStream, Consumer<String> printer) {
+    getOdd(intStream).mapToObj(Integer::toString).forEach(printer);
 
   }
 
@@ -173,6 +175,7 @@ public class LambdaStreamExcImpl implements LambdaStreamExc {
    */
   @Override
   public Stream<Integer> squareIntStream(int[] ints) {
-    return null;
+
+    return this.createIntStream(ints).flatMap(i -> IntStream.of(i*i)).boxed();
   }
 }
