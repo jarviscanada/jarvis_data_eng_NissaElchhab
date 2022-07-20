@@ -10,7 +10,7 @@ class Main {
 
   public static void main(String[] args) {
     final Getopts getopts = new Getopts(3, args);
-    final JavaGrep javaGrep = new JavaGrepImpl();
+    final JavaGrepStream javaGrep = new JavaGrepStreamImpl();
     javaGrep.setRegex(getopts.getArg());
     javaGrep.setRootPath(getopts.getArg());
     javaGrep.setOutFile(getopts.getArg());

@@ -2,6 +2,7 @@ package ca.jrvs.apps.grep;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -21,7 +22,7 @@ public interface JavaGrepStream {
    * @return files under the rootDir
    * @throws IOException on file system errors
    */
-  Stream<File> listFiles(Stream<String> rootDir) throws IOException;
+  Stream<Path> listFiles(String rootDir) throws IOException;
 
   /**
    * Read a file and returns all the lines
@@ -32,7 +33,7 @@ public interface JavaGrepStream {
    * @return lines
    * @throws IllegalArgumentException if an inputFile is not a File
    */
-  Stream<String> readLines(File inputFile) throws IllegalArgumentException;
+  Stream<String> readLines(Path inputFilePath) throws IllegalArgumentException, IOException;
 
   /**
    * check if a line contains the regex pattern (passed by user)
