@@ -1,7 +1,5 @@
 package ca.jrvs.apps.grep;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,12 +16,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JavaGrepImpl implements JavaGrep {
-
-  private static final Logger logger = LoggerFactory.getLogger(JavaGrepImpl.class);
 
   /* TODO: basic assumed constants for validation
   OS dependent.env. variables. Assuming JavaGrep is Linux only for now
@@ -34,6 +31,7 @@ public class JavaGrepImpl implements JavaGrep {
   public static final int MAX_REGEX_LENGTH;
   public static final int MAX_PATH_LENGTH;
   public static final int MIN_PATH_LENGTH;
+  private static final Logger logger = LoggerFactory.getLogger(JavaGrepImpl.class);
 
   static {
     MAX_REGEX_LENGTH = Byte.MAX_VALUE * 2;

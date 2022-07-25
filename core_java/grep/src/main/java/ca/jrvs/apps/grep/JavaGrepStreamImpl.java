@@ -80,7 +80,16 @@ public class JavaGrepStreamImpl implements JavaGrepStream {
    */
   @Override
   public Stream<Path> listFiles(String rootDir) throws IOException {
-    return Files.walk(Paths.get(rootDir), FileVisitOption.FOLLOW_LINKS);
+    Stream<Path> files;
+    try {
+      files = Files.walk(Paths.get(rootDir), FileVisitOption.FOLLOW_LINKS)
+          .filter(Files::isRegularFile);
+    } catch (IOException e) {
+      logger.error("IOException during root directory walk");
+      throw new RuntimeException("IOException during root directory walk", e);
+    }
+
+    return files;
 
   }
 

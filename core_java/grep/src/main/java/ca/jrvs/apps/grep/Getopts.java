@@ -2,16 +2,13 @@ package ca.jrvs.apps.grep;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 class Getopts {
 
   private static final Logger logger = LoggerFactory.getLogger(Getopts.class);
-  private String[] positionalArgs;
   private static int nextArgPos;
   public final String NO_NEXT_ARGUMENT = "";
+  private String[] positionalArgs;
   // TODO change to enums, Maps, and namedArguments as well
   // TODO validation constraints should be associated with the parameter/enum class
 
@@ -44,7 +41,8 @@ class Getopts {
    */
   String getArg() {
     if (nextArgPos < this.positionalArgs.length) {
-      logger.debug("nextArgPos: " + nextArgPos + " ||| positionalArgs: " + positionalArgs[nextArgPos].toString());
+      logger.debug("nextArgPos: " + nextArgPos + " ||| positionalArgs: "
+          + positionalArgs[nextArgPos].toString());
       return this.positionalArgs[nextArgPos++];
     } else {
       logger.warn("Reached the end of positional arguments: No Next argument.");

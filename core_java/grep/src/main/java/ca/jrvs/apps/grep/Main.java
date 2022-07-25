@@ -1,8 +1,8 @@
 package ca.jrvs.apps.grep;
 
+import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.IOException;
 
 class Main {
 
@@ -17,12 +17,10 @@ class Main {
 
     try {
       javaGrep.process();
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       logger.error("JavaGrep IOException: " + " toString: " + javaGrep.toString());
       logger.error(e.getMessage());
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       logger.error("JavaGrep Exception: " + " toString: " + javaGrep.toString());
       logger.error(e.getMessage());
     }
