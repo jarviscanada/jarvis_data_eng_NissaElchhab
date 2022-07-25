@@ -17,8 +17,14 @@ class Main {
 
     try {
       javaGrep.process();
-    } catch (Exception e) {
-      logger.error("JavaGrep exception: " + " toString: " + javaGrep.toString());
+    }
+    catch (IOException e) {
+      logger.error("JavaGrep IOException: " + " toString: " + javaGrep.toString());
+      logger.error(e.getMessage());
+    }
+    catch (Exception e) {
+      logger.error("JavaGrep Exception: " + " toString: " + javaGrep.toString());
+      logger.error(e.getMessage());
     }
   }
 

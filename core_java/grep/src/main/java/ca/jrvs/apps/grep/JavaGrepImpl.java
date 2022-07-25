@@ -214,7 +214,7 @@ public class JavaGrepImpl implements JavaGrep {
    */
   @Override
   public String toString() {
-    return "Class#" + this.hashCode() + " regex=" + this.regex + "(Pattern: " + this.pattern
+    return "Class#" + this.hashCode() + " regex=" + this.regex + " (Pattern: " + this.pattern
         + ") rootPath=" + this.rootPath + " outfile=" + this.outFile + "\n";
   }
 }

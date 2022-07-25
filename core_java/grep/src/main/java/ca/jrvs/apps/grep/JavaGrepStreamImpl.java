@@ -1,9 +1,6 @@
 package ca.jrvs.apps.grep;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
@@ -14,10 +11,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class JavaGrepStreamImpl implements JavaGrepStream{
-
-  private static final Logger logger = LoggerFactory.getLogger(JavaGrepImpl.class);
+public class JavaGrepStreamImpl implements JavaGrepStream {
 
   /* TODO: basic assumed constants for validation
   OS dependent.env. variables. Assuming JavaGrep is Linux only for now
@@ -28,6 +25,7 @@ public class JavaGrepStreamImpl implements JavaGrepStream{
   public static final int MAX_REGEX_LENGTH;
   public static final int MAX_PATH_LENGTH;
   public static final int MIN_PATH_LENGTH;
+  private static final Logger logger = LoggerFactory.getLogger(JavaGrepImpl.class);
 
   static {
     MAX_REGEX_LENGTH = Byte.MAX_VALUE * 2;
@@ -39,6 +37,7 @@ public class JavaGrepStreamImpl implements JavaGrepStream{
   private Pattern pattern;
   private String rootPath;
   private String outFile;
+
   /**
    * Top level search workflow
    *
@@ -55,7 +54,8 @@ public class JavaGrepStreamImpl implements JavaGrepStream{
         matchesLinesStream.accept(
             readLines(path));
       } catch (IOException e) {
-        throw new RuntimeException(e);
+        logger.error("IOException with path:" + path);
+        throw new RuntimeException("IOException with path:", e);
       }
     });
 
@@ -65,7 +65,8 @@ public class JavaGrepStreamImpl implements JavaGrepStream{
           try {
             writeToFile(stringStream);
           } catch (IOException e) {
-            throw new RuntimeException(e);
+            logger.error("IOException with stringStream");
+            throw new RuntimeException("IOException with stringStream", e);
           }
         });
   }
@@ -119,16 +120,18 @@ public class JavaGrepStreamImpl implements JavaGrepStream{
   @Override
   public void writeToFile(Stream<String> lines) throws IOException {
     try (BufferedWriter br = new BufferedWriter(new FileWriter(this.outFile))) {
-      lines.forEach( line -> {
+      lines.forEach(line -> {
         try {
           br.write(line);
           br.newLine();
         } catch (IOException e) {
-          throw new RuntimeException(e);
+          logger.error("IOException while writing line: " + line);
+          throw new RuntimeException("IOException while writing line", e);
         }
       });
 
     } catch (IOException e) {
+      logger.error("IOException while writing to file");
       throw new IOException("IO error while writing to file: `" + this.outFile + "`");
     }
   }
@@ -203,7 +206,8 @@ public class JavaGrepStreamImpl implements JavaGrepStream{
    */
   @Override
   public String toString() {
-    return "Class#" + this.hashCode() + " regex=" + this.regex + "(Pattern: " + this.pattern
+    return "Class#" + this.hashCode() + " ClassName:" + this.getClass().getCanonicalName() +
+        " regex=" + this.regex + " (Pattern: " + this.pattern
         + ") rootPath=" + this.rootPath + " outfile=" + this.outFile + "\n";
   }
 }
