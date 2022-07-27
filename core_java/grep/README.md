@@ -1,25 +1,54 @@
 
 # Introduction: Core Java / Grep
-Implement a simple grep app in Java. The app searches for a text pattern recursively in a given directory, and output matched lines to a file. The app takes three arguments:
-core java 8
-openjdk-8
-focus on a well defined interfaces
-uses exceptions
-procedural
-functional
-logging libraries: Slf4j, Log4j2
-testing using JUnit5
-maven
-IntelliJ Idea Ultimate
-docker hub, docker compose
-docker base image openjdk8-alpine
-Google Java coding standards
+The Grep project aims to implement a simple `grep`-like app in Java.
+Just like Linux `grep`, the app scans all the files within a directory and its sub-directories (recursively), searching for a text pattern within that collection of files, then outputs matched lines to a file.
 
-(50-100 words)
-Discuss the design of each app. What does the app do? What technologies have you used? (e.g. core java, libraries, lambda, IDE, docker, etc..)
+The app takes three positional arguments on the commandline:
+- a regexPattern: a special text string for describing a search pattern, restricted for now to Java [https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html]Regex definition
+- a sourceDirectory: root directory path to find the collection of files to search into
+- an outputFile: output file name
+
+Technologies used:
+------------------
+- Core Java 8 (version 1.8): the [https://www.jetbrains.com/lp/devecosystem-2019/java/#:~:text=Although%20Java%2010%20and%2011,still%20the%20most%20used%20version.]most used Java version.
+- Openjdk-8: FOSS and reference build of Oracle Java
+- Defining and/or using interfaces will be preferred in this project, for maintainability
+- Using exceptions will be preferred as error handling mechanism
+- Using two different versions of the JavaGrep interface (one procedural style, one functional/stream oriented) is preferred to handle different scenarios of eager vs lazy processing and their impact on performance vs. memory consumption
+- Logging libraries: Slf4j is favoured as a logger interface, Log4j2 for implementation
+- Testing library: JUnit5
+- Project/lifescyle management: maven
+- IDE: IntelliJ Idea Ultimate + vim extension + custom configuration with Google Java Code Style
+- Container technology: docker, containerd
+- Docker image hosting: will be hosted on docker hub
+- Docker image creation: created by docker compose 
+- Docker base image: openjdk8-alpine from dockerhub.io
 
 # Quick Start
-How to use your apps? 
+
+From local installation:
+------------------------
+`java -jar [GREP_JAR_DIR/]grep.jar {REGEX_PATTERN} {SOURCE_DIR} {OUTPUT_FILE}`
+
+From docker image:
+-------------------
+`docker run --rm \
+-v {YOUR_ROOT_DATA_DIR}:/data -v {YOUR_OUTPUT_FILE_DIR}:/out jrvs/grep \
+{REGEX_PATTERN} {SOURCE_DIR} {OUTPUT_FILE}`
+
+Examples:
+---------
+
+`java -jar grep.jar  ./my_source_dir ./out/my_output_file.txt`
+
+`java -jar grep.jar  ./my_source_dir # To Stdout`
+`java -jar grep.jar  ./my_source_dir > ./out/my_output_file.txt  # Redirect from Stdout`
+
+```
+docker run --rm \
+-v $(pwd)/data:/data -v $(pwd)/out:/out \
+${docker_user}/grep .*Tristan.*Isolde.* /data /out/grep_out.txt
+```
 
 #Implemenation
 2 implemetations one stream for memory constrained and one procedural for perf
@@ -54,44 +83,7 @@ use uber jar
 List three things you can improve in this project.
 ## User stories, examples and specifications:
 
-Usage: `grepapp`  regex rootPath outFile
-- regex: a special text string for describing a search pattern
-- rootPath: root directory path
-- outFile: output file name
 
-Similar to:
-    `egrep -r {regex} {rootPath} > {outFile}`
 
-## Examples:
 
-```
-regex=".*Romeo.*Juliet.*"
-rootPath="./data"
-outFile="grepapp_outfile.txt"
-egrep -r ${regex_pattern} ${src_dir} > outFile
-./data/txt/shakespeare.txt:    Is father, mother, Tybalt, Romeo, Juliet,
-./data/txt/shakespeare.txt:Enter Romeo and Juliet aloft, at the Window.
-./data/txt/shakespeare.txt:    And Romeo dead; and Juliet, dead before,
-./data/txt/shakespeare.txt:    Romeo, there dead, was husband to that Juliet;
-```
-### As a .jar file
-```
-#Download jar file
-wget -O grep-demo.jar https://github.com/jarviscanada/jarvis_data_eng_demo/raw/feature/grep_demo_jar/core_java/grep/target/grep-1.0-SNAPSHOT.jar
-#Run the grep app
-outfile=grep_$(date +%F_%T).txt
-java -jar grep-demo.jar ${regex_pattern} ${src_dir} ./out/${outfile}
-#verify 
-cat out/$outfile
-```
-### As a docker image
-```
-#Approach 2: Docker image
-outfile=grep_$(date +%F_%T).txt
-docker run --rm \
--v `pwd`/data:/data -v `pwd`/out:/out jrvs/grep \
-${regex_pattern} ${src_dir} /out/${outfile}
-#verify 
-cat out/$outfile
-```
 
