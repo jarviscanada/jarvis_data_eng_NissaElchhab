@@ -7,7 +7,7 @@ Just like Linux's [`grep`](https://manpages.debian.org/bullseye/grep/grep.1.en.h
 
 The app takes three positional arguments on the commandline:
 
-- a regexPattern: a special text string for describing a search pattern, restricted for now to [Java Regex] (https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html "Oracle Java 8 Regex Pattern Class documentation") definition
+- a regexPattern: a special text string for describing a search pattern, restricted for now to [Java Regex](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html "Oracle Java 8 Regex Pattern Class documentation") definition
 - a sourceDirectory: root directory path to find the collection of files to search into
 - an outputFile: output file name
 
@@ -62,7 +62,6 @@ The project defines 2 different interfaces for the same `grep`-like process, to 
 The 2 interfaces and their basic implementations are:
 
 ## 1. A procedural oriented interface
--------------------------------
 The benefit of implementing this interface is that it is straightforward, mature, easy to understand (at this stage) and delivers the best performance out of Java 8 JVM on lower cores, non multi-threaded and simple applications.
 
 ### Pseudocode
@@ -78,7 +77,7 @@ writeToFile(matchedLines)
 ```
 
 ### Performance Issue
-On the performance side, more generally, the most expensive function is the regex pattern match. As Java 8 regex is based on Nondeterministic Finite Automata (NFA), many references, including this [one](https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton#:~:text=Keep%20a%20set,(s).) points to an O(nxm) complexity, considering that the regex matching algorith is the same, and the pattern is constant.
+On the performance side, more generally, the most expensive function is the regex pattern match. As Java 8 regex is based on Nondeterministic Finite Automata (NFA), many references, including this [one](https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton#:~:text=Keep%20a%20set,(s).) point to an O(nxm) complexity, considering that the regex matching algorith is the same, and the pattern is constant.
 The outer looping through the lines of the files' collection brings it to O(n^2), n being the number of characters
 The potential cost of the procedural interface would be O(n) memory growth, n being the total number of characters
 
@@ -86,7 +85,6 @@ As we plan to run our app in a container, we aim to make the app use as little m
 However, this could be a challenge, as procedural style makes most if not all operations _eager_ instead of lazy
 
 ## 2. A functional + stream oriented interface
-------------------------------------------
 A functional+stream paradigm brings many benefits: 
 - in many cases, it is concise and expressive.
 - the intended logic is usually clearer, especially when using Function References and an expressive naming scheme.
@@ -111,12 +109,11 @@ The stream and lambda features of Java 8 can be more costly, as lambads and func
 This might show as a greater impact for apps similar to `grep` as it is usually invoked once, thus making the lambda and stream invokation expensive.
 The perfromance of lambas is not expected to be better than the procedural implementation on mono-core cpus. However, lambdas would shine on multicore or parallel architectures.
 
-However, the greatet benefit of the stream and lambdas combo is expected to be lesser memory need and delaying/averting [`OutOfMemoryError` exception](https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/memleaks002.html "Oracle Documentation: Understand the OutOfMemoryError Exception") as space complexity is depedent on the maximum available RSS and buffersize, making it O(1) for a given configuration.
+However, the greatet benefit of the stream and lambdas combo is expected to be lesser memory need and delaying/averting an [`OutOfMemoryError exception`](https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/memleaks002.html "Oracle Documentation: Understand the OutOfMemoryError Exception") as space complexity is depedent on the maximum available heap and buffersize but constant, making it O(1) for a given configuration.
 
 As opposed to the procedural approach, the combination of streams and lambdas make the _lazy_ evaluation more memory efficient. This can be further combined with using streams through the whole chain of functions, including writing to `outputFile`
 
 ## Other implementation considerations
-
 In order to make the code cleaner and easier to update, this project will add a `GetOpts` class to handle command-line arguments.
 - This will make the code cleaner and encapsulate managing the commandline arguments concern into its own class.
 - One of the easy features that can be added this way is validation of the arguments
@@ -129,7 +126,6 @@ The Grep Project uses, for now, 2 types of testing:
 - manually running a collection of patterns through Linux `grep`, collecting the results, then comparing these known correct results with app output.
 
 # Deployment
-
 For deployement, we will first need to:
 1. choose a base JDK image on which we will layer our build: [openjdk:8-alpine](https://hub.docker.com/layers/openjdk/library/openjdk/8-alpine/images/sha256-a3562aa0b991a80cfe8172847c8be6dbf6e46340b759c2b782f8b8be45342717?context=explore). It is a lightweight and official image from dockerhub.
 2. then create a Dockerfile
@@ -139,22 +135,33 @@ COPY target/grep*.jar /usr/local/app/grep/lib/grep.jar
 ENTRYPOINT ["java","-jar","/usr/local/app/grep/lib/grep.jar"]
 ```
 3. create an uber-jar to simplify the current and future classpath dependency issues.
-This is done through `maven shade` plugin https://maven.apache.org/plugins/maven-shade-plugin/, then running:
-` mvn clean verify compile package`
+  This is done through `maven shade` plugin https://maven.apache.org/plugins/maven-shade-plugin/, then running:
+  `mvn clean verify compile package`
 
 4. This allows to build a local uber-jar, against which we can run our Dockerfile:
-  `docker build -t ${YOUR_DOCKER_REPO_LOGIN}/grep
+  `docker build -t ${YOUR_DOCKER_REPO_LOGIN}/grep`
   
-  and push the new artifact to dockerhub.io:
+5. then push the new artifact to dockerhub.io:
   
   `docker push ${YOUR_DOCKER_REPO_LOGIN}/grep`
 
 5. The artifact is now available on docker hub through:
-`docker pull ${YOUR_DOCKER_REPO_LOGIN}/grep`
+  `docker pull ${YOUR_DOCKER_REPO_LOGIN}/grep`
 
 # Improvement
-List three things you can improve in this project.
-## User stories, examples and specifications:
+A few immediate improvements come to mind:
+1. Getopts: can assign `outputFile` to `STDOUT` in case the last argument is missing/optional
+2. Getopts: add an optional named arguments
+4. Getopts: Add validations for input arguments
+5. JavaGrep implementation: Add reasonnable lower and upper limits to filesystem parameters, such as filesize, number of files, directory depth
+6. JavaGrep implementations: Improve exception handling
+7. JavaGrep procedural implementation: improve memory usage
+8. JavaGrep functional implementation: simplify and stream line the stream
+9. JavaGrep interfaces: unify as much as possible the procedural and functional interfaces
+
+
+
+Nissa Elchhab
 
 
 
