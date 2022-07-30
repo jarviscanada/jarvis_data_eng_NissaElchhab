@@ -64,7 +64,7 @@ validate_args "$@" # TODO check and replace argument logic "$1" "$2" "$3" with a
 cmd=$1
 postgres_user=$2
 postgres_password="$3"
-postgres_db='jrvs_db' # postgres docker default in case not specified, as per docs
+postgres_db='jrvs_postgres' # postgres docker default in case not specified, as per docs
 export PGPASSWORD="$postgres_password" # TODO POSSIBLE SECURITY ISSUE; export to make psql on admins' workstation easier
 container_name='jrvs-psql'
 image_name='postgres:9.6-alpine'
@@ -118,7 +118,7 @@ case $cmd in
 		for ddl_file_path in $(ls $4);
 		do
 			echo "Found $ddl_file_path...running DDL file"
-    			psql $psql_url -a -f "$ddl_file_path"
+    			psql $psql_url -a -f "$4/$ddl_file_path"
 		done
 	else
 		echo "Warning: No DDL file to populate database found."
