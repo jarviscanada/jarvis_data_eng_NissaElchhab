@@ -10,7 +10,7 @@ validate_args () {
     create)
     if [ $# -lt 3 ]; then
       echo 'Error: argument(s) missing. Exiting'
-      echo 'Usage: psql_docker.sh start|stop|create [db_username] [db_password] [ [ddl_file_or_dir] ... ]'
+      echo 'Usage: psql_docker.sh start|stop|create [db_username] [db_password] [ddl_file_or_dir] [postgres_db]'
       exit 1
     fi
     ;;
@@ -18,14 +18,14 @@ validate_args () {
     start|stop)
       if [ $# -ne 1 ]; then
       echo 'Error: too many arguments. Exiting'
-      echo 'Usage: psql_docker.sh start|stop|create [db_username] [db_password] [ [ddl_file_or_dir] ... ]'
+      echo 'Usage: psql_docker.sh start|stop|create [db_username] [db_password] [ddl_file_or_dir] [postgres_db]'
       exit 1
      fi
   	;;
 
     *)
   	echo 'Error: Illegal command or missing arguments'
-  	echo 'Usage: psql_docker.sh start|stop|create [db_username] [db_password] [ [ddl_file_or_dir] ... ]'
+  	echo 'Usage: psql_docker.sh start|stop|create [db_username] [db_password] [ddl_file_or_dir] [postgres_db]'
   	exit 1
   	;;
   esac
@@ -64,7 +64,7 @@ validate_args "$@" # TODO check and replace argument logic "$1" "$2" "$3" with a
 cmd=$1
 postgres_user=$2
 postgres_password="$3"
-postgres_db='jrvs_postgres' # postgres docker default in case not specified, as per docs
+postgres_db=${5:-'postgres'} # postgres docker default in case not specified, as per docs
 export PGPASSWORD="$postgres_password" # TODO POSSIBLE SECURITY ISSUE; export to make psql on admins' workstation easier
 container_name='jrvs-psql'
 image_name='postgres:9.6-alpine'
@@ -171,7 +171,7 @@ case $cmd in
 
   *)
 	echo 'Error: Illegal command or missing arguments'
-	echo 'Usage: psql_docker.sh start|stop|create [db_username] [db_password] [ [ddl_file_or_dir] ... ]'
+	echo 'Usage: psql_docker.sh start|stop|create [db_username] [db_password] [ddl_file_or_dir] [postgres_db]'
 	exit 1
 	;;
 esac
