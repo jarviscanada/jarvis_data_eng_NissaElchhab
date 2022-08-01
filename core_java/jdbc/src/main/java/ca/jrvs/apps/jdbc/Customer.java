@@ -1,6 +1,8 @@
 package ca.jrvs.apps.jdbc;
 
 import ca.jrvs.apps.jdbc.data_access.Dto;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Customer implements Dto {
 
@@ -14,6 +16,9 @@ public class Customer implements Dto {
   private String state;
   private String zipcode;
 
+  public Customer() {
+  }
+
   public Customer(String firstname, String lastname, String email, String phone, String address,
       String city, String state, String zipcode) {
     this.firstname = firstname;
@@ -26,9 +31,27 @@ public class Customer implements Dto {
     this.zipcode = zipcode;
   }
 
+  public static Customer BuildFrom(ResultSet customerResultSet) throws SQLException {
+    Customer customer = new Customer();
+    customer.setId(customerResultSet.getLong("customer_id"));
+    customer.setFirstname(customerResultSet.getString("first_name"));
+    customer.setLastname(customerResultSet.getString("last_name"));
+    customer.setEmail(customerResultSet.getString("email"));
+    customer.setPhone(customerResultSet.getString("phone"));
+    customer.setAddress(customerResultSet.getString("address"));
+    customer.setCity(customerResultSet.getString("city"));
+    customer.setState(customerResultSet.getString("state"));
+    customer.setZipcode(customerResultSet.getString("zipcode"));
+    return customer;
+  }
+
   @Override
   public Long getId() {
     return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getFirstname() {

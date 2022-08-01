@@ -2,8 +2,11 @@ package ca.jrvs.apps.jdbc.data_access;
 
 import java.sql.Connection;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class Dao<T extends Dto> {
+  protected static final String CUSTOMER_SEQUENCE = "hp_customer_seq";
   protected final Connection connection;
 
   public Dao(Connection connection) {
