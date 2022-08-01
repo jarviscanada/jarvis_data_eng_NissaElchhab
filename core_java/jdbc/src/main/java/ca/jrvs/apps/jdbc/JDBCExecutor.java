@@ -48,8 +48,9 @@ class JDBCExecutor {
         System.out.printf("There are %d records\n", rs.getInt(1));
       }
 
+
     } catch (SQLException e) {
-      logger.error("");
+      logger.error("JDBCExecutor error");
     }
 
   }
