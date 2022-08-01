@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 
 public class CustomerDao extends Dao<Customer> {
 
-  protected Logger logger = LoggerFactory.getLogger(Dao.class);
-
   private final static String FIND_ALL = "SELECT "
       + "(customer_id, first_name, last_name, email, phone,address, city, state, zipcode) "
       + "FROM customer";
@@ -27,6 +25,7 @@ public class CustomerDao extends Dao<Customer> {
       + "SET first_name=?, last_name=?, email=?, phone=?,address=?, city=?, state=?, zipcode=? "
       + "WHERE customer_id=?";
   private final static String DELETE = "DELETE FROM customer WHERE customer_id=?";
+  protected Logger logger = LoggerFactory.getLogger(Dao.class);
 
   public CustomerDao(Connection connection) {
     super(connection);
@@ -97,12 +96,33 @@ public class CustomerDao extends Dao<Customer> {
 
   @Override
   public Customer update(Customer dto) {
-    return null;
+    try (PreparedStatement stmt = this.connection.prepareStatement(UPDATE)) {
+      stmt.setString(1, dto.getFirstname());
+      stmt.setString(2, dto.getLastname());
+      stmt.setString(3, dto.getEmail());
+      stmt.setString(4, dto.getPhone());
+      stmt.setString(5, dto.getAddress());
+      stmt.setString(6, dto.getCity());
+      stmt.setString(7, dto.getState());
+      stmt.setString(8, dto.getZipcode());
+      stmt.setLong(9, dto.getId());
+      stmt.execute();
+      return this.findById(dto.getId());
+    } catch (SQLException e) {
+      logger.error(this.getClass().toString() + "#update");
+      throw new RuntimeException("update", e);
+    }
   }
 
   @Override
   public void delete(Long id) {
-
+    try (PreparedStatement stmt = this.connection.prepareStatement(DELETE)) {
+      stmt.setLong(1, id);
+      stmt.execute();
+    } catch (SQLException e) {
+      logger.error(this.getClass().toString() + "#delete");
+      throw new RuntimeException("delete", e);
+    }
   }
 
 
