@@ -35,20 +35,19 @@ public class CustomerDao extends Dao<Customer> {
   @Override
   public Customer findById(Long id) {
     Customer customer = new Customer();
-    try (PreparedStatement stmt = connection.prepareStatement(FIND_ONE)) {
+    try (PreparedStatement stmt = this.connection.prepareStatement(FIND_ONE)) {
       stmt.setLong(1, id);
       if (stmt.execute()) {
         ResultSet rs = stmt.getResultSet();
         customer = Customer.BuildFrom(rs);
       } else {
         customer = null;
-        return  customer;
       }
-
     } catch (SQLException e) {
-      // log
-
+      logger.error(this.getClass().toString() + "#findById");
+      throw new RuntimeException("findById", e);
     }
+    return customer;
   }
 
   @Override
@@ -67,15 +66,15 @@ public class CustomerDao extends Dao<Customer> {
         customers.add(customer);
       }
     } catch (SQLException e) {
-      logger.error("CustomerDao#findAll");
-      throw new RuntimeException("CustomerDao#findAll", e);
+      logger.error(this.getClass().toString() + "#findAll");
+      throw new RuntimeException("findAll", e);
     }
     return customers;
   }
 
   @Override
   public Customer create(Customer dto) {
-    try (PreparedStatement statement = connection.prepareStatement(CREATE)) {
+    try (PreparedStatement statement = this.connection.prepareStatement(CREATE)) {
       statement.setString(1, dto.getFirstname());
       statement.setString(2, dto.getLastname());
       statement.setString(3, dto.getEmail());
@@ -84,19 +83,15 @@ public class CustomerDao extends Dao<Customer> {
       statement.setString(6, dto.getCity());
       statement.setString(7, dto.getState());
       statement.setString(8, dto.getZipcode());
-      if (statement.execute()) {
-        Long id = statement.getResultSet().getLong(1);
-        dto.setId(id);
-        logger.debug("getResult column index 1: " + id);
-        logger.debug(dto.toString());
-        return dto;
-      } else {
-        // log statement.getLargeUpdateCount())
-        return null;
-      }
+      //Alternative
+      // ResultSet rs = statement.executeQuery();
+      //return Customer.BuildFrom(rs);
+      statement.execute();
+      Long id = this.getLastSeqVal(CUSTOMER_SEQUENCE);
+      return this.findById(id);
     } catch (SQLException e) {
-      // log
-      throw new RuntimeException("Customer::create error", e);
+      logger.error(this.getClass().toString() + "#create");
+      throw new RuntimeException("create", e);
     }
   }
 
