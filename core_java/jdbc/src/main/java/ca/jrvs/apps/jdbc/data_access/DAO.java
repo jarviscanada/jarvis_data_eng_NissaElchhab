@@ -6,13 +6,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public abstract class Dao<T extends Dto> {
+public abstract class DAO<T extends DTO> {
 
   protected static final String CUSTOMER_SEQUENCE = "hp_customer_seq";
   protected static final String GET_LAST_SEQ_VAL = "SELECT last_value FROM ";
   protected final Connection connection;
 
-  public Dao(Connection connection) {
+  public DAO(Connection connection) {
     super();
     this.connection = connection;
   }

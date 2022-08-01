@@ -7,22 +7,22 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DbAccessManager {
+public class DBAccessManager {
 
   private final String url;
   private final Properties loginInfo;
-  private final Logger logger = LoggerFactory.getLogger(DbAccessManager.class);
+  private final Logger logger = LoggerFactory.getLogger(DBAccessManager.class);
 
-  public DbAccessManager(String username, String password, String hostname, int port,
+  public DBAccessManager(String username, String password, String hostname, int port,
       String databaseName) {
     this.url = "jdbc:postgresql://" + hostname + ":" + port + "/" + databaseName;
     this.loginInfo = new Properties();
     this.loginInfo.setProperty("user", username);
     this.loginInfo.setProperty("password", password);
-    logger.info("Initializing DbAccessManager with URL: " + this.url);
+    logger.info("Initializing DBAccessManager with URL: " + this.url);
   }
 
-  public DbAccessManager(String username, String password, String databaseName) {
+  public DBAccessManager(String username, String password, String databaseName) {
     this(username, password, "localhost", 5432, databaseName);
   }
 

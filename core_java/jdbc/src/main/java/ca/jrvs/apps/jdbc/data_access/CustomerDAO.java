@@ -10,7 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CustomerDao extends Dao<Customer> {
+public class CustomerDAO extends DAO<Customer> {
 
   private final static String FIND_ALL = "SELECT "
       + "(customer_id, first_name, last_name, email, phone,address, city, state, zipcode) "
@@ -25,9 +25,9 @@ public class CustomerDao extends Dao<Customer> {
       + "SET first_name=?, last_name=?, email=?, phone=?,address=?, city=?, state=?, zipcode=? "
       + "WHERE customer_id=?";
   private final static String DELETE = "DELETE FROM customer WHERE customer_id=?";
-  protected Logger logger = LoggerFactory.getLogger(Dao.class);
+  protected Logger logger = LoggerFactory.getLogger(DAO.class);
 
-  public CustomerDao(Connection connection) {
+  public CustomerDAO(Connection connection) {
     super(connection);
   }
 

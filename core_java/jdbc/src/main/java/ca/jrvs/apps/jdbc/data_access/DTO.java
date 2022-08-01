@@ -1,6 +1,6 @@
 package ca.jrvs.apps.jdbc.data_access;
 
-public interface Dto {
+public interface DTO {
 
   Long getId();
 }

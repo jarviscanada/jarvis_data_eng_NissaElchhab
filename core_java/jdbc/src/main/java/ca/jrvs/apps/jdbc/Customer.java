@@ -1,10 +1,10 @@
 package ca.jrvs.apps.jdbc;
 
-import ca.jrvs.apps.jdbc.data_access.Dto;
+import ca.jrvs.apps.jdbc.data_access.DTO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Customer implements Dto {
+public class Customer implements DTO {
 
   private Long id;
   private String firstname;
