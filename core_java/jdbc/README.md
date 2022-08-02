@@ -15,9 +15,9 @@ Due to the simple nature of this app, no unit tests have been written (for now)
 The app also uses Maven, the project management and build tool.
 
 # Implementation
-## ER Diagram
+## Entity Relationship Diagram
 
-[ER diagram](./resources/hplussports.png)
+[Entity Relationship Diagram](resources/diagrams/hplussports.png)
 
 ## Design Patterns
 
@@ -41,7 +41,7 @@ The database setup makes use of psql_docker.sh script (from the Linux_SQL projec
 but modified and expanded
 to handle initialization using multiple DDL/.sql files and more command line options
 to better define database names.
-The script has been renamed to [`jdbc_docker`](./tools/jdbc_docker.sh)
+The script has been renamed to [`jdbc_docker`](tools/jdbc_docker.sh)
 and is under the `tools directory`.
 Running this tools checks for docker service,
 pulls and deploys locally an instance of Postgresql 9.6 running on Alpine Linux,
