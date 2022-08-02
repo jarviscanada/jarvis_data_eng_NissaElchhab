@@ -17,7 +17,7 @@ The app also uses Maven, the project management and build tool.
 # Implementation
 ## Entity Relationship Diagram
 
-[Entity Relationship Diagram](resources/diagrams/hplussports.png)
+![Entity Relationship Diagram](resources/diagrams/hplussports.png)
 
 ## Design Patterns
 
