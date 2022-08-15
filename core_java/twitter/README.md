@@ -1,27 +1,28 @@
 # Introduction
+
 (50-100 words)
 What does this app do?
 What technoglies you have used? (e.g. Twitter REST API, HTTP client, mvn, Java libs, docker etc..)
 
 Implement a Java app which can CRUD a Twitter post via Twitter REST API.
 
-use twitter API v2: most up to date, only one available as of now in all dev tiers, including Essentials
+use twitter API v2: most up to date, only one available as of now in all dev tiers, including
+Essentials
 use oauth1a: simpler than oath2, yet gives access to Twitter API v2
 oauth flow: client Grant Flow, i.e [micro]service to [micro]service
 this app is trustworthy enough to use that simpler and faster flow
 
-
 Create:
-Create a tweet with a geotag and output the created tweet object (simplified version) in JSON  format. 
+Create a tweet with a geotag and output the created tweet object (simplified version) in JSON
+format.
 Print error message (or exception) if tweet_text length is over 140 characters or geo tag is invalid
 (latitude or longitude is out of range)
 
 TwitterApp "post" "tweet_text" "latitude:longitude"
 
 Arguments:
-tweet_text         - tweet_text cannot exceed 140 UTF-8 encoded characters.
+tweet_text - tweet_text cannot exceed 140 UTF-8 encoded characters.
 latitude:longitude - Geo location.
-
 
 Show/Read (with options)
 Lookup a tweet by ID and print the tweet object in JSON format.
@@ -29,14 +30,15 @@ Print error message (or exception) if `tweet_id` is invalid
 (e.g. non-digit characters, out of range) or optional `[field1,filed2]` is invalid.
 
 Show all fields in JSON document if [field1,fields2] is empty.
-Otherwise, only show user specified [fields] in the JSON document. 
-Print error message (or exception) if `tweet_id` is invalid (e.g. non-digit characters, out of range)
+Otherwise, only show user specified [fields] in the JSON document.
+Print error message (or exception) if `tweet_id` is invalid (e.g. non-digit characters, out of
+range)
 
 TwitterApp show tweet_id [field1,fields2]
 
 Arguments:
-tweet_id  - Tweet ID. Same as id_str in the tweet object
-[field1,fields2]  - A comma-separated list of top-level fields from the tweet object 
+tweet_id - Tweet ID. Same as id_str in the tweet object
+[field1,fields2]  - A comma-separated list of top-level fields from the tweet object
 (similar to SELECT clause in SQL)
 
 Delete:
@@ -47,24 +49,23 @@ USAGE: TwitterApp delete [id1,id2,..]
 Arguments:
 tweet_ids - A comma-separated list of tweets.
 
-
 # Quick Start
 
 - Usage:
-  - TwitterApp post|show|delete [options]
+    - TwitterApp post|show|delete [options]
 
 Post/Create:
 TwitterApp "post" "tweet_text" "latitude:longitude"
 
 Arguments:
-tweet_text         - tweet_text cannot exceed 140 UTF-8 encoded characters.
+tweet_text - tweet_text cannot exceed 140 UTF-8 encoded characters.
 latitude:longitude - Geo location.
 
 Read/Show
 TwitterApp show tweet_id [field1,fields2]
 
 Arguments:
-tweet_id  - Tweet ID. Same as id_str in the tweet object
+tweet_id - Tweet ID. Same as id_str in the tweet object
 [field1,fields2]  - A comma-separated list of top-level fields from the tweet object
 (similar to SELECT clause in SQL)
 
@@ -74,9 +75,6 @@ USAGE: TwitterApp delete [id1,id2,..]
 
 Arguments:
 tweet_ids - A comma-separated list of tweets.
-
-
-
 
 - how to package your app using mvn?
 - how to run your app with docker?
@@ -89,7 +87,6 @@ docker run --rm \
 -e accessToken=YOUR_VALUE \
 -e tokenSecret=YOUR_VALUE \
 jrvs/twitter_app post "test post" "43:79"
-
 
 Sample JSON output:
 {
@@ -110,8 +107,6 @@ Sample JSON output:
 "favorited" : false,
 "retweeted" : false
 }
-
-
 
 docker run --rm \
 -e consumerKey=YOUR_VALUE \
@@ -156,8 +151,6 @@ jrvs/twitter_app show 1276568976764686343 "id,text,coordinates"
 }
 }
 
-
-
 docker run --rm \
 -e consumerKey=YOUR_VALUE \
 -e consumerSecret=YOUR_VALUE \
@@ -186,7 +179,9 @@ Sample JSON output:
 }
 
 # Design
+
 ## UML diagram
+
 ## explain each component(app/main, controller, service, DAO) (30-50 words each)
 
 app/main
@@ -197,8 +192,8 @@ service
 
 DAO
 
-
 ## Models
+
 Talk about tweet model
 -----------------------
 
@@ -206,27 +201,32 @@ Authn: OAuth 1.0a
 https://developer.twitter.com/en/docs/authentication/oauth-1-0a
 https://developer.twitter.com/en/docs/authentication/oauth-1-0a/percent-encoding-parameters
 
-
-
-You have to sign each API request by passing several generated keys and tokens in an authorization header. To start, you can generate several keys and tokens in your Twitter developer app’s details page, including the following:
+You have to sign each API request by passing several generated keys and tokens in an authorization
+header. To start, you can generate several keys and tokens in your Twitter developer app’s details
+page, including the following:
 API key and secret:
 
 oauth_consumer_key
 
 oauth_consumer_secret
 
-Think of these as the user name and password that represents your Twitter developer app when making API requests.
+Think of these as the user name and password that represents your Twitter developer app when making
+API requests.
 Access token and secret:
 
 oauth_token
 
 oauth_token_secret
 
-An access token and access token secret are user-specific credentials used to authenticate OAuth 1.0a API requests. They specify the Twitter account the request is made on behalf of.
+An access token and access token secret are user-specific credentials used to authenticate OAuth
+1.0a API requests. They specify the Twitter account the request is made on behalf of.
 
-You can generate your own access token and token secret if you would like your app to make requests on behalf of the same Twitter account associated with your developer account on the Twitter developer app's details page.
+You can generate your own access token and token secret if you would like your app to make requests
+on behalf of the same Twitter account associated with your developer account on the Twitter
+developer app's details page.
 
-If you'd like to generate access tokens for a different user, see "Making requests on behalf of users" below.
+If you'd like to generate access tokens for a different user, see "Making requests on behalf of
+users" below.
 
 
 ----------------------------------
@@ -238,18 +238,20 @@ Object Model:
 ---------------
 https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/tweet
 
-id (default)	string
+id (default)    string
 
 text (default)   string
 https://github.com/twitter/twitter-text/
 
-author_id  string
+author_id string
 
-conversation_id  string  The Tweet ID of the original Tweet of the conversation (which includes direct replies, replies of replies).
+conversation_id string The Tweet ID of the original Tweet of the conversation (which includes direct
+replies, replies of replies).
 
-created_at  date (ISO 8601)
+created_at date (ISO 8601)
 
-geo  object   Contains details about the location tagged by the user in this Tweet, if they specified one.
+geo object Contains details about the location tagged by the user in this Tweet, if they specified
+one.
 
 "geo": {
 "coordinates": {
@@ -262,7 +264,7 @@ geo  object   Contains details about the location tagged by the user in this Twe
 "place_id": "01a9a39529b27f36"
 }
 
-source   string
+source string
 
 
 
@@ -274,14 +276,17 @@ Using Twitter APIv2
 ----------------------
 example:
 
-curl --request GET 'https://api.twitter.com/2/tweets?ids=1212092628029698048&tweet.fields=attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld&expansions=referenced_tweets.id' --header 'Authorization: Bearer $BEARER_TOKEN'
-
+curl --request
+GET 'https://api.twitter.com/2/tweets?ids=1212092628029698048&tweet.fields=attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld&expansions=referenced_tweets.id'
+--header 'Authorization: Bearer $BEARER_TOKEN'
 
 {
 "data": [
 {
 "id": "1212092628029698048",
-"text": "We believe the best future version of our API will come from building it with YOU. Here’s to another great year with everyone who builds on the Twitter platform. We can’t wait to continue working with you in the new year. https://t.co/yvxdK6aOo2",
+"text": "We believe the best future version of our API will come from building it with YOU. Here’s
+to another great year with everyone who builds on the Twitter platform. We can’t wait to continue
+working with you in the new year. https://t.co/yvxdK6aOo2",
 "possibly_sensitive": false,
 "referenced_tweets": [
 {
@@ -396,7 +401,9 @@ curl --request GET 'https://api.twitter.com/2/tweets?ids=1212092628029698048&twe
 "id": "1212092626247110657"
 }
 ],
-"text": "These launches would not be possible without the feedback you provided along the way, so THANK YOU to everyone who has contributed your time and ideas. Have more feedback? Let us know ⬇️ https://t.co/Vxp4UKnuJ9",
+"text": "These launches would not be possible without the feedback you provided along the way, so
+THANK YOU to everyone who has contributed your time and ideas. Have more feedback? Let us know
+⬇️ https://t.co/Vxp4UKnuJ9",
 "entities": {
 "urls": [
 {
@@ -441,39 +448,30 @@ curl --request GET 'https://api.twitter.com/2/tweets?ids=1212092628029698048&twe
 }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #### Tweet ID
+
 {"id": 10765432100123456789, "id_str": "10765432100123456789"}
-In Twitter APIs up to version 1.1, you should always use the string representation of the number to avoid losing accuracy.
+In Twitter APIs up to version 1.1, you should always use the string representation of the number to
+avoid losing accuracy.
 In newer versions of the API, all large integer values are represented as strings by default.
 https://developer.twitter.com/en/docs/twitter-ids
 
-#### 
+####  
 
 ## Spring
+
 - How you managed the dependencies using Spring?
 
 # Test
+
 How did you test you app using Junit and mockito?
 
 ## Deployment
+
 How did you dockerize your app.
 
 # Improvements
+
 - Imporvement 1
 - Imporvement 2
 - Imporvement 3
