@@ -12,13 +12,13 @@ import oauth.signpost.exception.OAuthMessageSignerException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TwitterApiTest {
+
   private static final String CONSUMER_KEY = System.getenv("consumerKey");
   private static final String CONSUMER_SECRET = System.getenv("consumerSecret");
   private static final String ACCESS_TOKEN = System.getenv("accessToken");
@@ -33,12 +33,13 @@ public class TwitterApiTest {
 
     // setup oauth
     OAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
-    consumer.setTokenWithSecret(ACCESS_TOKEN,ACCESS_TOKEN_SECRET);
+    consumer.setTokenWithSecret(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
     LOGGER.info("setup oauth " + consumer);
 
     // create an HTTP POST request
-    String twitterStatus = args.length == 0 ? "#TestTestTest Hello From Api at " + LocalDateTime.now()
-        : args[1];
+    String twitterStatus =
+        args.length == 0 ? "#TestTestTest Hello From Api at " + LocalDateTime.now()
+            : args[1];
     PercentEscaper percentEscaper = new PercentEscaper("", false);
     HttpPost request = new HttpPost("https://api.twitter.com/1.1/statuses/update.json?status=" +
         percentEscaper.escape(twitterStatus) + "&lat=36.7821120598956&long=-123.400612831116");
@@ -59,7 +60,6 @@ public class TwitterApiTest {
 
     HttpResponse httpResponse = httpClient.execute(request);
     LOGGER.info("HttpResponse: " + EntityUtils.toString(httpResponse.getEntity()));
-
 
 
   }
