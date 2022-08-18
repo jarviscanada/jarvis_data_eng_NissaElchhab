@@ -49,9 +49,9 @@ public class TwitterApiTest {
     consumer.sign(request);
 
     // enumerating HTTP request headers
-    logger.info("HTTP Request Headers BEGIN [ \n");
+    logger.info("HTTP Request Headers BEGIN <!-- \n");
     Arrays.stream(request.getAllHeaders()).forEach(h -> logger.info(h.toString()));
-    logger.info("\n ] HTTP Request Headers END.\n");
+    logger.info("\n --> HTTP Request Headers END.\n");
 
     // send the request
     HttpClient httpClient = HttpClientBuilder.create().build();
