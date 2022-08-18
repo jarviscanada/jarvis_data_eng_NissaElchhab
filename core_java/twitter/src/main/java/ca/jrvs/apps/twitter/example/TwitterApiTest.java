@@ -29,12 +29,12 @@ public class TwitterApiTest {
       OAuthCommunicationException, IOException {
 
     // logging
-    final Logger LOGGER = LoggerFactory.getLogger(TwitterApiTest.class);
+    final Logger logger = LoggerFactory.getLogger(TwitterApiTest.class);
 
     // setup oauth
     OAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
     consumer.setTokenWithSecret(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
-    LOGGER.info("setup oauth " + consumer);
+    logger.info("setup oauth " + consumer);
 
     // create an HTTP POST request
     String twitterStatus =
@@ -43,15 +43,15 @@ public class TwitterApiTest {
     PercentEscaper percentEscaper = new PercentEscaper("", false);
     HttpPost request = new HttpPost("https://api.twitter.com/1.1/statuses/update.json?status=" +
         percentEscaper.escape(twitterStatus) + "&lat=36.7821120598956&long=-123.400612831116");
-    LOGGER.info("Create HTTP POST request " + request);
+    logger.info("Create HTTP POST request " + request);
 
     // sign the request / add headers
     consumer.sign(request);
 
     // enumerating HTTP request headers
-    LOGGER.info("HTTP Request Headers BEGIN [ \n");
-    Arrays.stream(request.getAllHeaders()).forEach(h -> LOGGER.info(h.toString()));
-    LOGGER.info("\n ] HTTP Request Headers END.\n");
+    logger.info("HTTP Request Headers BEGIN [ \n");
+    Arrays.stream(request.getAllHeaders()).forEach(h -> logger.info(h.toString()));
+    logger.info("\n ] HTTP Request Headers END.\n");
 
     // send the request
     HttpClient httpClient = HttpClientBuilder.create().build();
@@ -59,7 +59,7 @@ public class TwitterApiTest {
     //    httpClient.execute(request, basicResponseHandler);
 
     HttpResponse httpResponse = httpClient.execute(request);
-    LOGGER.info("HttpResponse: " + EntityUtils.toString(httpResponse.getEntity()));
+    logger.info("HttpResponse: " + EntityUtils.toString(httpResponse.getEntity()));
 
 
   }

@@ -1,5 +1,13 @@
 package ca.jrvs.apps.twitter.example;
 
+import ca.jrvs.apps.twitter.example.dto.Company;
+import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+//import static ca.jrvs.apps.twitter.example.JsonParser.toObjectFromJson;
+//import static ca.jrvs.apps.twitter.example.JsonParser.toJson;
+
 public class ExampleMain {
 
   public static final String companyStr = "{\n"
@@ -47,7 +55,12 @@ public class ExampleMain {
       + "   ]\n"
       + "}";
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
+    // logging
+    final Logger logger = LoggerFactory.getLogger(TwitterApiTest.class);
+
+    Company company = JsonParser.toObjectFromJson(companyStr, Company.class);
+    logger.info(company.toString());
 
 
   }

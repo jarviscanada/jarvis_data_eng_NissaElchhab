@@ -114,4 +114,18 @@ public class Company {
   public void setDividends(List<Dividend> dividends) {
     this.dividends = dividends;
   }
+
+  @Override
+  public String toString() {
+    return "Company{" +
+        "symbol='" + symbol + '\'' +
+        ", companyName='" + companyName + '\'' +
+        ", exchange='" + exchange + '\'' +
+        ", description='" + description + '\'' +
+        ", ceo='" + ceo + '\'' +
+        ", sector='" + sector + '\'' +
+        ", financials=" + financials +
+        ", dividends=" + dividends +
+        '}';
+  }
 }

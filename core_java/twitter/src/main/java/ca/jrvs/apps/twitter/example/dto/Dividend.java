@@ -50,4 +50,15 @@ public class Dividend {
   public void setAmount(Double amount) {
     this.amount = amount;
   }
+
+  @Override
+  public String toString() {
+    return "Dividend{" +
+        "exDate='" + exDate + '\'' +
+        ", paymentDate='" + paymentDate + '\'' +
+        ", recordDate='" + recordDate + '\'' +
+        ", declaredDate='" + declaredDate + '\'' +
+        ", amount=" + amount +
+        '}';
+  }
 }

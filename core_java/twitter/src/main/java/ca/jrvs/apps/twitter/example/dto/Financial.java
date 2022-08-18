@@ -70,4 +70,16 @@ public class Financial {
     this.netIncome = netIncome;
   }
 
+  @Override
+  public String toString() {
+    return "Financial{" +
+        "reportDate='" + reportDate + '\'' +
+        ", grossProfit=" + grossProfit +
+        ", costOfRevenue=" + costOfRevenue +
+        ", operatingRevenue=" + operatingRevenue +
+        ", totalRevenue=" + totalRevenue +
+        ", operatingIncome=" + operatingIncome +
+        ", netIncome=" + netIncome +
+        '}';
+  }
 }
