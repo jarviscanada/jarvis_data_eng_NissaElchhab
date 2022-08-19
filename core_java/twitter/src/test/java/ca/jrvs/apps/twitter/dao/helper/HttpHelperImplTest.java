@@ -8,6 +8,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,17 +17,28 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-class HttpHelperTest {
+public class HttpHelperImplTest {
 
   @Mock
   OAuthConsumer oAuthConsumer;
   @Mock
   HttpClient httpClient;
   @Mock
+  HttpHelper httpHelper;
+
   URI uri;
+
+  @BeforeClass
+  public static void classSetUp() {
+  }
+
+  @AfterClass
+  public static void classTearDown() {
+  }
 
   @Before
   public void setUp() throws Exception {
+
 
   }
 
@@ -36,9 +48,11 @@ class HttpHelperTest {
 
   @Test
   public void httpPostShouldReturnAHttpResponse() {
+    HttpResponse httpResponse = httpHelper.httpPost(uri);
+    assertTrue(httpResponse != null);
   }
 
-    @Test
+  @Test
   public void httpPostShouldReturn401OnForbiddenPath() {
   }
 
@@ -62,19 +76,19 @@ class HttpHelperTest {
   public void httpGetShouldReturnAHttpResponse() {
   }
 
-    @Test
+  @Test
   public void httpGetShouldReturn404ResponseOnNonExistingURI() {
   }
 
-    @Test
+  @Test
   public void httpGetShouldReturn200ResponseOnReachableURI() {
   }
 
-    @Test
+  @Test
   public void httpGetShouldThrowOAuthExceptionOnOAuthErrors() {
   }
 
-    @Test
+  @Test
   public void httpGetShouldThrowIOExceptionOnHttpClientErrors() {
   }
 
