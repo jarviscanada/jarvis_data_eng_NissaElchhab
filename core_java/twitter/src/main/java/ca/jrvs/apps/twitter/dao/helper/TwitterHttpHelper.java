@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.URI;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-import oauth.signpost.exception.OAuthException;
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+import oauth.signpost.exception.OAuthMessageSignerException;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -40,7 +42,17 @@ public class TwitterHttpHelper implements HttpHelper {
    */
   @Override
   public HttpResponse httpGet(URI uri) {
-    return executeHttpMethod(HttpMethod.GET,uri, null);
+    try {
+      return executeHttpMethod(HttpMethod.GET, uri, null);
+    } catch (OAuthMessageSignerException | OAuthExpectationFailedException |
+             OAuthCommunicationException e) {
+      logger.debug("httpGet OAuthMessageSignerException | OAuthExpectationFailedException |  \n"
+          + "             OAuthCommunicationException: " + e);
+      throw new RuntimeException(e);
+    } catch (IOException e) {
+      logger.debug("httpGet IOException: " + e);
+      throw new RuntimeException(e);
+    }
   }
 
   /**
@@ -51,10 +63,22 @@ public class TwitterHttpHelper implements HttpHelper {
    */
   @Override
   public HttpResponse httpPost(URI uri) {
-    return executeHttpMethod(HttpMethod.POST,uri, null);
+    try {
+      return executeHttpMethod(HttpMethod.POST, uri, null);
+    } catch (OAuthMessageSignerException | OAuthExpectationFailedException |
+             OAuthCommunicationException e) {
+      logger.debug("httpPost OAuthMessageSignerException | OAuthExpectationFailedException |  \n"
+          + "             OAuthCommunicationException: " + e);
+      throw new RuntimeException(e);
+    } catch (IOException e) {
+      logger.debug("httpPost IOException: " + e);
+      throw new RuntimeException(e);
+    }
   }
 
-  private HttpResponse executeHttpMethod(HttpMethod httpMethod, URI uri, StringEntity entity) {
+  private HttpResponse executeHttpMethod(HttpMethod httpMethod, URI uri, StringEntity entity)
+      throws OAuthMessageSignerException, OAuthExpectationFailedException,
+      OAuthCommunicationException, IOException {
     HttpUriRequest request;
     HttpResponse response;
     switch (httpMethod) {
@@ -75,16 +99,7 @@ public class TwitterHttpHelper implements HttpHelper {
       }
     }
 
-    try {
-      oAuthConsumer.sign(request);
-      response = httpClient.execute(request);
-    } catch (OAuthException e) {
-      logger.debug(e.toString());
-      throw new RuntimeException(e);
-    } catch (IOException e) {
-      logger.debug(e.toString());
-      throw new RuntimeException(e);
-    }
-    return response;
+    oAuthConsumer.sign(request);
+    return httpClient.execute(request);
   }
 }
