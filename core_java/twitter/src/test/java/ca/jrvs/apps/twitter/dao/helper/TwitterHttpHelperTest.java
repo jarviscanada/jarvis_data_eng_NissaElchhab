@@ -1,30 +1,39 @@
 package ca.jrvs.apps.twitter.dao.helper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.net.URI;
 import oauth.signpost.OAuthConsumer;
+import oauth.signpost.exception.OAuthException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(Parameterized.class)
 public class TwitterHttpHelperTest {
 
+  @Rule
+  public MockitoRule mockitoJUnitRunner = MockitoJUnit.rule();
+
   @Mock
-  OAuthConsumer oAuthConsumer;
+  public OAuthConsumer oAuthConsumer;
+
   @Mock
-  HttpClient httpClient;
+  public HttpClient httpClient;
+
   @Mock
-  HttpHelper httpHelper;
+  public HttpHelper httpHelper;
 
   URI uri;
 
@@ -38,7 +47,6 @@ public class TwitterHttpHelperTest {
 
   @Before
   public void setUp() throws Exception {
-
 
   }
 
@@ -64,11 +72,11 @@ public class TwitterHttpHelperTest {
   public void httpPostShouldReturn204OnSuccessfulResourcePost() {
   }
 
-  @Test
+  @Test(expected = OAuthException.class)
   public void httpPostShouldThrowOAuthExceptionOnOAuthErrors() {
   }
 
-  @Test
+  @Test(expected = IOException.class)
   public void httpPostShouldThrowIOExceptionOnHttpClientErrors() {
   }
 
@@ -84,11 +92,11 @@ public class TwitterHttpHelperTest {
   public void httpGetShouldReturn200ResponseOnReachableURI() {
   }
 
-  @Test
+  @Test(expected = OAuthException.class)
   public void httpGetShouldThrowOAuthExceptionOnOAuthErrors() {
   }
 
-  @Test
+  @Test(expected = IOException.class)
   public void httpGetShouldThrowIOExceptionOnHttpClientErrors() {
   }
 
