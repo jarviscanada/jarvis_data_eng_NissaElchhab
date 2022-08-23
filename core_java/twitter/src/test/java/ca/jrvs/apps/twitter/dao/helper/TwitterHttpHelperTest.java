@@ -1,5 +1,6 @@
 package ca.jrvs.apps.twitter.dao.helper;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class TwitterHttpHelperTest {
   @Test
   public void httpPostShouldReturnAHttpResponse() {
     HttpResponse httpResponse = httpHelper.httpPost(uri);
-    assertTrue(httpResponse != null);
+    assertNotNull(httpResponse);
   }
 
   @Test

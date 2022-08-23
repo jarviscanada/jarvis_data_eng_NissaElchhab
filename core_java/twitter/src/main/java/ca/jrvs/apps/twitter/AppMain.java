@@ -2,9 +2,12 @@ package ca.jrvs.apps.twitter;
 
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.dao.helper.TwitterHttpHelper;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +15,7 @@ class AppMain {
 
   public static Logger logger = LoggerFactory.getLogger(AppMain.class);
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
     final String CONSUMER_KEY = System.getenv("consumerKey");
     final String CONSUMER_KEY_SECRET = System.getenv("consumerKeySecret");
     final String ACCESS_TOKEN = System.getenv("accessToken");
@@ -32,7 +35,7 @@ class AppMain {
       throw new RuntimeException(e);
     }
     HttpResponse httpResponse = httpHelper.httpGet(uri);
-    logger.debug(httpResponse.toString());
+    System.out.println(EntityUtils.toString(httpResponse.getEntity()));
 
 
   }
