@@ -1,6 +1,7 @@
 package ca.jrvs.apps.twitter.model;
 
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
+import java.io.IOException;
 import java.time.ZonedDateTime;
 
 /**
@@ -48,6 +49,93 @@ public class Tweet implements JsonParser {
   //
   private boolean retweeted;
 
+  public Tweet build(String json) {
+    Tweet tweet;
+    try {
+      tweet = this.parseJson(json);
+    } catch (IOException e) {
+      throw new IllegalArgumentException("JSON cannot be parsed into object",e);
+    }
+    return tweet;
+  }
 
+  public ZonedDateTime getCreatedAt() {
+    return createdAt;
+  }
 
+  public void setCreatedAt(ZonedDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getIdStr() {
+    return idStr;
+  }
+
+  public void setIdStr(String idStr) {
+    this.idStr = idStr;
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public void setText(String text) {
+    this.text = text;
+  }
+
+  public Entities getEntities() {
+    return entities;
+  }
+
+  public void setEntities(Entities entities) {
+    this.entities = entities;
+  }
+
+  public Coordinates getCoordinates() {
+    return coordinates;
+  }
+
+  public void setCoordinates(Coordinates coordinates) {
+    this.coordinates = coordinates;
+  }
+
+  public int getRetweetCount() {
+    return retweetCount;
+  }
+
+  public void setRetweetCount(int retweetCount) {
+    this.retweetCount = retweetCount;
+  }
+
+  public int getFavoriteCount() {
+    return favoriteCount;
+  }
+
+  public void setFavoriteCount(int favoriteCount) {
+    this.favoriteCount = favoriteCount;
+  }
+
+  public boolean isFavorited() {
+    return favorited;
+  }
+
+  public void setFavorited(boolean favorited) {
+    this.favorited = favorited;
+  }
+
+  public boolean isRetweeted() {
+    return retweeted;
+  }
+
+  public void setRetweeted(boolean retweeted) {
+    this.retweeted = retweeted;
+  }
 }
