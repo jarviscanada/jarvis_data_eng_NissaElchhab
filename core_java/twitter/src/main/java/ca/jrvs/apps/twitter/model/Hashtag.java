@@ -1,9 +1,7 @@
 package ca.jrvs.apps.twitter.model;
 
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
-import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
 import java.io.IOException;
-import java.util.List;
 
 public class Hashtag implements JsonParser {
 
@@ -18,7 +16,7 @@ public class Hashtag implements JsonParser {
     try {
       hashtag = this.parseJson(json);
     } catch (IOException e) {
-      throw new IllegalArgumentException("JSON cannot be parsed into object",e);
+      throw new IllegalArgumentException("JSON cannot be parsed into object", e);
     }
     return hashtag;
   }

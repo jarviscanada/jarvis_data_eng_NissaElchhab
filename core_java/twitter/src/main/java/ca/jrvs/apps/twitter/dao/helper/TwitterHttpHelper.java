@@ -34,10 +34,12 @@ public class TwitterHttpHelper implements HttpHelper {
 //    this.httpClient = HttpClientBuilder.create().build();
     this.httpClient = new DefaultHttpClient();
   }
+
   public TwitterHttpHelper(OAuthConsumer oAuthConsumer, HttpClient httpClient) {
     this.oAuthConsumer = oAuthConsumer;
     this.httpClient = httpClient;
   }
+
   public TwitterHttpHelper(OAuthConsumer oAuthConsumer) {
     this(oAuthConsumer, new DefaultHttpClient());
   }
@@ -60,7 +62,7 @@ public class TwitterHttpHelper implements HttpHelper {
     } catch (ClientProtocolException e) {
       logger.debug("GET ClientProtocolException: " + e);
       throw new IllegalStateException(e);
-    }  catch (IOException e) {
+    } catch (IOException e) {
       logger.debug("GET IOException: " + e);
       throw new IllegalStateException(e);
     }

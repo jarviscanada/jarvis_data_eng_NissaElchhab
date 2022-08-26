@@ -25,7 +25,7 @@ public class UserMention implements JsonParser {
     try {
       userMention = this.parseJson(json);
     } catch (IOException e) {
-      throw new IllegalArgumentException("JSON cannot be parsed into object",e);
+      throw new IllegalArgumentException("JSON cannot be parsed into object", e);
     }
     return userMention;
   }

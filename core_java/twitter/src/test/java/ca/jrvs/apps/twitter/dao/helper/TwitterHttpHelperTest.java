@@ -23,22 +23,20 @@ import org.springframework.http.HttpStatus;
 //@RunWith(Parameterized.class)
 public class TwitterHttpHelperTest {
 
-  @Rule
-  public MockitoRule mockitoJUnitRunner = MockitoJUnit.rule();
-
-  @Mock
-  public OAuthConsumer oAuthConsumer;
-  @Mock
-  public HttpClient httpClient;
-  @Mock
-  public HttpHelper httpHelper;
-
   public static URI getUriIsNotAuthz;
   public static URI getUriIsAuthzAndExists;
   public static URI getUriIsAuthAndDoesNotExist;
   public static URI postUriIsNotAuthz;
   public static URI postUriIsAuthzAndIsValid;
   public static URI postUriIsAuthAndDoesNotExist;
+  @Rule
+  public MockitoRule mockitoJUnitRunner = MockitoJUnit.rule();
+  @Mock
+  public OAuthConsumer oAuthConsumer;
+  @Mock
+  public HttpClient httpClient;
+  @Mock
+  public HttpHelper httpHelper;
 
   @BeforeClass
   public static void classSetup() {

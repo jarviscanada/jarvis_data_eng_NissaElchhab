@@ -16,7 +16,7 @@ public class Coordinates implements JsonParser {
     try {
       coordinates = this.parseJson(json);
     } catch (IOException e) {
-      throw new IllegalArgumentException("JSON cannot be parsed into object",e);
+      throw new IllegalArgumentException("JSON cannot be parsed into object", e);
     }
     return coordinates;
   }

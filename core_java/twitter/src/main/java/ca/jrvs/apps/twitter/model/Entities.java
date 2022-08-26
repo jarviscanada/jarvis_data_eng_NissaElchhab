@@ -17,7 +17,7 @@ public class Entities implements JsonParser {
     try {
       entities = this.parseJson(json);
     } catch (IOException e) {
-      throw new IllegalArgumentException("JSON cannot be parsed into object",e);
+      throw new IllegalArgumentException("JSON cannot be parsed into object", e);
     }
     return entities;
   }
