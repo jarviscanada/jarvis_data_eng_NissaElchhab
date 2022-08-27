@@ -49,6 +49,21 @@ public class Tweet implements JsonParser {
   //
   private boolean retweeted;
 
+  public Tweet(ZonedDateTime createdAt, Long id, String idStr, String text, Entities entities,
+      Coordinates coordinates, int retweetCount, int favoriteCount, boolean favorited,
+      boolean retweeted) {
+    this.createdAt = createdAt;
+    this.id = id;
+    this.idStr = idStr;
+    this.text = text;
+    this.entities = entities;
+    this.coordinates = coordinates;
+    this.retweetCount = retweetCount;
+    this.favoriteCount = favoriteCount;
+    this.favorited = favorited;
+    this.retweeted = retweeted;
+  }
+
   public Tweet build(String json) {
     Tweet tweet;
     try {

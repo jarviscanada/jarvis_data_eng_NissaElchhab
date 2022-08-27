@@ -11,6 +11,11 @@ public class Coordinates implements JsonParser {
   // For tweet coordinates field, always `"Point"`
   private String type;
 
+  public Coordinates(float[] coordinates, String type) {
+    this.coordinates = coordinates;
+    this.type = type;
+  }
+
   public Coordinates build(String json) {
     Coordinates coordinates;
     try {

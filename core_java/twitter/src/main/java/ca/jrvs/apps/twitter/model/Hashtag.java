@@ -11,6 +11,11 @@ public class Hashtag implements JsonParser {
   //
   private String text;
 
+  public Hashtag(int[] indices, String text) {
+    this.indices = indices;
+    this.text = text;
+  }
+
   public Hashtag build(String json) {
     Hashtag hashtag;
     try {

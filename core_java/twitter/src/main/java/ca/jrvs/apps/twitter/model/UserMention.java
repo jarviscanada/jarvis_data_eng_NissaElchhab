@@ -20,6 +20,14 @@ public class UserMention implements JsonParser {
   //
   private String screenName;
 
+  public UserMention(Long id, String idStr, int[] indices, String name, String screenName) {
+    this.id = id;
+    this.idStr = idStr;
+    this.indices = indices;
+    this.name = name;
+    this.screenName = screenName;
+  }
+
   public UserMention build(String json) {
     UserMention userMention;
     try {

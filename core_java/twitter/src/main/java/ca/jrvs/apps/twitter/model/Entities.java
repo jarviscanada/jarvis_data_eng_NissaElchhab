@@ -12,6 +12,10 @@ public class Entities implements JsonParser {
   //
   private List<UserMention> userMentions;
 
+  public Entities(List<Hashtag> hashtags, List<UserMention> userMentions) {
+    this.hashtags = hashtags;
+    this.userMentions = userMentions;
+  }
   public Entities build(String json) {
     Entities entities;
     try {
