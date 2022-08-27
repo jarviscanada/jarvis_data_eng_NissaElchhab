@@ -20,6 +20,9 @@ public class UserMention implements JsonParser {
   //
   private String screenName;
 
+  public UserMention() {
+  }
+
   public UserMention(Long id, String idStr, int[] indices, String name, String screenName) {
     this.id = id;
     this.idStr = idStr;
@@ -28,14 +31,15 @@ public class UserMention implements JsonParser {
     this.screenName = screenName;
   }
 
-  public UserMention build(String json) {
-    UserMention userMention;
+  public static UserMention from(String json) {
+    UserMention unmarshalledObject;
     try {
-      userMention = this.parseJson(json);
+      unmarshalledObject = JsonParser.unmarshall(json, UserMention.class);
     } catch (IOException e) {
-      throw new IllegalArgumentException("JSON cannot be parsed into object", e);
+      throw new IllegalArgumentException(
+          "JSON cannot be parsed into object", e);
     }
-    return userMention;
+    return unmarshalledObject;
   }
 
   public Long getId() {

@@ -49,6 +49,10 @@ public class Tweet implements JsonParser {
   //
   private boolean retweeted;
 
+  public Tweet() {
+
+  }
+
   public Tweet(ZonedDateTime createdAt, Long id, String idStr, String text, Entities entities,
       Coordinates coordinates, int retweetCount, int favoriteCount, boolean favorited,
       boolean retweeted) {
@@ -64,14 +68,19 @@ public class Tweet implements JsonParser {
     this.retweeted = retweeted;
   }
 
-  public Tweet build(String json) {
-    Tweet tweet;
+//  public Tweet(String json) {
+//
+//  }
+
+  public static Tweet from(String json) {
+    Tweet unmarshalledObject;
     try {
-      tweet = this.parseJson(json);
+      unmarshalledObject = JsonParser.unmarshall(json, Tweet.class);
     } catch (IOException e) {
-      throw new IllegalArgumentException("JSON cannot be parsed into object", e);
+      throw new IllegalArgumentException(
+          "JSON cannot be parsed into object", e);
     }
-    return tweet;
+    return unmarshalledObject;
   }
 
   public ZonedDateTime getCreatedAt() {

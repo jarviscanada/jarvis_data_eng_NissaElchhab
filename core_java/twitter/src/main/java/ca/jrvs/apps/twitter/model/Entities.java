@@ -12,19 +12,25 @@ public class Entities implements JsonParser {
   //
   private List<UserMention> userMentions;
 
+  public Entities() {
+  }
+
   public Entities(List<Hashtag> hashtags, List<UserMention> userMentions) {
     this.hashtags = hashtags;
     this.userMentions = userMentions;
   }
-  public Entities build(String json) {
-    Entities entities;
+
+  public static Entities from(String json) {
+    Entities unmarshalledObject;
     try {
-      entities = this.parseJson(json);
+      unmarshalledObject = JsonParser.unmarshall(json, Entities.class);
     } catch (IOException e) {
-      throw new IllegalArgumentException("JSON cannot be parsed into object", e);
+      throw new IllegalArgumentException(
+          "JSON cannot be parsed into object", e);
     }
-    return entities;
+    return unmarshalledObject;
   }
+
 
   public List<Hashtag> getHashtags() {
     return hashtags;

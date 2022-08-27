@@ -11,19 +11,23 @@ public class Hashtag implements JsonParser {
   //
   private String text;
 
+  public Hashtag() {
+  }
+
   public Hashtag(int[] indices, String text) {
     this.indices = indices;
     this.text = text;
   }
 
-  public Hashtag build(String json) {
-    Hashtag hashtag;
+  public static Hashtag from(String json) {
+    Hashtag unmarshalledObject;
     try {
-      hashtag = this.parseJson(json);
+      unmarshalledObject = JsonParser.unmarshall(json, Hashtag.class);
     } catch (IOException e) {
-      throw new IllegalArgumentException("JSON cannot be parsed into object", e);
+      throw new IllegalArgumentException(
+          "JSON cannot be parsed into object", e);
     }
-    return hashtag;
+    return unmarshalledObject;
   }
 
   public int[] getIndices() {

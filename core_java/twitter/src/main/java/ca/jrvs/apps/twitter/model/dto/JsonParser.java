@@ -18,7 +18,7 @@ public interface JsonParser {
    * @return JSON string representation
    * @throws JsonProcessingException
    */
-  static String toJson(Object object, boolean prettyJson, boolean includeNullValues) throws
+  static String marshall(Object object, boolean prettyJson, boolean includeNullValues) throws
       JsonProcessingException {
     final ObjectMapper om = new ObjectMapper();
     if (!includeNullValues) {
@@ -39,7 +39,7 @@ public interface JsonParser {
    * @return
    * @throws IOException
    */
-  static <T> T parseJson(String json, Class<T> clazz) throws IOException {
+  static <T> T unmarshall(String json, Class<T> clazz) throws IOException {
     final ObjectMapper om = new ObjectMapper();
     om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     return (T) om.readValue(json, clazz);
@@ -52,9 +52,9 @@ public interface JsonParser {
    * @return pretty JSON string representation
    * @throws JsonProcessingException
    */
-  default String toJson(Object object) throws
+  default String marshall(Object object) throws
       JsonProcessingException {
-    return JsonParser.toJson(object, true, true);
+    return JsonParser.marshall(object, true, true);
   }
 
   /**
@@ -65,9 +65,9 @@ public interface JsonParser {
    * @return JSON string representation
    * @throws JsonProcessingException
    */
-  default String toJson(Object object, boolean prettyJson) throws
+  default String marshall(Object object, boolean prettyJson) throws
       JsonProcessingException {
-    return JsonParser.toJson(object, prettyJson, true);
+    return JsonParser.marshall(object, prettyJson, true);
   }
 
   /**
@@ -78,10 +78,11 @@ public interface JsonParser {
    * @return
    * @throws IOException
    */
-  default <T extends JsonParser> T parseJson(String json) throws IOException {
+  default <T extends JsonParser> T unmarshall(String json) throws IOException {
     Class<T> clazz = (Class<T>) this.getClass();
     final ObjectMapper om = new ObjectMapper();
     om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     return (T) om.readValue(json, clazz);
   }
+
 }
