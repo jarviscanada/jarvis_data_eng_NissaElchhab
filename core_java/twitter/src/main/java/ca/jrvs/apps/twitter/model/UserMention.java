@@ -36,7 +36,7 @@ public class UserMention implements JsonParser {
   public static UserMention from(String json) {
     UserMention unmarshalledObject;
     try {
-      unmarshalledObject = JsonParser.unmarshall(json, UserMention.class);
+      unmarshalledObject = JsonParser.parseJson(json, UserMention.class);
     } catch (IOException e) {
       throw new IllegalArgumentException(
           "JSON cannot be parsed into object UserMention", e);

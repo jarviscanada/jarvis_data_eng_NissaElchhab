@@ -24,7 +24,7 @@ public class Entities implements JsonParser {
   public static Entities from(String json) {
     Entities unmarshalledObject;
     try {
-      unmarshalledObject = JsonParser.unmarshall(json, Entities.class);
+      unmarshalledObject = JsonParser.parseJson(json, Entities.class);
     } catch (IOException e) {
       throw new IllegalArgumentException(
           "JSON cannot be parsed into object", e);

@@ -23,7 +23,7 @@ public class Hashtag implements JsonParser {
   public static Hashtag from(String json) {
     Hashtag unmarshalledObject;
     try {
-      unmarshalledObject = JsonParser.unmarshall(json, Hashtag.class);
+      unmarshalledObject = JsonParser.parseJson(json, Hashtag.class);
     } catch (IOException e) {
       throw new IllegalArgumentException(
           "JSON cannot be parsed into object Hashtag", e);

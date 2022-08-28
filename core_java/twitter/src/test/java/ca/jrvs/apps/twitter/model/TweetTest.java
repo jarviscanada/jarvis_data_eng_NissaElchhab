@@ -1,21 +1,21 @@
 package ca.jrvs.apps.twitter.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.dao.helper.TwitterHttpHelper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gdata.util.common.base.PercentEscaper;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.http.HttpResponse;
+import org.assertj.core.api.AssertJProxySetup;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class TweetTest {
   public static String exampleInputJsonTweet;
   public static Tweet exampleExpectedObjectTweet;
   public static Tweet exampleInputObjectTweet;
-  public static Tweet exampleExpectedSerializedTweet;
+  public static String exampleExpectedSerializedTweet;
   public static URI getUriIsNotAuthz;
   public static URI getUriIsAuthzAndExists;
   public static URI getUriIsAuthAndDoesNotExist;
@@ -92,29 +92,34 @@ public class TweetTest {
         + "}";
 
     List<Hashtag> hashTags = Arrays.asList(
-        new Hashtag("documentation", Arrays.asList( 211, 225)),
-        new Hashtag("parsingJSON",  Arrays.asList(  226, 238 ) ),
-        new Hashtag("GeoTagged",Arrays.asList( 239,249  ) ));
+        new Hashtag("documentation", Arrays.asList(211, 225)),
+        new Hashtag("parsingJSON", Arrays.asList(226, 238)),
+        new Hashtag("GeoTagged", Arrays.asList(239, 249)));
 
     List<UserMention> userMentions = Arrays.asList(
-        new UserMention(6253282L,"6253282", Arrays.asList( 4, 15 ),
-            "Twitter API","twitterapi" ),
-        new UserMention(1253282L,"1253282", Arrays.asList( 3, 25),
-            "googleapi","Google API") );
+        new UserMention(6253282L, "6253282", Arrays.asList(4, 15),
+            "Twitter API", "twitterapi"),
+        new UserMention(1253282L, "1253282", Arrays.asList(3, 25),
+            "googleapi", "Google API"));
 
-    Coordinates coordinates = new Coordinates(  new float[]{ -75.14310264f, 40.05701649f  },
+    Coordinates coordinates = new Coordinates(new float[]{-75.14310264f, 40.05701649f},
         "Point");
 
-    Entities entities =  new Entities( hashTags, userMentions );
+    Entities entities = new Entities(hashTags, userMentions);
 
     exampleExpectedObjectTweet = new Tweet(
-      "Mon Feb 18 21:24:39 +0000 2019" ,
+        "Mon Feb 18 21:24:39 +0000 2019",
         1097607853932564480L, "1097607853932564480",
-        "text with loc223",  entities,coordinates, 11,  0,
+        "text with loc223", entities, coordinates, 11, 0,
         true, false);
 
-    exampleInputObjectTweet = null;
-    exampleExpectedSerializedTweet = null;
+    exampleInputObjectTweet = new Tweet(
+        "Mon Feb 18 21:24:39 +0000 2019",
+        1097607853932564480L, "1097607853932564480",
+        "text with loc223", entities, coordinates, 11, 0,
+        true, false);
+
+    exampleExpectedSerializedTweet = exampleInputJsonTweet;
 
     PercentEscaper percentEscaper = new PercentEscaper("", false);
     try {
@@ -148,13 +153,15 @@ public class TweetTest {
 
   @Test
   public void shouldDeserializeTweetObjectFromJson() {
-    Tweet parsedExampleInputJsonTweet;
-    parsedExampleInputJsonTweet = Tweet.from(exampleInputJsonTweet);
+    Tweet parsedInputJsonTweet;
+    parsedInputJsonTweet = Tweet.from(exampleInputJsonTweet);
 //    assertEquals(exampleExpectedObjectTweet,parsedExampleInputJsonTweet);
+    Assert.assertSame();
   }
 
-
-  public void shouldSerializeTweetObjectToJson() {
+  @Test
+  public void shouldSerializeTweetObjectToJson() throws JsonProcessingException {
+    String serializedTweet = exampleInputObjectTweet.toJson();
 
   }
 

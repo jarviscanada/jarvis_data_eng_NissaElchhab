@@ -40,7 +40,7 @@ public class Coordinates implements JsonParser {
   public static Coordinates from(String json) {
     Coordinates unmarshalledObject;
     try {
-      unmarshalledObject = JsonParser.unmarshall(json, Coordinates.class);
+      unmarshalledObject = JsonParser.parseJson(json, Coordinates.class);
     } catch (IOException e) {
       throw new IllegalArgumentException("JSON cannot be parsed into object", e);
     }

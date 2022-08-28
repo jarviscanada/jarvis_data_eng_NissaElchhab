@@ -82,7 +82,7 @@ public class Tweet implements JsonParser {
   public static Tweet from(String json) {
     Tweet unmarshalledObject;
     try {
-      unmarshalledObject = JsonParser.unmarshall(json, Tweet.class);
+      unmarshalledObject = JsonParser.parseJson(json, Tweet.class);
     } catch (IOException e) {
       throw new IllegalArgumentException(
           "JSON cannot be parsed into object: Tweet", e);
