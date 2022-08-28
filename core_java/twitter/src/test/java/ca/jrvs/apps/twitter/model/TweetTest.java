@@ -1,6 +1,7 @@
 package ca.jrvs.apps.twitter.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.dao.helper.TwitterHttpHelper;
@@ -8,6 +9,10 @@ import com.google.gdata.util.common.base.PercentEscaper;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.http.HttpResponse;
 import org.junit.After;
 import org.junit.Before;
@@ -30,8 +35,83 @@ public class TweetTest {
 
   @BeforeClass
   public static void beforeClass() throws Exception {
-    exampleInputJsonTweet = "{\"created_at\":\"Tue Aug 16 18:48:49 +0000 2022\",\"id\":1559613165377183744,\"id_str\":\"1559613165377183744\",\"text\":\"#TestTestTest Hello From Api at 2022-08-16T12:48:48.787\",\"truncated\":false,\"entities\":{\"hashtags\":[{\"text\":\"TestTestTest\",\"indices\":[0,13]}],\"symbols\":[],\"user_mentions\":[],\"urls\":[]},\"source\":\"\\u003ca href=\\\"https:\\/\\/jrvs.ca\\\" rel=\\\"nofollow\\\"\\u003evisjar\\u003c\\/a\\u003e\",\"in_reply_to_status_id\":null,\"in_reply_to_status_id_str\":null,\"in_reply_to_user_id\":null,\"in_reply_to_user_id_str\":null,\"in_reply_to_screen_name\":null,\"user\":{\"id\":1554290146664521728,\"id_str\":\"1554290146664521728\",\"name\":\"Anissaa\",\"screen_name\":\"anissaappears\",\"location\":\"\",\"description\":\"Student, Java dev, Spring Boot, Golang, React\",\"url\":null,\"entities\":{\"description\":{\"urls\":[]}},\"protected\":false,\"followers_count\":114,\"friends_count\":3094,\"listed_count\":0,\"created_at\":\"Tue Aug 02 02:17:50 +0000 2022\",\"favourites_count\":197,\"utc_offset\":null,\"time_zone\":null,\"geo_enabled\":true,\"verified\":false,\"statuses_count\":43,\"lang\":null,\"contributors_enabled\":false,\"is_translator\":false,\"is_translation_enabled\":false,\"profile_background_color\":\"F5F8FA\",\"profile_background_image_url\":null,\"profile_background_image_url_https\":null,\"profile_background_tile\":false,\"profile_image_url\":\"http:\\/\\/pbs.twimg.com\\/profile_images\\/1554290347202580480\\/3LGtF_RO_normal.png\",\"profile_image_url_https\":\"https:\\/\\/pbs.twimg.com\\/profile_images\\/1554290347202580480\\/3LGtF_RO_normal.png\",\"profile_link_color\":\"1DA1F2\",\"profile_sidebar_border_color\":\"C0DEED\",\"profile_sidebar_fill_color\":\"DDEEF6\",\"profile_text_color\":\"333333\",\"profile_use_background_image\":true,\"has_extended_profile\":true,\"default_profile\":true,\"default_profile_image\":false,\"following\":false,\"follow_request_sent\":false,\"notifications\":false,\"translator_type\":\"none\",\"withheld_in_countries\":[]},\"geo\":{\"type\":\"Point\",\"coordinates\":[36.78211206,-123.40061283]},\"coordinates\":{\"type\":\"Point\",\"coordinates\":[-123.40061283,36.78211206]},\"place\":null,\"contributors\":null,\"is_quote_status\":false,\"retweet_count\":0,\"favorite_count\":0,\"favorited\":false,\"retweeted\":false,\"lang\":\"in\"}";
-    exampleExpectedObjectTweet = null;
+    exampleInputJsonTweet = "{\n"
+        + "   \"created_at\":\"Mon Feb 18 21:24:39 +0000 2019\",\n"
+        + "   \"id\":1097607853932564480,\n"
+        + "   \"id_str\":\"1097607853932564480\",\n"
+        + "   \"text\":\"test with loc223\",\n"
+        + "   \"entities\":{\n"
+        + "      \"hashtags\":[\n"
+        + "         {\n"
+        + "            \"text\":\"documentation\",\n"
+        + "            \"indices\":[\n"
+        + "               211,\n"
+        + "               225\n"
+        + "            ]\n"
+        + "         },\n"
+        + "         {\n"
+        + "            \"text\":\"parsingJSON\",\n"
+        + "            \"indices\":[\n"
+        + "               226,\n"
+        + "               238\n"
+        + "            ]\n"
+        + "         },\n"
+        + "         {\n"
+        + "            \"text\":\"GeoTagged\",\n"
+        + "            \"indices\":[\n"
+        + "               239,\n"
+        + "               249\n"
+        + "            ]\n"
+        + "         }\n"
+        + "      ],\n"
+        + "      \"user_mentions\":[\n"
+        + "         {\n"
+        + "            \"name\":\"Twitter API\",\n"
+        + "            \"indices\":[\n"
+        + "               4,\n"
+        + "               15\n"
+        + "            ],\n"
+        + "            \"screen_name\":\"twitterapi\",\n"
+        + "            \"id\":6253282,\n"
+        + "            \"id_str\":\"6253282\"\n"
+        + "         }\n"
+        + "      ]\n"
+        + "   },\n"
+        + "   \"coordinates\":{\n"
+        + "      \"coordinates\":[\n"
+        + "         -75.14310264,\n"
+        + "         40.05701649\n"
+        + "      ],\n"
+        + "      \"type\":\"Point\"\n"
+        + "   },\n"
+        + "   \"retweet_count\":0,\n"
+        + "   \"favorite_count\":0,\n"
+        + "   \"favorited\":false,\n"
+        + "   \"retweeted\":false\n"
+        + "}";
+
+    List<Hashtag> hashTags = Arrays.asList(
+        new Hashtag("documentation", new  int[]{211, 225}),
+        new Hashtag("parsingJSON",   new int[]{ 226, 238 } ),
+        new Hashtag("GeoTagged", new  int[]{239,249  }) );
+
+    List<UserMention> userMentions = Arrays.asList(
+        new UserMention(6253282L,"6253282", new int[]{ 4, 15 },
+            "Twitter API","twitterapi" ),
+        new UserMention(1253282L,"1253282", new int[]{ 3, 25},
+            "googleapi","Google API") );
+
+    Coordinates coordinates = new Coordinates(  new float[]{ -75.14310264f, 40.05701649f  },
+        "Point");
+
+    Entities entities =  new Entities( hashTags, userMentions );
+
+    exampleExpectedObjectTweet = new Tweet(
+        ZonedDateTime.parse("Mon Feb 18 21:24:39 +0000 2019"),
+        1097607853932564480L, "1097607853932564480",
+        "text with loc223",  entities,coordinates, 11,  0,
+        true, false);
+
     exampleInputObjectTweet = null;
     exampleExpectedSerializedTweet = null;
 
@@ -67,9 +147,9 @@ public class TweetTest {
 
   @Test
   public void shouldDeserializeTweetObjectFromJson() {
-    Tweet tweet;
-    Tweet
-
+    Tweet parsedExampleInputJsonTweet;
+    parsedExampleInputJsonTweet = Tweet.from(exampleInputJsonTweet);
+    assertSame(exampleExpectedObjectTweet,parsedExampleInputJsonTweet);
   }
 
   @Test
@@ -77,7 +157,6 @@ public class TweetTest {
 
   }
 
-  @Test
   public void create() {
     final String CONSUMER_KEY = System.getenv("consumerKey");
     final String CONSUMER_KEY_SECRET = System.getenv("consumerKeySecret");
@@ -93,7 +172,6 @@ public class TweetTest {
     assertEquals(HttpStatus.OK.value(), httpResponse.getStatusLine().getStatusCode());
   }
 
-  @Test
   public void findBy() {
     final String CONSUMER_KEY = System.getenv("consumerKey");
     final String CONSUMER_KEY_SECRET = System.getenv("consumerKeySecret");

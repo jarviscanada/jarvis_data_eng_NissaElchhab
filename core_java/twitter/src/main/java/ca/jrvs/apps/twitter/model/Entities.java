@@ -1,6 +1,7 @@
 package ca.jrvs.apps.twitter.model;
 
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,18 +33,22 @@ public class Entities implements JsonParser {
   }
 
 
+  @JsonProperty("hashtags")
   public List<Hashtag> getHashtags() {
     return hashtags;
   }
 
+  @JsonProperty("hashtags")
   public void setHashtags(List<Hashtag> hashtags) {
     this.hashtags = hashtags;
   }
 
+  @JsonProperty("hashtags")
   public List<UserMention> getUserMentions() {
     return userMentions;
   }
 
+  @JsonProperty("hashtags")
   public void setUserMentions(List<UserMention> userMentions) {
     this.userMentions = userMentions;
   }

@@ -112,8 +112,8 @@ public class TwitterHttpHelper implements HttpHelper {
         break;
       }
       default: {
-        logger.error("Invalid Http Method: " + httpMethod.toString());
-        throw new IllegalArgumentException("Invalid Http Method: " + httpMethod.toString());
+        logger.error("Invalid Http Method: " + httpMethod);
+        throw new IllegalArgumentException("Invalid Http Method: " + httpMethod);
       }
     }
 

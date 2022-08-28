@@ -1,6 +1,7 @@
 package ca.jrvs.apps.twitter.model;
 
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,17 +19,22 @@ public class Coordinates implements JsonParser {
   public static final int LATITUDE = 1;
   private static final Logger logger = LoggerFactory.getLogger(Coordinates.class);
   // For tweet coordinates field, always `"Point"`
-  private final String type;
+  private String type;
   private float[] coordinates = new float[2];
 
   public Coordinates() {
     this.type = DEFAULT_TYPE;
   }
 
-  public Coordinates(float[] coordinates) {
-    this.coordinates[0] = coordinates[0];
-    this.coordinates[1] = coordinates[1];
-    this.type = DEFAULT_TYPE;
+//  public Coordinates(float[] coordinates) {
+//    this.coordinates[0] = coordinates[0];
+//    this.coordinates[1] = coordinates[1];
+//    this.type = DEFAULT_TYPE;
+//  }
+
+  public Coordinates(float[] coordinates, String type) {
+    this.coordinates = coordinates;
+    this.type = type;
   }
 
   public static Coordinates from(String json) {
@@ -41,10 +47,12 @@ public class Coordinates implements JsonParser {
     return unmarshalledObject;
   }
 
+  @JsonProperty("coordinates")
   public float[] getCoordinates() {
     return coordinates;
   }
 
+  @JsonProperty("coordinates")
   public void setCoordinates(float[] coordinates) {
     if (isCoordinatesValid(coordinates)) {
       this.coordinates = coordinates;
@@ -54,23 +62,31 @@ public class Coordinates implements JsonParser {
     }
   }
 
+  @JsonProperty("type")
   public String getType() {
     return type;
   }
 
+  @JsonProperty("type")
+  public void setType(String type) {
+    this.type = type;
+  }
+
   private boolean isCoordinatesValid(float[] coords) {
-    boolean isValid = false;
     if (coords == null || coords.length != 2) {
       logger.debug(
           "Coordinates must be a collection of 2 floating-point numbers referencing longitude and latitude");
-    } else if (coords[LONGITUDE] >= MIN_LONGITUDE && coords[LONGITUDE] <= MAX_LONGITUDE) {
-      logger.debug("Longitude value out of bounds");
-    } else if (coords[LATITUDE] >= MIN_LATITUDE && coords[LATITUDE] <= MAX_LATITUDE) {
-      logger.debug("Latitude value out of bounds");
-    } else {
-      isValid = true;
+      return false;
     }
-    return isValid;
+    if (coords[LONGITUDE] >= MIN_LONGITUDE && coords[LONGITUDE] <= MAX_LONGITUDE) {
+      logger.debug("Longitude value out of bounds");
+      return false;
+    }
+    if (coords[LATITUDE] >= MIN_LATITUDE && coords[LATITUDE] <= MAX_LATITUDE) {
+      logger.debug("Latitude value out of bounds");
+      return false;
+    }
+    return true;
   }
 
 }

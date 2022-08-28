@@ -1,20 +1,20 @@
 package ca.jrvs.apps.twitter.model;
 
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.IOException;
 
 public class Hashtag implements JsonParser {
 
   //
-  private int[] indices;
-
-  //
   private String text;
+  //
+  private int[] indices;
 
   public Hashtag() {
   }
 
-  public Hashtag(int[] indices, String text) {
+  public Hashtag(String text, int[] indices) {
     this.indices = indices;
     this.text = text;
   }
@@ -30,19 +30,25 @@ public class Hashtag implements JsonParser {
     return unmarshalledObject;
   }
 
-  public int[] getIndices() {
-    return indices;
-  }
-
-  public void setIndices(int[] indices) {
-    this.indices = indices;
-  }
-
+  @JsonProperty("text")
   public String getText() {
     return text;
   }
 
+  @JsonProperty("text")
   public void setText(String text) {
     this.text = text;
   }
+
+  @JsonProperty("indices")
+  public int[] getIndices() {
+    return indices;
+  }
+
+  @JsonProperty("indices")
+  public void setIndices(int[] indices) {
+    this.indices = indices;
+  }
+
+
 }
