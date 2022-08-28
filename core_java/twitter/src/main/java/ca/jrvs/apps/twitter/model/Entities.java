@@ -38,17 +38,15 @@ public class Entities implements JsonParser {
     return hashtags;
   }
 
-  @JsonProperty("hashtags")
   public void setHashtags(List<Hashtag> hashtags) {
     this.hashtags = hashtags;
   }
 
-  @JsonProperty("hashtags")
+  @JsonProperty("mentions")
   public List<UserMention> getUserMentions() {
     return userMentions;
   }
 
-  @JsonProperty("hashtags")
   public void setUserMentions(List<UserMention> userMentions) {
     this.userMentions = userMentions;
   }

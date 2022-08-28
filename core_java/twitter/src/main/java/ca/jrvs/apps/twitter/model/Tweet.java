@@ -3,7 +3,10 @@ package ca.jrvs.apps.twitter.model;
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +34,9 @@ import org.slf4j.LoggerFactory;
 
 public class Tweet implements JsonParser {
 
+  public static final String CREATEDAT_PATTERN = "EEE MMM dd HH:mm:ss Z yyyy";
+  public static final DateTimeFormatter twitterDatetimeFormat =
+      new DateTimeFormatterBuilder().appendPattern(CREATEDAT_PATTERN).toFormatter();
   public static final int MAX_TEXT_LENGTH = 140;
   private static final Logger logger = LoggerFactory.getLogger(Tweet.class);
   // String UTC time when this Tweet was created. Example:
@@ -58,10 +64,11 @@ public class Tweet implements JsonParser {
 
   }
 
-  public Tweet(ZonedDateTime createdAt, Long id, String idStr, String text, Entities entities,
+  public Tweet(String createdAt, Long id, String idStr, String text, Entities entities,
       Coordinates coordinates, int retweetCount, int favoriteCount, boolean favorited,
       boolean retweeted) {
-    this.createdAt = createdAt;
+    this.createdAt = ZonedDateTime.parse(createdAt, twitterDatetimeFormat);
+//        ZonedDateTime.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME);
     this.id = id;
     this.idStr = idStr;
     this.text = text;
@@ -79,7 +86,7 @@ public class Tweet implements JsonParser {
       unmarshalledObject = JsonParser.unmarshall(json, Tweet.class);
     } catch (IOException e) {
       throw new IllegalArgumentException(
-          "JSON cannot be parsed into object", e);
+          "JSON cannot be parsed into object: Tweet", e);
     }
     return unmarshalledObject;
   }
@@ -91,7 +98,7 @@ public class Tweet implements JsonParser {
 
   @JsonProperty("created_at")
   public void setCreatedAt(String createdAt) {
-    this.createdAt = ZonedDateTime.parse(createdAt);
+    this.createdAt = ZonedDateTime.parse(createdAt,twitterDatetimeFormat);
   }
 
   @JsonProperty("id")
@@ -99,7 +106,6 @@ public class Tweet implements JsonParser {
     return id;
   }
 
-  @JsonProperty("id")
   public void setId(Long id) {
     this.id = id;
   }
@@ -109,7 +115,6 @@ public class Tweet implements JsonParser {
     return idStr;
   }
 
-  @JsonProperty("id_str")
   public void setIdStr(String idStr) {
     this.idStr = idStr;
   }
@@ -119,7 +124,6 @@ public class Tweet implements JsonParser {
     return text;
   }
 
-  @JsonProperty("text")
   public void setText(String text) {
     this.text = text;
   }
@@ -129,7 +133,6 @@ public class Tweet implements JsonParser {
     return entities;
   }
 
-  @JsonProperty("entities")
   public void setEntities(Entities entities) {
     this.entities = entities;
   }
@@ -139,7 +142,6 @@ public class Tweet implements JsonParser {
     return coordinates;
   }
 
-  @JsonProperty("coordinates")
   public void setCoordinates(Coordinates coordinates) {
     this.coordinates = coordinates;
   }
@@ -149,7 +151,6 @@ public class Tweet implements JsonParser {
     return retweetCount;
   }
 
-  @JsonProperty("retweet_count")
   public void setRetweetCount(int retweetCount) {
     this.retweetCount = retweetCount;
   }
@@ -159,7 +160,6 @@ public class Tweet implements JsonParser {
     return favoriteCount;
   }
 
-  @JsonProperty("favorite_count")
   public void setFavoriteCount(int favoriteCount) {
     this.favoriteCount = favoriteCount;
   }
@@ -169,7 +169,6 @@ public class Tweet implements JsonParser {
     return favorited;
   }
 
-  @JsonProperty("favorited")
   public void setFavorited(boolean favorited) {
     this.favorited = favorited;
   }
@@ -179,7 +178,6 @@ public class Tweet implements JsonParser {
     return retweeted;
   }
 
-  @JsonProperty("retweeted")
   public void setRetweeted(boolean retweeted) {
     this.retweeted = retweeted;
   }

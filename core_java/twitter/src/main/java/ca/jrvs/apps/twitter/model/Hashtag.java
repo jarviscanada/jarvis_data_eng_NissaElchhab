@@ -3,18 +3,19 @@ package ca.jrvs.apps.twitter.model;
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.IOException;
+import java.util.List;
 
 public class Hashtag implements JsonParser {
 
   //
   private String text;
   //
-  private int[] indices;
+  private List<Integer> indices;
 
   public Hashtag() {
   }
 
-  public Hashtag(String text, int[] indices) {
+  public Hashtag(String text, List<Integer> indices) {
     this.indices = indices;
     this.text = text;
   }
@@ -25,7 +26,7 @@ public class Hashtag implements JsonParser {
       unmarshalledObject = JsonParser.unmarshall(json, Hashtag.class);
     } catch (IOException e) {
       throw new IllegalArgumentException(
-          "JSON cannot be parsed into object", e);
+          "JSON cannot be parsed into object Hashtag", e);
     }
     return unmarshalledObject;
   }
@@ -35,18 +36,16 @@ public class Hashtag implements JsonParser {
     return text;
   }
 
-  @JsonProperty("text")
   public void setText(String text) {
     this.text = text;
   }
 
   @JsonProperty("indices")
-  public int[] getIndices() {
+  public List<Integer> getIndices() {
     return indices;
   }
 
-  @JsonProperty("indices")
-  public void setIndices(int[] indices) {
+  public void setIndices(List<Integer> indices) {
     this.indices = indices;
   }
 

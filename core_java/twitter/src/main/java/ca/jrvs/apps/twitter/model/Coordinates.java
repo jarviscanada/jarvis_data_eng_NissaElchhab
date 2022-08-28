@@ -52,7 +52,6 @@ public class Coordinates implements JsonParser {
     return coordinates;
   }
 
-  @JsonProperty("coordinates")
   public void setCoordinates(float[] coordinates) {
     if (isCoordinatesValid(coordinates)) {
       this.coordinates = coordinates;
@@ -78,11 +77,11 @@ public class Coordinates implements JsonParser {
           "Coordinates must be a collection of 2 floating-point numbers referencing longitude and latitude");
       return false;
     }
-    if (coords[LONGITUDE] >= MIN_LONGITUDE && coords[LONGITUDE] <= MAX_LONGITUDE) {
+    if (coords[LONGITUDE] <= MIN_LONGITUDE || coords[LONGITUDE] >= MAX_LONGITUDE) {
       logger.debug("Longitude value out of bounds");
       return false;
     }
-    if (coords[LATITUDE] >= MIN_LATITUDE && coords[LATITUDE] <= MAX_LATITUDE) {
+    if (coords[LATITUDE] <= MIN_LATITUDE || coords[LATITUDE] >= MAX_LATITUDE) {
       logger.debug("Latitude value out of bounds");
       return false;
     }

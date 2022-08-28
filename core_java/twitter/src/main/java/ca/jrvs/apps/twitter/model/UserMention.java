@@ -3,6 +3,7 @@ package ca.jrvs.apps.twitter.model;
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.IOException;
+import java.util.List;
 
 public class UserMention implements JsonParser {
 
@@ -13,7 +14,7 @@ public class UserMention implements JsonParser {
   private String idStr;
 
   //
-  private int[] indices;
+  private List<Integer> indices;
 
   //
   private String name;
@@ -24,7 +25,7 @@ public class UserMention implements JsonParser {
   public UserMention() {
   }
 
-  public UserMention(Long id, String idStr, int[] indices, String name, String screenName) {
+  public UserMention(Long id, String idStr,  List<Integer> indices, String name, String screenName) {
     this.id = id;
     this.idStr = idStr;
     this.indices = indices;
@@ -38,7 +39,7 @@ public class UserMention implements JsonParser {
       unmarshalledObject = JsonParser.unmarshall(json, UserMention.class);
     } catch (IOException e) {
       throw new IllegalArgumentException(
-          "JSON cannot be parsed into object", e);
+          "JSON cannot be parsed into object UserMention", e);
     }
     return unmarshalledObject;
   }
@@ -64,12 +65,11 @@ public class UserMention implements JsonParser {
   }
 
   @JsonProperty("indices")
-  public int[] getIndices() {
+  public  List<Integer> getIndices() {
     return indices;
   }
 
-  @JsonProperty("indices")
-  public void setIndices(int[] indices) {
+  public void setIndices( List<Integer> indices) {
     this.indices = indices;
   }
 
@@ -78,7 +78,6 @@ public class UserMention implements JsonParser {
     return name;
   }
 
-  @JsonProperty("name")
   public void setName(String name) {
     this.name = name;
   }
@@ -88,7 +87,6 @@ public class UserMention implements JsonParser {
     return screenName;
   }
 
-  @JsonProperty("screen_name")
   public void setScreenName(String screenName) {
     this.screenName = screenName;
   }
