@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.apache.http.HttpResponse;
 import org.assertj.core.api.AssertJProxySetup;
+import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,7 +41,7 @@ public class TweetTest {
         + "   \"created_at\":\"Mon Feb 18 21:24:39 +0000 2019\",\n"
         + "   \"id\":1097607853932564480,\n"
         + "   \"id_str\":\"1097607853932564480\",\n"
-        + "   \"text\":\"test with loc223\",\n"
+        + "   \"text\":\"text with loc223\",\n"
         + "   \"entities\":{\n"
         + "      \"hashtags\":[\n"
         + "         {\n"
@@ -155,9 +156,10 @@ public class TweetTest {
   public void shouldDeserializeTweetObjectFromJson() {
     Tweet parsedInputJsonTweet;
     parsedInputJsonTweet = Tweet.from(exampleInputJsonTweet);
+    Assertions.assertThat(exampleExpectedObjectTweet)
+        .isEqualToComparingFieldByFieldRecursively(parsedInputJsonTweet);
 //    assertEquals(exampleExpectedObjectTweet,parsedExampleInputJsonTweet);
-    Assert.assertSame();
-  }
+    }
 
   @Test
   public void shouldSerializeTweetObjectToJson() throws JsonProcessingException {
