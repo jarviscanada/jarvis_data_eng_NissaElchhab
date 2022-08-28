@@ -25,7 +25,7 @@ public class UserMention implements JsonParser {
   public UserMention() {
   }
 
-  public UserMention(Long id, String idStr,  List<Integer> indices, String name, String screenName) {
+  public UserMention(Long id, String idStr, List<Integer> indices, String name, String screenName) {
     this.id = id;
     this.idStr = idStr;
     this.indices = indices;
@@ -65,11 +65,11 @@ public class UserMention implements JsonParser {
   }
 
   @JsonProperty("indices")
-  public  List<Integer> getIndices() {
+  public List<Integer> getIndices() {
     return indices;
   }
 
-  public void setIndices( List<Integer> indices) {
+  public void setIndices(List<Integer> indices) {
     this.indices = indices;
   }
 

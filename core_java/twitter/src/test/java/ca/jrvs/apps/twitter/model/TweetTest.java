@@ -85,9 +85,9 @@ public class TweetTest {
         + "      ],\n"
         + "      \"type\":\"Point\"\n"
         + "   },\n"
-        + "   \"retweet_count\":0,\n"
+        + "   \"retweet_count\":11,\n"
         + "   \"favorite_count\":0,\n"
-        + "   \"favorited\":false,\n"
+        + "   \"favorited\":true,\n"
         + "   \"retweeted\":false\n"
         + "}";
 
@@ -150,7 +150,7 @@ public class TweetTest {
   public void shouldDeserializeTweetObjectFromJson() {
     Tweet parsedExampleInputJsonTweet;
     parsedExampleInputJsonTweet = Tweet.from(exampleInputJsonTweet);
-//    assertSame(exampleExpectedObjectTweet,parsedExampleInputJsonTweet);
+//    assertEquals(exampleExpectedObjectTweet,parsedExampleInputJsonTweet);
   }
 
 

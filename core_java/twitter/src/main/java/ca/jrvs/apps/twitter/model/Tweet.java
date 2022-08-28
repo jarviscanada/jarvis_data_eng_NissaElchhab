@@ -3,7 +3,6 @@ package ca.jrvs.apps.twitter.model;
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -98,7 +97,7 @@ public class Tweet implements JsonParser {
 
   @JsonProperty("created_at")
   public void setCreatedAt(String createdAt) {
-    this.createdAt = ZonedDateTime.parse(createdAt,twitterDatetimeFormat);
+    this.createdAt = ZonedDateTime.parse(createdAt, twitterDatetimeFormat);
   }
 
   @JsonProperty("id")
