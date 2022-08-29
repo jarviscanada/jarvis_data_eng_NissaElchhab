@@ -79,6 +79,25 @@ public class Tweet implements JsonParser {
     this.retweeted = retweeted;
   }
 
+  // copy constructor
+  // TODO: id and idStr copy should be removed or conditional if null or not
+  public Tweet(Tweet from) {
+    this.id = from.id;
+    this.idStr = from.idStr;
+    this.createdAt = from.createdAt;
+    this.text = from.text;
+    // TODO deep or shallow copy enough?
+    //     this.entities = new Entities(from.entities);
+    //     this.coordinates = new Coordinates(from.coordinates);
+    this.entities = from.entities;
+    this.coordinates = from.coordinates;
+    this.retweetCount = from.retweetCount;
+    this.favoriteCount = from.favoriteCount;
+    this.favorited = from.favorited;
+    this.retweeted = from.retweeted;
+
+  }
+
   public static Tweet from(String json) {
     Tweet unmarshalledObject;
     try {
