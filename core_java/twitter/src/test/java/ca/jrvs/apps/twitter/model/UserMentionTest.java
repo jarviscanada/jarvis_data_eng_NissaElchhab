@@ -6,12 +6,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class UserMentionTest {
+
   public static String exampleInputJson;
   public static List<String> exampleInputJsonList;
   public static Tweet expectedObject;
@@ -100,7 +100,7 @@ public class UserMentionTest {
         new UserMention(6253282L, "6253282", Arrays.asList(4, 15),
             "Twitter API", "twitterapi"),
         new UserMention(1253282L, "1253282", Arrays.asList(6, 22),
-             "Google API", "googleapi"));
+            "Google API", "googleapi"));
   }
 
 
@@ -122,7 +122,7 @@ public class UserMentionTest {
   }
 
   @Test
-  public void  jsonParserShouldDeserializeExampleJsonIntoSimilarObject() {
+  public void jsonParserShouldDeserializeExampleJsonIntoSimilarObject() {
     List<UserMention> expected = Arrays.asList(
         new UserMention(6253282L, "6253282", Arrays.asList(4, 15),
             "Twitter API", "twitterapi"),
@@ -134,7 +134,8 @@ public class UserMentionTest {
         return JsonParser.parseJson(j,
             UserMention.class);
       } catch (IOException e) {
-        throw new RuntimeException("Unexpected error while JsonParser::parseJson deserializing during UserMentionTest", e);
+        throw new RuntimeException(
+            "Unexpected error while JsonParser::parseJson deserializing during UserMentionTest", e);
       }
     }).collect(
         Collectors.toList());

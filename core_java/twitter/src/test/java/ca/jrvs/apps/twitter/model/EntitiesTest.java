@@ -1,12 +1,16 @@
 package ca.jrvs.apps.twitter.model;
 
+import ca.jrvs.apps.twitter.model.dto.JsonParser;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.After;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class EntitiesTest {
+
   public static String exampleInputJson;
   public static Tweet expectedObject;
   public static Tweet exampleInputObject;
@@ -15,8 +19,8 @@ public class EntitiesTest {
   @BeforeClass
   public static void beforeClass() throws Exception {
 /*
- "entities":{
-      "hashtags": [
+{
+      "hashtags":  [
          {
             "text":"documentation",
             "indices":[
@@ -68,7 +72,7 @@ public class EntitiesTest {
     */
 
     exampleInputJson = "{\n"
-        + "      \"hashtags\": [\n"
+        + "      \"hashtags\":  [\n"
         + "         {\n"
         + "            \"text\":\"documentation\",\n"
         + "            \"indices\":[\n"
@@ -120,21 +124,61 @@ public class EntitiesTest {
 
   @Before
   public void setUp() throws Exception {
-    List<Hashtag> hashTags = Arrays.asList(
+    List<Hashtag> expectedHashtags = Arrays.asList(
         new Hashtag("documentation", Arrays.asList(211, 225)),
         new Hashtag("parsingJSON", Arrays.asList(226, 238)),
         new Hashtag("GeoTagged", Arrays.asList(239, 249)));
 
-    List<UserMention> userMentions = Arrays.asList(
+    List<UserMention> expectedUserMentions = Arrays.asList(
         new UserMention(6253282L, "6253282", Arrays.asList(4, 15),
             "Twitter API", "twitterapi"),
         new UserMention(1253282L, "1253282", Arrays.asList(6, 22),
-            "googleapi", "Google API"));
+            "Google API", "googleapi"));
 
-    Entities entities = new Entities(hashTags, userMentions);
+    Entities expected = new Entities(expectedHashtags, expectedUserMentions);
   }
 
-  @After
-  public void tearDown() throws Exception {
+
+  @Test
+  public void classBuilderShouldDeserializeExampleJsonIntoSimilarObject() {
+    List<Hashtag> expectedHashtags = Arrays.asList(
+        new Hashtag("documentation", Arrays.asList(211, 225)),
+        new Hashtag("parsingJSON", Arrays.asList(226, 238)),
+        new Hashtag("GeoTagged", Arrays.asList(239, 249)));
+
+    List<UserMention> expectedUserMentions = Arrays.asList(
+        new UserMention(6253282L, "6253282", Arrays.asList(4, 15),
+            "Twitter API", "twitterapi"),
+        new UserMention(1253282L, "1253282", Arrays.asList(6, 22),
+            "Google API", "googleapi"));
+
+    Entities expected = new Entities(expectedHashtags, expectedUserMentions);
+    Entities parsed = Entities.from(exampleInputJson);
+
+    Assertions.assertThat(parsed)
+        .isEqualToComparingFieldByFieldRecursively(expected);
   }
+
+
+  @Test
+  public void jsonParserShouldDeserializeExampleJsonIntoSimilarObject() throws IOException {
+    List<Hashtag> expectedHashtags = Arrays.asList(
+        new Hashtag("documentation", Arrays.asList(211, 225)),
+        new Hashtag("parsingJSON", Arrays.asList(226, 238)),
+        new Hashtag("GeoTagged", Arrays.asList(239, 249)));
+
+    List<UserMention> expectedUserMentions = Arrays.asList(
+        new UserMention(6253282L, "6253282", Arrays.asList(4, 15),
+            "Twitter API", "twitterapi"),
+        new UserMention(1253282L, "1253282", Arrays.asList(6, 22),
+            "Google API", "googleapi"));
+
+    Entities expected = new Entities(expectedHashtags, expectedUserMentions);
+
+    Entities parsed = JsonParser.parseJson(exampleInputJson, Entities.class);
+
+    Assertions.assertThat(parsed)
+        .isEqualToComparingFieldByFieldRecursively(expected);
+  }
+
 }

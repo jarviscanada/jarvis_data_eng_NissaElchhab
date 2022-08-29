@@ -1,7 +1,6 @@
 package ca.jrvs.apps.twitter.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.dao.helper.TwitterHttpHelper;
@@ -13,10 +12,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.http.HttpResponse;
-import org.assertj.core.api.AssertJProxySetup;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,13 +34,84 @@ public class TweetTest {
 
   @BeforeClass
   public static void beforeClass() throws Exception {
-    exampleInputJsonTweet = "{\n"
+    /*
+
+    {
+   "created_at":"Mon Feb 18 21:24:39 +0000 2019",
+   "id":1097607853932564480,
+   "id_str":"1097607853932564480",
+   "text":"text with loc223",
+   "entities":{
+      "hashtags":  [
+         {
+            "text":"documentation",
+            "indices":[
+               211,
+               225
+            ]
+         },
+         {
+            "text":"parsingJSON",
+            "indices":[
+               226,
+               238
+            ]
+         },
+         {
+            "text":"GeoTagged",
+            "indices":[
+               239,
+               249
+            ]
+         }
+      ],
+      "user_mentions":[
+         {
+            "name":"Twitter API",
+            "indices":[
+               4,
+               15
+            ],
+            "screen_name":"twitterapi",
+            "id":6253282,
+            "id_str":"6253282"
+         },
+
+          {
+            "name":"Google API",
+            "indices":[
+               6,
+               22
+            ],
+            "screen_name":"googleapi",
+            "id":1253282,
+            "id_str":"1253282"
+         }
+
+      ]
+   },
+   "coordinates":{
+      "coordinates":[
+         -75.14310264,
+         40.05701649
+      ],
+      "type":"Point"
+   },
+   "retweet_count":11,
+   "favorite_count":0,
+   "favorited":true,
+   "retweeted":false
+}
+
+
+     */
+    exampleInputJsonTweet = "    {\n"
         + "   \"created_at\":\"Mon Feb 18 21:24:39 +0000 2019\",\n"
         + "   \"id\":1097607853932564480,\n"
         + "   \"id_str\":\"1097607853932564480\",\n"
         + "   \"text\":\"text with loc223\",\n"
         + "   \"entities\":{\n"
-        + "      \"hashtags\":[\n"
+        + "      \"hashtags\":  [\n"
         + "         {\n"
         + "            \"text\":\"documentation\",\n"
         + "            \"indices\":[\n"
@@ -76,7 +144,19 @@ public class TweetTest {
         + "            \"screen_name\":\"twitterapi\",\n"
         + "            \"id\":6253282,\n"
         + "            \"id_str\":\"6253282\"\n"
+        + "         },\n"
+        + "\n"
+        + "          {\n"
+        + "            \"name\":\"Google API\",\n"
+        + "            \"indices\":[\n"
+        + "               6,\n"
+        + "               22\n"
+        + "            ],\n"
+        + "            \"screen_name\":\"googleapi\",\n"
+        + "            \"id\":1253282,\n"
+        + "            \"id_str\":\"1253282\"\n"
         + "         }\n"
+        + "\n"
         + "      ]\n"
         + "   },\n"
         + "   \"coordinates\":{\n"
@@ -92,7 +172,7 @@ public class TweetTest {
         + "   \"retweeted\":false\n"
         + "}";
 
-    List<Hashtag> hashTags = Arrays.asList(
+    List<Hashtag> hashtags = Arrays.asList(
         new Hashtag("documentation", Arrays.asList(211, 225)),
         new Hashtag("parsingJSON", Arrays.asList(226, 238)),
         new Hashtag("GeoTagged", Arrays.asList(239, 249)));
@@ -100,13 +180,13 @@ public class TweetTest {
     List<UserMention> userMentions = Arrays.asList(
         new UserMention(6253282L, "6253282", Arrays.asList(4, 15),
             "Twitter API", "twitterapi"),
-        new UserMention(1253282L, "1253282", Arrays.asList(3, 25),
-            "googleapi", "Google API"));
+        new UserMention(1253282L, "1253282", Arrays.asList(6, 22),
+            "Google API", "googleapi"));
+
+    Entities entities = new Entities(hashtags, userMentions);
 
     Coordinates coordinates = new Coordinates(new float[]{-75.14310264f, 40.05701649f},
         "Point");
-
-    Entities entities = new Entities(hashTags, userMentions);
 
     exampleExpectedObjectTweet = new Tweet(
         "Mon Feb 18 21:24:39 +0000 2019",
@@ -156,10 +236,10 @@ public class TweetTest {
   public void shouldDeserializeTweetObjectFromJson() {
     Tweet parsedInputJsonTweet;
     parsedInputJsonTweet = Tweet.from(exampleInputJsonTweet);
-    Assertions.assertThat(exampleExpectedObjectTweet)
-        .isEqualToComparingFieldByFieldRecursively(parsedInputJsonTweet);
+    Assertions.assertThat(parsedInputJsonTweet)
+        .isEqualToComparingFieldByFieldRecursively(exampleExpectedObjectTweet);
 //    assertEquals(exampleExpectedObjectTweet,parsedExampleInputJsonTweet);
-    }
+  }
 
   @Test
   public void shouldSerializeTweetObjectToJson() throws JsonProcessingException {

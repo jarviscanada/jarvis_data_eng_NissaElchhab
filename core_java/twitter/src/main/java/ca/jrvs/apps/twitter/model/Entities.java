@@ -42,7 +42,7 @@ public class Entities implements JsonParser {
     this.hashtags = hashtags;
   }
 
-  @JsonProperty("mentions")
+  @JsonProperty("user_mentions")
   public List<UserMention> getUserMentions() {
     return userMentions;
   }

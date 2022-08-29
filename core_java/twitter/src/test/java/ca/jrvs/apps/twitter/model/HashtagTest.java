@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -72,12 +71,12 @@ public class HashtagTest {
         + "      ]";
 
     exampleInputJsonList = Arrays.asList("{\n"
-        + "            \"text\":\"documentation\",\n"
-        + "            \"indices\":[\n"
-        + "               211,\n"
-        + "               225\n"
-        + "            ]\n"
-        + "         }",
+            + "            \"text\":\"documentation\",\n"
+            + "            \"indices\":[\n"
+            + "               211,\n"
+            + "               225\n"
+            + "            ]\n"
+            + "         }",
         " {\n"
             + "            \"text\":\"parsingJSON\",\n"
             + "            \"indices\":[\n"
@@ -102,24 +101,24 @@ public class HashtagTest {
         new Hashtag("GeoTagged", Arrays.asList(239, 249)));
   }
 
-@Test
+  @Test
   public void shouldDeserializeExampleJsonIntoSimilarObject() {
-  List<Hashtag> expected = Arrays.asList(
-      new Hashtag("documentation", Arrays.asList(211, 225)),
-      new Hashtag("parsingJSON", Arrays.asList(226, 238)),
-      new Hashtag("GeoTagged", Arrays.asList(239, 249)));
+    List<Hashtag> expected = Arrays.asList(
+        new Hashtag("documentation", Arrays.asList(211, 225)),
+        new Hashtag("parsingJSON", Arrays.asList(226, 238)),
+        new Hashtag("GeoTagged", Arrays.asList(239, 249)));
 
-  List<Hashtag> parsedList = exampleInputJsonList.stream().map(Hashtag::from).collect(
-      Collectors.toList());
+    List<Hashtag> parsedList = exampleInputJsonList.stream().map(Hashtag::from).collect(
+        Collectors.toList());
 
-  for (int i = 0; i < parsedList.size(); ++i) {
-    Assertions.assertThat(parsedList.get(i))
-        .isEqualToComparingFieldByFieldRecursively(expected.get(i));
+    for (int i = 0; i < parsedList.size(); ++i) {
+      Assertions.assertThat(parsedList.get(i))
+          .isEqualToComparingFieldByFieldRecursively(expected.get(i));
+    }
   }
-}
 
   @Test
-  public void  jsonParserShouldDeserializeExampleJsonIntoSimilarObject() {
+  public void jsonParserShouldDeserializeExampleJsonIntoSimilarObject() {
     List<Hashtag> expected = Arrays.asList(
         new Hashtag("documentation", Arrays.asList(211, 225)),
         new Hashtag("parsingJSON", Arrays.asList(226, 238)),
@@ -130,7 +129,8 @@ public class HashtagTest {
         return JsonParser.parseJson(j,
             Hashtag.class);
       } catch (IOException e) {
-        throw new RuntimeException("Unexpected error while JsonParser::parseJson deserializing during HashtagTest", e);
+        throw new RuntimeException(
+            "Unexpected error while JsonParser::parseJson deserializing during HashtagTest", e);
       }
     }).collect(
         Collectors.toList());
