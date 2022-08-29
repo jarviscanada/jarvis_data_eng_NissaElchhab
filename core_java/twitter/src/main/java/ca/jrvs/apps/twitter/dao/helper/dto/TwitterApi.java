@@ -8,10 +8,13 @@ import java.net.URISyntaxException;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TwitterApi extends Tweet {
 
   public static final int HTTP_OK = 200;
+  private static final Logger logger = LoggerFactory.getLogger(TwitterApi.class);
   // URI symbols and separators
   private static final String QUERY_SYM;
   private static final String SEP;
@@ -66,18 +69,30 @@ public class TwitterApi extends Tweet {
   }
 
   // TODO use Optional instead of null
-  public static Tweet parseResponse( HttpResponse response, HttpStatusCode expectedStatusCode) {
+  public static Tweet parseResponse(HttpResponse response, HttpStatusCode expectedStatusCode) {
     StatusLine responseStatus = response.getStatusLine();
-    if (responseStatus.getStatusCode() != expectedStatusCode.getStatusCode())
-    if (response.getStatusLine().getStatusCode() == HTTP_OK) {
+    if (!expectedStatusCode.equals(responseStatus)) {
       try {
-        return Tweet.from(EntityUtils.toString(response.getEntity()));
+        logger.debug(EntityUtils.toString(response.getEntity()));
       } catch (IOException e) {
-        throw new IllegalArgumentException("Argument error while parsing response", e);
+        logger.debug("Response has no valid entity: failed to convert to String");
+        logger.debug(e.toString());
       }
-    } else {
-      return null;
+      throw new RuntimeException("Unexpected HTTP status");
     }
+
+    if (response.getEntity() == null) {
+      logger.debug("Unexpected response: response has no body");
+      throw new RuntimeException("Empty response body");
+    }
+
+    String jsonStr;
+    try {
+      jsonStr = EntityUtils.toString(response.getEntity());
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to convert to String", e);
+    }
+    return Tweet.from(jsonStr);
   }
 
   public static URI buildUri(HttpVerb httpVerb, Tweet tweet) {

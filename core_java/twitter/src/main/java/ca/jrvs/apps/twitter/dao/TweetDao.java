@@ -1,6 +1,7 @@
 package ca.jrvs.apps.twitter.dao;
 
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
+import ca.jrvs.apps.twitter.dao.helper.dto.HttpStatusCode;
 import ca.jrvs.apps.twitter.dao.helper.dto.HttpVerb;
 import ca.jrvs.apps.twitter.dao.helper.dto.TwitterApi;
 import ca.jrvs.apps.twitter.model.Tweet;
@@ -23,9 +24,8 @@ public class TweetDao implements CrdDao<Tweet, Long> {
   @Override
   public Tweet create(Tweet tweet) {
     URI request = TwitterApi.buildUri(HttpVerb.POST, tweet);
-    Tweet responseTweet = TwitterApi.parseResponseHttpOK(httpHelper.httpPost(request));
+    return TwitterApi.parseResponseHttpOK(httpHelper.httpPost(request));
     //      System.out.println("Failed to Create Tweet");
-    return responseTweet;
   }
 
   /**
@@ -37,9 +37,8 @@ public class TweetDao implements CrdDao<Tweet, Long> {
   @Override
   public Tweet findById(Long tweetId) {
     URI request = TwitterApi.buildUri(HttpVerb.GET, tweetId);
-    Tweet responseTweet = TwitterApi.parseResponseHttpOK(httpHelper.httpGet(request));
+    return TwitterApi.parseResponse(httpHelper.httpGet(request), HttpStatusCode.OK);
     //      System.out.println("Failed to Create Tweet");
-    return responseTweet;
   }
 
   /**
@@ -51,8 +50,7 @@ public class TweetDao implements CrdDao<Tweet, Long> {
   @Override
   public Tweet deleteById(Long tweetId) {
     URI request = TwitterApi.buildUri(HttpVerb.DELETE, tweetId);
-    Tweet responseTweet = TwitterApi.parseResponseHttpOK(httpHelper.httpPost(request));
+    return TwitterApi.parseResponse(httpHelper.httpPost(request), HttpStatusCode.OK);
     //      System.out.println("Failed to Create Tweet");
-    return responseTweet;
   }
 }

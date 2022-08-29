@@ -1,5 +1,9 @@
 package ca.jrvs.apps.twitter.dao.helper.dto;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+
 public enum HttpStatusCode {
   CONTINUE(100),
   OK(200),
@@ -20,5 +24,13 @@ public enum HttpStatusCode {
 
   public int getStatusCode() {
     return this.statusCode;
+  }
+
+  public boolean equals(StatusLine statusLine) {
+    return statusLine.getStatusCode() == this.statusCode;
+  }
+
+  public boolean equals(int statusCode) {
+    return statusCode == this.statusCode;
   }
 }
