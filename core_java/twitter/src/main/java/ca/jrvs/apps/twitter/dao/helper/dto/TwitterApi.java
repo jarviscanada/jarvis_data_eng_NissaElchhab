@@ -1,9 +1,14 @@
 package ca.jrvs.apps.twitter.dao.helper.dto;
 
+import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.model.Tweet;
 import com.google.gdata.util.common.base.PercentEscaper;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 
 public class TwitterApi extends Tweet {
 
@@ -60,7 +65,16 @@ public class TwitterApi extends Tweet {
     return query;
   }
 
-
+  public static URI get(Long tweetId) {
+    URI query;
+    try {
+      query = new URI(
+          API_BASE_URI + GET_PATH + QUERY_SYM + GET_ID + tweetId.toString());
+    } catch (URISyntaxException e) {
+      throw new IllegalArgumentException("Get Tweet argument invalid", e);
+    }
+    return query;
+  }
   public static URI get(Tweet tweet) {
     URI query;
     try {
@@ -76,18 +90,25 @@ public class TwitterApi extends Tweet {
   public static URI delete(Tweet tweet) {
     URI query;
     PercentEscaper percentEscaper = new PercentEscaper("", false);
-
     try {
       query = new URI(
-          API_BASE_URI + POST_PATH + QUERY_SYM + POST_STATUS + percentEscaper.escape(
-              tweet.getText())
-              + SEP + POST_LATITUDE + tweet.getCoordinates().latitude() + SEP + POST_LONGITUDE
-              + tweet.getCoordinates()
-              .longitude());
+          API_BASE_URI + DELETE_PATH + QUERY_SYM + GET_ID + tweet.getIdStr());
     } catch (URISyntaxException e) {
       throw new IllegalArgumentException("Tweet argument invalid", e);
     }
     return query;
+  }
+
+  public static Tweet parseResponse(HttpResponse response) {
+    if (response.getStatusLine().getStatusCode() == HTTP_OK) {
+      try {
+        return Tweet.from(EntityUtils.toString(response.getEntity()));
+      } catch (IOException e) {
+        throw new IllegalArgumentException("Argument error while parsing response",e);
+      }
+    } else {
+      return null;
+    }
   }
 
 }

@@ -31,14 +31,11 @@ public class TweetDao implements CrdDao<Tweet,Long> {
   @Override
   public Tweet create(Tweet tweet) {
     URI request = TwitterApi.post(tweet);
-    HttpResponse response = httpHelper.httpPost(request);
-    if (response.getStatusLine().getStatusCode() == TwitterApi.HTTP_OK) {
-      try {
-        return Tweet.from(EntityUtils.toString(response.getEntity()));
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
+    Tweet responseTweet = TwitterApi.parseResponse(httpHelper.httpPost(request));
+    if (responseTweet != null) {
+      return responseTweet;
     } else {
+//      System.out.println("Failed to Create Tweet");
       return null;
     }
   }
@@ -46,13 +43,19 @@ public class TweetDao implements CrdDao<Tweet,Long> {
   /**
    * Find an entity(Tweet) by its id
    *
-   * @param aLong entity id
+   * @param tweetId entity id
    * @return Tweet entity
    */
   @Override
-  public Tweet findById(Long aLong) {
-    Tweet tweet;
-    return null ;// tweet;
+  public Tweet findById(Long tweetId) {
+    URI request = TwitterApi.get(tweetId);
+    Tweet responseTweet = TwitterApi.parseResponse(httpHelper.httpPost(request));
+    if (responseTweet != null) {
+      return responseTweet;
+    } else {
+//      System.out.println("Failed to Create Tweet");
+      return null;
+    }
   }
 
   /**
