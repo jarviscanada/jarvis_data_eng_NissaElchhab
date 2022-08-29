@@ -71,6 +71,14 @@ public class Coordinates implements JsonParser {
     this.type = type;
   }
 
+  public float longitude() {
+    return coordinates[LONGITUDE];
+  }
+
+  public float latitude() {
+    return coordinates[LATITUDE];
+  }
+
   private boolean isCoordinatesValid(float[] coords) {
     if (coords == null || coords.length != 2) {
       logger.debug(
