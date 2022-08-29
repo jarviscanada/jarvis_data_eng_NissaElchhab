@@ -23,7 +23,7 @@ public class TweetDao implements CrdDao<Tweet, Long> {
   @Override
   public Tweet create(Tweet tweet) {
     URI request = TwitterApi.buildUri(HttpVerb.POST, tweet);
-    Tweet responseTweet = TwitterApi.parseResponse(httpHelper.httpPost(request));
+    Tweet responseTweet = TwitterApi.parseResponseHttpOK(httpHelper.httpPost(request));
     //      System.out.println("Failed to Create Tweet");
     return responseTweet;
   }
@@ -37,7 +37,7 @@ public class TweetDao implements CrdDao<Tweet, Long> {
   @Override
   public Tweet findById(Long tweetId) {
     URI request = TwitterApi.buildUri(HttpVerb.GET, tweetId);
-    Tweet responseTweet = TwitterApi.parseResponse(httpHelper.httpGet(request));
+    Tweet responseTweet = TwitterApi.parseResponseHttpOK(httpHelper.httpGet(request));
     //      System.out.println("Failed to Create Tweet");
     return responseTweet;
   }
@@ -51,7 +51,7 @@ public class TweetDao implements CrdDao<Tweet, Long> {
   @Override
   public Tweet deleteById(Long tweetId) {
     URI request = TwitterApi.buildUri(HttpVerb.DELETE, tweetId);
-    Tweet responseTweet = TwitterApi.parseResponse(httpHelper.httpPost(request));
+    Tweet responseTweet = TwitterApi.parseResponseHttpOK(httpHelper.httpPost(request));
     //      System.out.println("Failed to Create Tweet");
     return responseTweet;
   }

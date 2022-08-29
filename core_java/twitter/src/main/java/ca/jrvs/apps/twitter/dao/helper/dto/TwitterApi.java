@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.util.EntityUtils;
 
 public class TwitterApi extends Tweet {
@@ -52,7 +53,22 @@ public class TwitterApi extends Tweet {
 
   // REST request and response helper methods
   // TODO use Optional instead of null
-  public static Tweet parseResponse(HttpResponse response) {
+  public static Tweet parseResponseHttpOK(HttpResponse response) {
+    if (response.getStatusLine().getStatusCode() == HTTP_OK) {
+      try {
+        return Tweet.from(EntityUtils.toString(response.getEntity()));
+      } catch (IOException e) {
+        throw new IllegalArgumentException("Argument error while parsing response", e);
+      }
+    } else {
+      return null;
+    }
+  }
+
+  // TODO use Optional instead of null
+  public static Tweet parseResponse( HttpResponse response, HttpStatusCode expectedStatusCode) {
+    StatusLine responseStatus = response.getStatusLine();
+    if (responseStatus.getStatusCode() != expectedStatusCode.getStatusCode())
     if (response.getStatusLine().getStatusCode() == HTTP_OK) {
       try {
         return Tweet.from(EntityUtils.toString(response.getEntity()));
