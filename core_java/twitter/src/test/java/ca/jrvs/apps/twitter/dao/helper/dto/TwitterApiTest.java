@@ -1,7 +1,5 @@
 package ca.jrvs.apps.twitter.dao.helper.dto;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 

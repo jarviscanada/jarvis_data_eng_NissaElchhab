@@ -37,6 +37,7 @@ public class Tweet implements JsonParser {
   public static final DateTimeFormatter twitterDatetimeFormat =
       new DateTimeFormatterBuilder().appendPattern(CREATEDAT_PATTERN).toFormatter();
   public static final int MAX_TEXT_LENGTH = 140;
+  public static final Long INVALID_ID = -1L;
   private static final Logger logger = LoggerFactory.getLogger(Tweet.class);
   // String UTC time when this Tweet was created. Example:
   private ZonedDateTime createdAt;
@@ -66,7 +67,8 @@ public class Tweet implements JsonParser {
   public Tweet(String createdAt, Long id, String idStr, String text, Entities entities,
       Coordinates coordinates, int retweetCount, int favoriteCount, boolean favorited,
       boolean retweeted) {
-    this.createdAt = ZonedDateTime.parse(createdAt, twitterDatetimeFormat);
+    this.createdAt =
+        createdAt == null ? null : ZonedDateTime.parse(createdAt, twitterDatetimeFormat);
 //        ZonedDateTime.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME);
     this.id = id;
     this.idStr = idStr;
@@ -77,6 +79,10 @@ public class Tweet implements JsonParser {
     this.favoriteCount = favoriteCount;
     this.favorited = favorited;
     this.retweeted = retweeted;
+  }
+
+  public Tweet(String text) {
+    this(null, INVALID_ID, INVALID_ID.toString(), text, null, null, 0, 0, false, false);
   }
 
   // copy constructor

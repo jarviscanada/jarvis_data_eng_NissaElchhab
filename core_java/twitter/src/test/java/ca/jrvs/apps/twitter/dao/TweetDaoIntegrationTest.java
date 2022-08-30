@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TweetDaoTest {
+public class TweetDaoIntegrationTest {
 
   public Long getByIdIsAuthzAndExists;
   public String getUriIsAuthAndDoesNotExist;
@@ -32,7 +32,7 @@ public class TweetDaoTest {
     final String ACCESS_TOKEN = System.getenv("accessToken");
     final String ACCESS_TOKEN_SECRET = System.getenv("accessTokenSecret");
 
-    getByIdIsAuthzAndExists =1564405218414305280L;
+    getByIdIsAuthzAndExists = 1564405218414305280L;
     getUriIsAuthAndDoesNotExist =
         "https://api.twitter.com/1.1/statuses/show.json?id=0";
     postUriIsNotAuthz =
