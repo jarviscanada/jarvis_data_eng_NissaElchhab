@@ -37,6 +37,12 @@ public class Coordinates implements JsonParser {
     this.type = type;
   }
 
+  public Coordinates(float longitude, float latitude) {
+    this.coordinates[LONGITUDE] = longitude;
+    this.coordinates[LATITUDE] = latitude;
+    this.type = DEFAULT_TYPE;
+  }
+
   public static Coordinates from(String json) {
     Coordinates unmarshalledObject;
     try {

@@ -35,7 +35,7 @@ public class TwitterApi extends Tweet {
 
   static {
     // URI symbols and separators
-    QUERY_SYM = "/?";
+    QUERY_SYM = "?";
     SEP = "&";
     EQUAL = "=";
     VOID_TWEET_TEXT = "";
