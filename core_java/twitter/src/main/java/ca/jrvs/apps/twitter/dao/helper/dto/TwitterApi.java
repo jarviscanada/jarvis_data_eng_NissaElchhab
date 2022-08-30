@@ -11,7 +11,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TwitterApi extends Tweet {
+// TODO convert to TweetDto, then change DAO to use DTO instead of model
+public class TwitterApi {
 
   public static final int HTTP_OK = 200;
   private static final Logger logger = LoggerFactory.getLogger(TwitterApi.class);
@@ -56,7 +57,7 @@ public class TwitterApi extends Tweet {
 
   // REST request and response helper methods
   // TODO use Optional instead of null
-  public static Tweet parseResponseHttpOK(HttpResponse response) {
+  public Tweet parseResponseHttpOK(HttpResponse response) {
     if (response.getStatusLine().getStatusCode() == HTTP_OK) {
       try {
         return Tweet.from(EntityUtils.toString(response.getEntity()));
@@ -69,7 +70,7 @@ public class TwitterApi extends Tweet {
   }
 
   // TODO use Optional instead of null
-  public static Tweet parseResponse(HttpResponse response, HttpStatusCode expectedStatusCode) {
+  public Tweet parseResponse(HttpResponse response, HttpStatusCode expectedStatusCode) {
     StatusLine responseStatus = response.getStatusLine();
     if (!expectedStatusCode.equals(responseStatus)) {
       try {

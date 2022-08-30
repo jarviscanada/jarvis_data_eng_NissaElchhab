@@ -85,6 +85,15 @@ public class Tweet implements JsonParser {
     this(null, INVALID_ID, INVALID_ID.toString(), text, null, null, 0, 0, false, false);
   }
 
+  public Tweet(String text, Coordinates coordinates) {
+    this(null, INVALID_ID, INVALID_ID.toString(), text, null, coordinates, 0, 0, false, false);
+  }
+
+  public Tweet(String text, float longitude, float latitude) {
+    this(null, INVALID_ID, INVALID_ID.toString(), text, null, new Coordinates(longitude, latitude),
+        0, 0, false, false);
+  }
+
   // copy constructor
   // TODO: id and idStr copy should be removed or conditional if null or not
   public Tweet(Tweet from) {

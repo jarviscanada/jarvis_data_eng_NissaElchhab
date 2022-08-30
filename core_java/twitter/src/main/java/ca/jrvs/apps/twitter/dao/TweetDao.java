@@ -10,6 +10,7 @@ import java.net.URI;
 public class TweetDao implements CrdDao<Tweet, Long> {
 
   private final HttpHelper httpHelper;
+  private static final TwitterApi twitterApi = new TwitterApi();
 
   public TweetDao(HttpHelper httpHelper) {
     this.httpHelper = httpHelper;
@@ -24,7 +25,7 @@ public class TweetDao implements CrdDao<Tweet, Long> {
   @Override
   public Tweet create(Tweet tweet) {
     URI request = TwitterApi.buildUri(HttpVerb.POST, tweet);
-    return TwitterApi.parseResponseHttpOK(httpHelper.httpPost(request));
+    return twitterApi.parseResponseHttpOK(httpHelper.httpPost(request));
     //      System.out.println("Failed to Create Tweet");
   }
 
@@ -37,7 +38,7 @@ public class TweetDao implements CrdDao<Tweet, Long> {
   @Override
   public Tweet findById(Long tweetId) {
     URI request = TwitterApi.buildUri(HttpVerb.GET, tweetId);
-    return TwitterApi.parseResponse(httpHelper.httpGet(request), HttpStatusCode.OK);
+    return twitterApi.parseResponse(httpHelper.httpGet(request), HttpStatusCode.OK);
     //      System.out.println("Failed to Create Tweet");
   }
 
@@ -50,7 +51,7 @@ public class TweetDao implements CrdDao<Tweet, Long> {
   @Override
   public Tweet deleteById(Long tweetId) {
     URI request = TwitterApi.buildUri(HttpVerb.DELETE, tweetId);
-    return TwitterApi.parseResponse(httpHelper.httpPost(request), HttpStatusCode.OK);
+    return twitterApi.parseResponse(httpHelper.httpPost(request), HttpStatusCode.OK);
     //      System.out.println("Failed to Create Tweet");
   }
 }
