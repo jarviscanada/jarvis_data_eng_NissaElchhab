@@ -3,37 +3,27 @@ package ca.jrvs.apps.twitter.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.given;
+
 import ca.jrvs.apps.twitter.dao.CrdDao;
-import ca.jrvs.apps.twitter.dao.TweetDao;
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.dao.helper.TwitterHttpHelper;
 import ca.jrvs.apps.twitter.model.Tweet;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
-import org.apache.commons.codec.binary.StringUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.internal.util.StringUtil;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-public class TweetServiceImplTest {
+public class TweetServiceImplUnitTest {
 
   @Rule
   public MockitoRule mockitoRule = MockitoJUnit.rule();
-
-  @Mock
-  CrdDao<Tweet, Long> dao;
-
-  @InjectMocks
-  TweetServiceImpl tweetService;
-
   public Long getByIdIsAuthzAndExists;
   public String getUriIsAuthAndDoesNotExist;
   public String postUriIsNotAuthz;
@@ -41,6 +31,10 @@ public class TweetServiceImplTest {
   public String tooLongTweetText;
   public float tweetLong;
   public float tweetLat;
+  @Mock
+  CrdDao<Tweet, Long> dao;
+  @InjectMocks
+  TweetServiceImpl tweetService;
 
   @Before
   public void setUp() throws Exception {
@@ -55,8 +49,8 @@ public class TweetServiceImplTest {
     postUriIsNotAuthz =
         "https://api.twitter.com/1.1/statuses/show.json?id=1549615165367183744";
     tweetText = "#TestTestTest Hello From Api at " + LocalDateTime.now();
-    tooLongTweetText = Stream.generate(() -> "A").limit(TweetServiceImpl.MAX_TWEET_CHAR+1)
-        .reduce("", (acc, s)-> acc+s);
+    tooLongTweetText = Stream.generate(() -> "A").limit(Tweet.MAX_TEXT_LENGTH + 1)
+        .reduce("", (acc, s) -> acc + s);
 
     tweetLong = -123.400612831116f;
     tweetLat = 36.7821120598956f;
@@ -129,7 +123,7 @@ public class TweetServiceImplTest {
         + "}";
 
     tweetLong = -75.14310264f;
-    tweetLat =  40.05701649f;
+    tweetLat = 40.05701649f;
 
     HttpHelper httpHelper = new TwitterHttpHelper(CONSUMER_KEY, CONSUMER_KEY_SECRET, ACCESS_TOKEN,
         ACCESS_TOKEN_SECRET);
@@ -137,23 +131,28 @@ public class TweetServiceImplTest {
 
   @Test
   public void postTweetHappyPath() {
-    given(dao.create(any(Tweet.class))).willReturn(new Tweet());
-    Tweet responseTweet = tweetService.postTweet(new Tweet(ng, tweetLat));
+    given(dao.create(any(Tweet.class))).willReturn(new Tweet(tweetText, tweetLong, tweetLat));
+    Tweet responseTweet = tweetService.postTweet(new Tweet(tweetText, tweetLong, tweetLat));
     assertNotNull(responseTweet);
-    assertEquals(tweetText,responseTweet.getText());
-    assertEquals(tweetLong,responseTweet.getCoordinates().longitude(), 0.0001);
-    assertEquals(tweetLat,responseTweet.getCoordinates().latitude(), 0.0001);
+    assertEquals(tweetText, responseTweet.getText());
+    assertEquals(tweetLong, responseTweet.getCoordinates().longitude(), 0.0001);
+    assertEquals(tweetLat, responseTweet.getCoordinates().latitude(), 0.0001);
     assertNotNull(responseTweet.getIdStr());
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void postTweetTextExceedsMaxChars() {
-    given(dao.create(any(Tweet.class))).willReturn(new Tweet());
-    Tweet responseTweet = tweetService.postTweet(new Tweet(tweetText, tweetLong, tweetLat));
-    assertNotNull(responseTweet);
-    assertEquals(tweetText,responseTweet.getText());
-    assertEquals(tweetLong,responseTweet.getCoordinates().longitude(), 0.0001);
-    assertEquals(tweetLat,responseTweet.getCoordinates().latitude(), 0.0001);
+    given(tweetService.postTweet(new Tweet(tooLongTweetText,  tweetLong, tweetLat))).willThrow(
+        IllegalArgumentException.class);
+    Tweet responseTweet = tweetService.postTweet(new Tweet(tooLongTweetText, tweetLong, tweetLat));
+//   assertNull(responseTweet);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void postTweetTextisNull() {
+    given(tweetService.postTweet(null)).willThrow(IllegalArgumentException.class);
+    Tweet responseTweet = tweetService.postTweet(null);
+//   assertNull(responseTweet);
   }
 
   @Test

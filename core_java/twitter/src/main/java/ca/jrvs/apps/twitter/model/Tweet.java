@@ -38,6 +38,7 @@ public class Tweet implements JsonParser {
       new DateTimeFormatterBuilder().appendPattern(CREATEDAT_PATTERN).toFormatter();
   public static final int MAX_TEXT_LENGTH = 140;
   public static final Long INVALID_ID = -1L;
+  public static final String EMPTY_STRING = "";
   private static final Logger logger = LoggerFactory.getLogger(Tweet.class);
   // String UTC time when this Tweet was created. Example:
   private ZonedDateTime createdAt;
@@ -60,16 +61,14 @@ public class Tweet implements JsonParser {
   //
   private boolean retweeted;
 
-  public Tweet() {
-
-  }
-
   public Tweet(String createdAt, Long id, String idStr, String text, Entities entities,
       Coordinates coordinates, int retweetCount, int favoriteCount, boolean favorited,
       boolean retweeted) {
     this.createdAt =
         createdAt == null ? null : ZonedDateTime.parse(createdAt, twitterDatetimeFormat);
 //        ZonedDateTime.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME);
+
+    // TODO based on Twitter api contract, id always== idStr: then, derive one from the other
     this.id = id;
     this.idStr = idStr;
     this.text = text;
@@ -93,6 +92,12 @@ public class Tweet implements JsonParser {
     this(null, INVALID_ID, INVALID_ID.toString(), text, null, new Coordinates(longitude, latitude),
         0, 0, false, false);
   }
+
+  public Tweet() {
+    this(null, INVALID_ID, INVALID_ID.toString(), EMPTY_STRING, null, null,
+        0, 0, false, false);
+  }
+
 
   // copy constructor
   // TODO: id and idStr copy should be removed or conditional if null or not
@@ -215,11 +220,4 @@ public class Tweet implements JsonParser {
     this.retweeted = retweeted;
   }
 
-  private boolean isTextValid(String text) {
-    if (text != null && text.length() > MAX_TEXT_LENGTH) {
-      logger.debug("Invalid text size");
-      return false;
-    }
-    return true;
-  }
 }
