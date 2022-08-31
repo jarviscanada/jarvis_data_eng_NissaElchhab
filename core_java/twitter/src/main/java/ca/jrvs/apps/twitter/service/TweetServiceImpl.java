@@ -3,7 +3,8 @@ package ca.jrvs.apps.twitter.service;
 import ca.jrvs.apps.twitter.model.Tweet;
 import java.util.List;
 
-public class TweetService implements Service{
+public class TweetServiceImpl implements Service{
+  public static final int MAX_TWEET_CHAR = 140;
 
   /**
    * Validate and post a user input Tweet
