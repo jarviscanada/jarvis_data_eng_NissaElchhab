@@ -1,8 +1,8 @@
 package ca.jrvs.apps.twitter.model;
 
-import static ca.jrvs.apps.twitter.validation.Tweet.CREATED_AT_PATTERN;
-import static ca.jrvs.apps.twitter.validation.Tweet.EMPTY_ID;
-import static ca.jrvs.apps.twitter.validation.Tweet.EMPTY_STRING;
+import static ca.jrvs.apps.twitter.service.validation.Tweet.CREATED_AT_PATTERN;
+import static ca.jrvs.apps.twitter.service.validation.Tweet.EMPTY_ID;
+import static ca.jrvs.apps.twitter.service.validation.Tweet.EMPTY_STRING;
 
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
 import com.fasterxml.jackson.annotation.JsonProperty;

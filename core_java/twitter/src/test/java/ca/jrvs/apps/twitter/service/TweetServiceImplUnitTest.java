@@ -12,7 +12,7 @@ import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.dao.helper.TwitterHttpHelper;
 import ca.jrvs.apps.twitter.model.Coordinates;
 import ca.jrvs.apps.twitter.model.Tweet;
-import ca.jrvs.apps.twitter.validation.Validator;
+import ca.jrvs.apps.twitter.service.validation.Validator;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
@@ -59,7 +59,7 @@ public class TweetServiceImplUnitTest {
         "https://api.twitter.com/1.1/statuses/show.json?id=1549615165367183744";
     tweetText = "#TestTestTest Hello From Api at " + LocalDateTime.now();
     tooLongTweetText = Stream.generate(() -> "A")
-        .limit(ca.jrvs.apps.twitter.validation.Tweet.MAX_TEXT_LENGTH + 1)
+        .limit(ca.jrvs.apps.twitter.service.validation.Tweet.MAX_TEXT_LENGTH + 1)
         .reduce("", (acc, s) -> acc + s);
 
     tweetAsJsonStr = " {\n"
@@ -140,9 +140,9 @@ public class TweetServiceImplUnitTest {
 
   @Test
   public void postTweetHappyPath() {
-    given(dao.create(any(Tweet.class))).willReturn(new Tweet(tweetText, tweetLong, tweetLat));
+    given(dao.create(any(Tweet.class))).willReturn(Tweet.from(tweetAsJsonStr));
     given(tweetValidator.isValid(any(Tweet.class))).willReturn(true);
-    Tweet responseTweet = tweetService.postTweet(new Tweet(tweetText, tweetLong, tweetLat));
+    Tweet responseTweet = tweetService.postTweet(Tweet.from(tweetAsJsonStr));
     assertNotNull(responseTweet);
     assertEquals(tweetText, responseTweet.getText());
     assertEquals(tweetLong, responseTweet.getCoordinates().longitude(), 0.0001);

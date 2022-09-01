@@ -43,6 +43,16 @@ public class TweetDao implements CrdDao<Tweet, Long> {
   }
 
   /**
+   * Find an entity(Tweet) by its idStr
+   *
+   * @param tweetIdStr entity idStr
+   * @return Tweet entity
+   */
+  public Tweet findById(String tweetIdStr) {
+    return findById(Long.parseLong(tweetIdStr));
+  }
+
+  /**
    * Delete an entity(Tweet) by its ID
    *
    * @param tweetId of the entity to be deleted
@@ -53,5 +63,15 @@ public class TweetDao implements CrdDao<Tweet, Long> {
     URI request = TwitterApi.buildUri(HttpVerb.DELETE, tweetId);
     return twitterApi.parseResponse(httpHelper.httpPost(request), HttpStatusCode.OK);
     //      System.out.println("Failed to Create Tweet");
+  }
+
+  /**
+   * Delete an entity(Tweet) by its idStr
+   *
+   * @param tweetIdStr of the entity to be deleted
+   * @return deleted entity
+   */
+  public Tweet deleteById(String tweetIdStr) {
+    return deleteById(Long.parseLong(tweetIdStr));
   }
 }

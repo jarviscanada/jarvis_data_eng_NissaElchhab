@@ -1,4 +1,4 @@
-package ca.jrvs.apps.twitter.validation;
+package ca.jrvs.apps.twitter.service.validation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

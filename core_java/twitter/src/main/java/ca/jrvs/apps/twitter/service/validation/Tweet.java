@@ -1,4 +1,4 @@
-package ca.jrvs.apps.twitter.validation;
+package ca.jrvs.apps.twitter.service.validation;
 
 import ca.jrvs.apps.twitter.model.Coordinates;
 import org.slf4j.Logger;
@@ -8,7 +8,6 @@ public class Tweet extends ca.jrvs.apps.twitter.model.Tweet implements
     Validator<ca.jrvs.apps.twitter.model.Tweet> {
 
   public static final String CREATED_AT_PATTERN = "EEE MMM dd HH:mm:ss Z yyyy";
-
   public static final int MIN_TEXT_LENGTH = 0;
   public static final int MAX_TEXT_LENGTH = 140;
   public static final String EMPTY_STRING = "0";
@@ -17,12 +16,13 @@ public class Tweet extends ca.jrvs.apps.twitter.model.Tweet implements
   public static final Logger logger = LoggerFactory.getLogger(
       ca.jrvs.apps.twitter.model.Tweet.class);
 
-  private final Validator<Coordinates> c =
-      new ca.jrvs.apps.twitter.validation.Coordinates();
+  private final Validator<Coordinates> coordinatesValidator =
+      new ca.jrvs.apps.twitter.service.validation.Coordinates();
 
   @Override
   public boolean isValid(ca.jrvs.apps.twitter.model.Tweet t) {
-    return Validator.isNotNull(t) && isTextValid() && c.isValid(this.getCoordinates());
+    return Validator.isNotNull(t) && isTextValid() && coordinatesValidator.isValid(
+        this.getCoordinates());
   }
 
   private boolean isTextValid() {

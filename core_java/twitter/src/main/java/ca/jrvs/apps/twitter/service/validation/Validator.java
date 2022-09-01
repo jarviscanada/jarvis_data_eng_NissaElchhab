@@ -1,6 +1,8 @@
-package ca.jrvs.apps.twitter.validation;
+package ca.jrvs.apps.twitter.service.validation;
 
-public interface Validator<T> {
+import ca.jrvs.apps.twitter.model.dto.JsonParser;
+
+public interface Validator<T extends JsonParser> {
 
   static boolean isNotNull(Object o) {
     return null != o;
