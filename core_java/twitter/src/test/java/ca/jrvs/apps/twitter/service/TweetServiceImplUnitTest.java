@@ -9,7 +9,9 @@ import static org.mockito.BDDMockito.given;
 import ca.jrvs.apps.twitter.dao.CrdDao;
 import ca.jrvs.apps.twitter.dao.helper.HttpHelper;
 import ca.jrvs.apps.twitter.dao.helper.TwitterHttpHelper;
+import ca.jrvs.apps.twitter.model.Coordinates;
 import ca.jrvs.apps.twitter.model.Tweet;
+import ca.jrvs.apps.twitter.validation.Validator;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 import org.junit.Before;
@@ -33,6 +35,10 @@ public class TweetServiceImplUnitTest {
   public float tweetLat;
   @Mock
   CrdDao<Tweet, Long> dao;
+  @Mock
+  Validator<Tweet> tweetValidator;
+  @Mock
+  Validator<Coordinates> coordinatesValidator;
   @InjectMocks
   TweetServiceImpl tweetService;
 
@@ -49,7 +55,7 @@ public class TweetServiceImplUnitTest {
     postUriIsNotAuthz =
         "https://api.twitter.com/1.1/statuses/show.json?id=1549615165367183744";
     tweetText = "#TestTestTest Hello From Api at " + LocalDateTime.now();
-    tooLongTweetText = Stream.generate(() -> "A").limit(Tweet.MAX_TEXT_LENGTH + 1)
+    tooLongTweetText = Stream.generate(() -> "A").limit(ca.jrvs.apps.twitter.validation.Tweet.MAX_TEXT_LENGTH+ 1)
         .reduce("", (acc, s) -> acc + s);
 
     tweetLong = -123.400612831116f;
@@ -132,6 +138,7 @@ public class TweetServiceImplUnitTest {
   @Test
   public void postTweetHappyPath() {
     given(dao.create(any(Tweet.class))).willReturn(new Tweet(tweetText, tweetLong, tweetLat));
+    given(tweetValidator.isValid(any(Tweet.class))).willReturn(true);
     Tweet responseTweet = tweetService.postTweet(new Tweet(tweetText, tweetLong, tweetLat));
     assertNotNull(responseTweet);
     assertEquals(tweetText, responseTweet.getText());
@@ -144,12 +151,20 @@ public class TweetServiceImplUnitTest {
   public void postTweetTextExceedsMaxChars() {
     given(tweetService.postTweet(new Tweet(tooLongTweetText,  tweetLong, tweetLat))).willThrow(
         IllegalArgumentException.class);
+
     Tweet responseTweet = tweetService.postTweet(new Tweet(tooLongTweetText, tweetLong, tweetLat));
 //   assertNull(responseTweet);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void postTweetTextisNull() {
+  public void validatedTweetCoordinatesOutOfBounds() {
+//    given(coordinatesValidator.isValid(any(Coordinates.class))).willReturn(false);
+    Tweet responseTweet = tweetService.postTweet(new Tweet(tweetText, 0f, tweetLat));
+//   assertNull(responseTweet);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void postTweetTextIsNull() {
     given(tweetService.postTweet(null)).willThrow(IllegalArgumentException.class);
     Tweet responseTweet = tweetService.postTweet(null);
 //   assertNull(responseTweet);

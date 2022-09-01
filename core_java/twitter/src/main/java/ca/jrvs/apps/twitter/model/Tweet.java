@@ -1,13 +1,15 @@
 package ca.jrvs.apps.twitter.model;
 
+import static ca.jrvs.apps.twitter.validation.Tweet.CREATED_AT_PATTERN;
+import static ca.jrvs.apps.twitter.validation.Tweet.EMPTY_ID;
+import static ca.jrvs.apps.twitter.validation.Tweet.EMPTY_STRING;
+
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Reference: https://developer.twitter.com/en/docs/twitter-api/v1/data-dictionary/overview
@@ -31,15 +33,10 @@ import org.slf4j.LoggerFactory;
 //      "favorited":false,
 //      "retweeted":false
 
-public class Tweet implements JsonParser {
+public class Tweet implements JsonParser{
 
-  public static final String CREATEDAT_PATTERN = "EEE MMM dd HH:mm:ss Z yyyy";
   public static final DateTimeFormatter twitterDatetimeFormat =
-      new DateTimeFormatterBuilder().appendPattern(CREATEDAT_PATTERN).toFormatter();
-  public static final int MAX_TEXT_LENGTH = 140;
-  public static final Long INVALID_ID = -1L;
-  public static final String EMPTY_STRING = "";
-  private static final Logger logger = LoggerFactory.getLogger(Tweet.class);
+      new DateTimeFormatterBuilder().appendPattern(CREATED_AT_PATTERN).toFormatter();
   // String UTC time when this Tweet was created. Example:
   private ZonedDateTime createdAt;
   //
@@ -69,8 +66,8 @@ public class Tweet implements JsonParser {
 //        ZonedDateTime.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME);
 
     // TODO based on Twitter api contract, id always== idStr: then, derive one from the other
-    this.id = id;
     this.idStr = idStr;
+    this.id = Long.parseLong(idStr);
     this.text = text;
     this.entities = entities;
     this.coordinates = coordinates;
@@ -81,20 +78,20 @@ public class Tweet implements JsonParser {
   }
 
   public Tweet(String text) {
-    this(null, INVALID_ID, INVALID_ID.toString(), text, null, null, 0, 0, false, false);
+    this(null, null, EMPTY_ID, text, null, null, 0, 0, false, false);
   }
 
   public Tweet(String text, Coordinates coordinates) {
-    this(null, INVALID_ID, INVALID_ID.toString(), text, null, coordinates, 0, 0, false, false);
+    this(null, null, EMPTY_ID, text, null, coordinates, 0, 0, false, false);
   }
 
   public Tweet(String text, float longitude, float latitude) {
-    this(null, INVALID_ID, INVALID_ID.toString(), text, null, new Coordinates(longitude, latitude),
+    this(null,null, EMPTY_ID, text, null, new Coordinates(longitude, latitude),
         0, 0, false, false);
   }
 
   public Tweet() {
-    this(null, INVALID_ID, INVALID_ID.toString(), EMPTY_STRING, null, null,
+    this(null,null, EMPTY_ID, EMPTY_STRING, null, null,
         0, 0, false, false);
   }
 

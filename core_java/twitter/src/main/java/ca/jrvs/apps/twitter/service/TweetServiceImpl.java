@@ -1,15 +1,24 @@
 package ca.jrvs.apps.twitter.service;
 
 import ca.jrvs.apps.twitter.dao.CrdDao;
-import ca.jrvs.apps.twitter.dao.TweetDao;
 import ca.jrvs.apps.twitter.model.Tweet;
+import ca.jrvs.apps.twitter.validation.Validation;
+import ca.jrvs.apps.twitter.validation.Validator;
 import java.util.List;
 
 public class TweetServiceImpl implements Service{
   private final CrdDao<Tweet, Long> dao;
+  private final Validator<Tweet> tweetValidator;
 
   public TweetServiceImpl(CrdDao<Tweet, Long> dao) {
     this.dao = dao;
+    this.tweetValidator = new Validation<ca.jrvs.apps.twitter.validation.Tweet>();
+  }
+
+  public TweetServiceImpl(CrdDao<Tweet, Long> dao,
+      Validator<Tweet> tweetValidator) {
+    this.dao = dao;
+    this.tweetValidator = tweetValidator;
   }
 
   /**
@@ -22,7 +31,7 @@ public class TweetServiceImpl implements Service{
    */
   @Override
   public Tweet postTweet(Tweet tweet) {
-    if (tweet == null || !isTextValid(tweet.getText())) {
+    if (!tweetValidator.isValid(tweet)) {
       throw new IllegalArgumentException("tweet's text is null or too long");
     }
     Tweet postedTweet = dao.create(tweet);
@@ -53,14 +62,4 @@ public class TweetServiceImpl implements Service{
   public List<Tweet> deleteTweets(String[] ids) {
     return null;
   }
-
-  private boolean isTextValid(String text) {
-    if (text == null) {
-      return false;
-    } else if (text.length() > Tweet.MAX_TEXT_LENGTH) {
-      return false;
-    }
-    return true;
-  }
-
 }
