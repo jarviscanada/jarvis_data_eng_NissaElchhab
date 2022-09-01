@@ -1,7 +1,9 @@
 package ca.jrvs.apps.twitter.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.any;
@@ -140,9 +142,9 @@ public class TweetServiceImplUnitTest {
 
   @Test
   public void postTweetHappyPath() {
-    given(dao.create(any(Tweet.class))).willReturn(Tweet.from(tweetAsJsonStr));
+    given(dao.create(any(Tweet.class))).willReturn(new Tweet(tweetText, tweetLong, tweetLat));
     given(tweetValidator.isValid(any(Tweet.class))).willReturn(true);
-    Tweet responseTweet = tweetService.postTweet(Tweet.from(tweetAsJsonStr));
+    Tweet responseTweet = tweetService.postTweet(new Tweet(tweetText, tweetLong, tweetLat));
     assertNotNull(responseTweet);
     assertEquals(tweetText, responseTweet.getText());
     assertEquals(tweetLong, responseTweet.getCoordinates().longitude(), 0.0001);
@@ -159,11 +161,14 @@ public class TweetServiceImplUnitTest {
 //   assertNull(responseTweet);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void validatedTweetCoordinatesOutOfBounds() {
-//    given(coordinatesValidator.isValid(any(Coordinates.class))).willReturn(false);
-    Tweet responseTweet = tweetService.postTweet(new Tweet(tweetText, 0f, tweetLat));
-//   assertNull(responseTweet);
+    float invalidLongitude =
+        ca.jrvs.apps.twitter.service.validation.Coordinates.MAX_LONGITUDE+0.00001f;
+    Validator<Coordinates> coordxValidator = new ca.jrvs.apps.twitter.service.validation.Coordinates();
+    boolean isValid = coordxValidator.isValid(new Coordinates(
+        invalidLongitude, 0));
+    assertFalse(isValid);
   }
 
   @Test(expected = IllegalArgumentException.class)

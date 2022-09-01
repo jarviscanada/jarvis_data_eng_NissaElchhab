@@ -20,13 +20,13 @@ public class Tweet extends ca.jrvs.apps.twitter.model.Tweet implements
       new ca.jrvs.apps.twitter.service.validation.Coordinates();
 
   @Override
-  public boolean isValid(ca.jrvs.apps.twitter.model.Tweet t) {
-    return Validator.isNotNull(t) && isTextValid() && coordinatesValidator.isValid(
-        this.getCoordinates());
+  public boolean isValid(ca.jrvs.apps.twitter.model.Tweet tweet) {
+    return Validator.isNotNull(tweet) && isTextValid(tweet) && coordinatesValidator.isValid(
+        tweet.getCoordinates());
   }
 
-  private boolean isTextValid() {
-    String text = this.getText();
+  private boolean isTextValid(ca.jrvs.apps.twitter.model.Tweet tweet) {
+    String text = tweet.getText();
     return Validator.isNotNull(text) &&
         Validator.isValueBetweenInclusive(text.length(), MIN_TEXT_LENGTH, MAX_TEXT_LENGTH);
   }

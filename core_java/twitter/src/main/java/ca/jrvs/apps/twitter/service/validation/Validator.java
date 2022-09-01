@@ -28,27 +28,13 @@ public interface Validator<T extends JsonParser> {
     return Float.compare(value, min) >= 0 && Float.compare(value, max) <= 0;
   }
 
-  default boolean isValid(T modelOrDto) {
-    return false;
-  }
-
-//  default boolean isNotValid(T modelOrDto) {
-//    return !isValid(modelOrDto);
-//  }
-//
-//  default boolean isValid() {
-//    return isValid((T) this);
-//  }
-//
-//  default boolean isNotValid() {
-//    return isNotValid((T) this);
-//  }
+  boolean isValid(T modelOrDto);
 
   default boolean isBetweenInclusive(int value, int min, int max) {
-    return isValueBetweenInclusive(value, min, max);
+    return Validator.isValueBetweenInclusive(value, min, max);
   }
 
   default boolean isBetweenInclusive(float value, float min, float max) {
-    return isValueBetweenInclusive(value, min, max);
+    return Validator.isValueBetweenInclusive(value, min, max);
   }
 }

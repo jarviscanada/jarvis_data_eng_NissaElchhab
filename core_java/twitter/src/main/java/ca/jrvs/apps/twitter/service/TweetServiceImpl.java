@@ -55,14 +55,14 @@ public class TweetServiceImpl implements Service {
               + "Please provide a valid tweet string id and/or an empty array instead if all returned fields are to be displayed");
     }
     Tweet foundTweet = dao.findById(Long.parseLong(id));
-    if (!tweetValidator.isValid(foundTweet)) {
+   /* if (!tweetValidator.isValid(foundTweet)) {
       try {
         ca.jrvs.apps.twitter.service.validation.Tweet.logger.debug(foundTweet.toJson(true, true));
       } catch (JsonProcessingException e) {
         throw new RuntimeException(e);
       }
       throw new RuntimeException("returned Tweet was invalid. Possibly null text field");
-    }
+    }*/
 
     return foundTweet;
   }
