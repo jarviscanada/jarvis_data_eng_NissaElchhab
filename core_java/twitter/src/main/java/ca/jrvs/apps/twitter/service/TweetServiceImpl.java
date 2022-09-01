@@ -3,13 +3,12 @@ package ca.jrvs.apps.twitter.service;
 import ca.jrvs.apps.twitter.dao.CrdDao;
 import ca.jrvs.apps.twitter.model.Tweet;
 import ca.jrvs.apps.twitter.service.validation.Validator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 
 public class TweetServiceImpl implements Service {
 
-  private final CrdDao<Tweet, Long> dao;
-  private final Validator<Tweet> tweetValidator;
+  private CrdDao<Tweet, Long> dao;
+  private Validator<Tweet> tweetValidator;
 
   public TweetServiceImpl(CrdDao<Tweet, Long> dao) {
     this.dao = dao;
@@ -52,17 +51,12 @@ public class TweetServiceImpl implements Service {
     if (Validator.isNull(id) || Validator.isNull(fields)) {
       throw new IllegalArgumentException(
           "Tweet id and/or fields argument is null. \n"
-              + "Please provide a valid tweet string id and/or an empty array instead if all returned fields are to be displayed");
+              + "Please provide a valid tweet string id and/or an empty array instead if all "
+              + "returned fields are to be displayed");
     }
     Tweet foundTweet = dao.findById(Long.parseLong(id));
-   /* if (!tweetValidator.isValid(foundTweet)) {
-      try {
-        ca.jrvs.apps.twitter.service.validation.Tweet.logger.debug(foundTweet.toJson(true, true));
-      } catch (JsonProcessingException e) {
-        throw new RuntimeException(e);
-      }
-      throw new RuntimeException("returned Tweet was invalid. Possibly null text field");
-    }*/
+    ca.jrvs.apps.twitter.service.validation.Tweet.logger.debug(
+        "TweetServiceImpl#showTweet\nfoundTweet.toString()\n");
 
     return foundTweet;
   }

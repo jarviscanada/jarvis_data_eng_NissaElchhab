@@ -50,4 +50,12 @@ public class Entities implements JsonParser {
   public void setUserMentions(List<UserMention> userMentions) {
     this.userMentions = userMentions;
   }
+
+  @Override
+  public String toString() {
+    return "Entities{" +
+        "hashtags=" + hashtags +
+        ", userMentions=" + userMentions +
+        '}';
+  }
 }

@@ -90,4 +90,15 @@ public class UserMention implements JsonParser {
   public void setScreenName(String screenName) {
     this.screenName = screenName;
   }
+
+  @Override
+  public String toString() {
+    return "UserMention{" +
+        "id=" + id +
+        ", idStr='" + idStr + '\'' +
+        ", indices=" + indices +
+        ", name='" + name + '\'' +
+        ", screenName='" + screenName + '\'' +
+        '}';
+  }
 }

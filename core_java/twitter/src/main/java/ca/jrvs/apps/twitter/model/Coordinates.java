@@ -3,6 +3,7 @@ package ca.jrvs.apps.twitter.model;
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.IOException;
+import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,5 +76,11 @@ public class Coordinates implements JsonParser {
     return coordinates[LATITUDE];
   }
 
-
+  @Override
+  public String toString() {
+    return "Coordinates{" +
+        "type='" + type + '\'' +
+        ", coordinates=" + Arrays.toString(coordinates) +
+        '}';
+  }
 }

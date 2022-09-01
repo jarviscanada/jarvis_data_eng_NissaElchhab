@@ -49,5 +49,11 @@ public class Hashtag implements JsonParser {
     this.indices = indices;
   }
 
-
+  @Override
+  public String toString() {
+    return "Hashtag{" +
+        "text='" + text + '\'' +
+        ", indices=" + indices +
+        '}';
+  }
 }

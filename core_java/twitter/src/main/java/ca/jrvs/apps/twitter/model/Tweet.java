@@ -217,4 +217,19 @@ public class Tweet implements JsonParser{
     this.retweeted = retweeted;
   }
 
+  @Override
+  public String toString() {
+    return "Tweet{" +
+        "createdAt=" + createdAt +
+        ", id=" + id +
+        ", idStr='" + idStr + '\'' +
+        ", text='" + text + '\'' +
+        ", entities=" + entities.toString() +
+        ", coordinates=" + coordinates.toString() +
+        ", retweetCount=" + retweetCount +
+        ", favoriteCount=" + favoriteCount +
+        ", favorited=" + favorited +
+        ", retweeted=" + retweeted +
+        '}';
+  }
 }
