@@ -6,7 +6,8 @@ import ca.jrvs.apps.twitter.validation.Validation;
 import ca.jrvs.apps.twitter.validation.Validator;
 import java.util.List;
 
-public class TweetServiceImpl implements Service{
+public class TweetServiceImpl implements Service {
+
   private final CrdDao<Tweet, Long> dao;
   private final Validator<Tweet> tweetValidator;
 
@@ -48,7 +49,14 @@ public class TweetServiceImpl implements Service{
    */
   @Override
   public Tweet showTweet(String id, String[] fields) {
-    return null;
+    if (Validator.isNull(id) || Validator.isNull(fields)) {
+      throw new IllegalArgumentException(
+          "Tweet id and/or fields argument is null. \n"
+              + "Please provide a valid tweet string id and/or an empty array instead if all returned fields are to be displayed");
+    }
+    Tweet foundTweet = dao.findById(Lo)
+return null;
+
   }
 
   /**

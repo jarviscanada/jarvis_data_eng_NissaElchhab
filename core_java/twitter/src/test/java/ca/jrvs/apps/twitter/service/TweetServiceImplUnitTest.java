@@ -3,6 +3,7 @@ package ca.jrvs.apps.twitter.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 
@@ -14,6 +15,7 @@ import ca.jrvs.apps.twitter.model.Tweet;
 import ca.jrvs.apps.twitter.validation.Validator;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,6 +33,7 @@ public class TweetServiceImplUnitTest {
   public String postUriIsNotAuthz;
   public String tweetText;
   public String tooLongTweetText;
+  public String tweetAsJsonStr;
   public float tweetLong;
   public float tweetLat;
   @Mock
@@ -55,17 +58,15 @@ public class TweetServiceImplUnitTest {
     postUriIsNotAuthz =
         "https://api.twitter.com/1.1/statuses/show.json?id=1549615165367183744";
     tweetText = "#TestTestTest Hello From Api at " + LocalDateTime.now();
-    tooLongTweetText = Stream.generate(() -> "A").limit(ca.jrvs.apps.twitter.validation.Tweet.MAX_TEXT_LENGTH+ 1)
+    tooLongTweetText = Stream.generate(() -> "A")
+        .limit(ca.jrvs.apps.twitter.validation.Tweet.MAX_TEXT_LENGTH + 1)
         .reduce("", (acc, s) -> acc + s);
 
-    tweetLong = -123.400612831116f;
-    tweetLat = 36.7821120598956f;
-
-    String tweetAsJsonStr = " {\n"
+    tweetAsJsonStr = " {\n"
         + "   \"created_at\":\"Mon Feb 18 21:24:39 +0000 2019\",\n"
         + "   \"id\":1097607853932564480,\n"
         + "   \"id_str\":\"1097607853932564480\",\n"
-        + "   \"text\":\"text with loc223\",\n"
+        + "   \"text\":\"" + tweetText + "\",\n"
         + "   \"entities\":{\n"
         + "      \"hashtags\":  [\n"
         + "         {\n"
@@ -130,6 +131,8 @@ public class TweetServiceImplUnitTest {
 
     tweetLong = -75.14310264f;
     tweetLat = 40.05701649f;
+  /*  tweetLong = -123.400612831116f;
+    tweetLat = 36.7821120598956f;*/
 
     HttpHelper httpHelper = new TwitterHttpHelper(CONSUMER_KEY, CONSUMER_KEY_SECRET, ACCESS_TOKEN,
         ACCESS_TOKEN_SECRET);
@@ -149,7 +152,7 @@ public class TweetServiceImplUnitTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void postTweetTextExceedsMaxChars() {
-    given(tweetService.postTweet(new Tweet(tooLongTweetText,  tweetLong, tweetLat))).willThrow(
+    given(tweetService.postTweet(new Tweet(tooLongTweetText, tweetLong, tweetLat))).willThrow(
         IllegalArgumentException.class);
 
     Tweet responseTweet = tweetService.postTweet(new Tweet(tooLongTweetText, tweetLong, tweetLat));
@@ -171,8 +174,22 @@ public class TweetServiceImplUnitTest {
   }
 
   @Test
-  public void showTweet() {
-    fail();
+  public void showTweetHappyPath() {
+    given(dao.findById(anyLong())).willReturn(Tweet.from(tweetAsJsonStr));
+    Tweet responseTweet = tweetService.showTweet("1097607853932564480", new String[]{});
+    assertNotNull(responseTweet);
+    Assertions.assertThat(responseTweet.getText())
+        .containsPattern("#TestTestTest Hello From Api at");
+    assertEquals(tweetLong, responseTweet.getCoordinates().longitude(), 0.0001);
+    assertEquals(tweetLat, responseTweet.getCoordinates().latitude(), 0.0001);
+    assertNotNull(responseTweet.getIdStr());
+  }
+
+
+  @Test(expected = IllegalArgumentException.class)
+  public void showTweetInvalidArguments() {
+    given(dao.findById(anyLong())).willReturn(Tweet.from(tweetAsJsonStr));
+    Tweet responseTweet = tweetService.showTweet(null, null);
   }
 
   @Test
