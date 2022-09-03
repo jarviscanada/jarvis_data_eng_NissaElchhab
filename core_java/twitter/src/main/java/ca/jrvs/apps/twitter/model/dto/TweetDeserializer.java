@@ -5,6 +5,7 @@ import ca.jrvs.apps.twitter.model.Entities;
 import ca.jrvs.apps.twitter.service.validation.Tweet;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,28 +14,39 @@ import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.LongNode;
 import java.io.IOException;
+import java.util.Collection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TweetDeserializer extends StdDeserializer<Tweet> {
 
   public static final String[] DEFAULT_FIELDS = {""};
+  private static final Logger logger = LoggerFactory.getLogger(TweetDeserializer.class);
   private final ObjectMapper om = new ObjectMapper();
   private JsonNode node;
   private String[] fields;
 
 
   public TweetDeserializer() {
-    this(null);
+    super(ca.jrvs.apps.twitter.model.Tweet.class);
   }
 
-  /**
-   * initializes the list of fields that are going to be matched for selection fields==null is
-   * equivalent to an empty field
-   *
-   * @param
-   */
-  public TweetDeserializer(Class<?> vc) {
-    super(vc);
+  public TweetDeserializer(String[] fields) {
+    super(ca.jrvs.apps.twitter.model.Tweet.class);
+    this.fields = fields;
+    logger.debug("FROM TweetDeserializer#TweetDeserializer: fields values:\n" + fields.toString());
   }
+
+//  /**
+//   * initializes the list of fields that are going to be matched for selection fields==null is
+//   * equivalent to an empty field
+//   *
+//   * @param
+//   */
+//  public TweetDeserializer(Class<?> valueClass) {
+//    super(valueClass);
+//  }
+
 
   public String[] getFields() {
     return fields;
@@ -90,6 +102,11 @@ public class TweetDeserializer extends StdDeserializer<Tweet> {
   @Override
   public Tweet deserialize(JsonParser jsonParser, DeserializationContext ctxt)
       throws IOException, JsonProcessingException {
+    // See documentation above
+    if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
+      jsonParser.nextToken();
+    }
+
     node = jsonParser.getCodec().readTree(jsonParser);
     // TODO note ideally we should use a HashMap<property, value> both here and in...
     // ... new tweet constructor with a switch to enable for extensibility

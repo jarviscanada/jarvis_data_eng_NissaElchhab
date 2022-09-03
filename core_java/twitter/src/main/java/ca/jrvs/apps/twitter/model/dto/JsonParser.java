@@ -1,10 +1,13 @@
 package ca.jrvs.apps.twitter.model.dto;
 
+import ca.jrvs.apps.twitter.model.Tweet;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.io.IOException;
 
 public interface JsonParser {
@@ -43,6 +46,23 @@ public interface JsonParser {
     final ObjectMapper om = new ObjectMapper();
     om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     return om.readValue(json, clazz);
+  }
+
+  /**
+   * @param json
+   * @return Tweet
+   * @throws IOException
+   */
+  static Tweet parseJsonTweetWithFilter(String json, String[] fields)
+      throws IOException {
+    final ObjectMapper om = new ObjectMapper();
+    om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    TweetDeserializer tweetDeserializer = new TweetDeserializer(fields);
+    SimpleModule tweetModule = new SimpleModule("TweetDeserializer",
+        new Version(1, 0, 0, "SNAPSHOT", null, null));
+    tweetModule.addDeserializer(Tweet.class, tweetDeserializer);
+    om.registerModule(tweetModule);
+    return om.readValue(json, Tweet.class);
   }
 
   /**
