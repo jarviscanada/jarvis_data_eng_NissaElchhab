@@ -1,4 +1,4 @@
-package ca.jrvs.apps.twitter.service.validation;
+package ca.jrvs.apps.twitter.validation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ public class Coordinates extends ca.jrvs.apps.twitter.model.Coordinates implemen
 
   @Override
   public boolean isValid(ca.jrvs.apps.twitter.model.Coordinates coordx) {
-    return Validator.isNotNull(coordx) && isCoordinatesValid(coordx);
+    return isNotNull(coordx) && isCoordinatesValid(coordx);
   }
 
   private boolean isCoordinatesValid(ca.jrvs.apps.twitter.model.Coordinates coordx) {

@@ -1,4 +1,4 @@
-package ca.jrvs.apps.twitter.service.validation;
+package ca.jrvs.apps.twitter.validation;
 
 import ca.jrvs.apps.twitter.model.Coordinates;
 import org.slf4j.Logger;
@@ -17,17 +17,17 @@ public class Tweet extends ca.jrvs.apps.twitter.model.Tweet implements
       ca.jrvs.apps.twitter.model.Tweet.class);
 
   private final Validator<Coordinates> coordinatesValidator =
-      new ca.jrvs.apps.twitter.service.validation.Coordinates();
+      new ca.jrvs.apps.twitter.validation.Coordinates();
 
   @Override
   public boolean isValid(ca.jrvs.apps.twitter.model.Tweet tweet) {
-    return Validator.isNotNull(tweet) && isTextValid(tweet)  && coordinatesValidator.isValid(
+    return isNotNull(tweet) && isTextValid(tweet)  && coordinatesValidator.isValid(
         tweet.getCoordinates());
   }
 
   private boolean isTextValid(ca.jrvs.apps.twitter.model.Tweet tweet) {
     String text = tweet.getText();
-    return Validator.isNotNull(text) &&
+    return isNotNull(text) &&
         Validator.isValueBetweenInclusive(text.length(), MIN_TEXT_LENGTH, MAX_TEXT_LENGTH);
   }
 }

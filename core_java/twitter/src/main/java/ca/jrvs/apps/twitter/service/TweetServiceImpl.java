@@ -2,7 +2,7 @@ package ca.jrvs.apps.twitter.service;
 
 import ca.jrvs.apps.twitter.dao.CrdDao;
 import ca.jrvs.apps.twitter.model.Tweet;
-import ca.jrvs.apps.twitter.service.validation.Validator;
+import ca.jrvs.apps.twitter.validation.Validator;
 import java.util.List;
 
 public class TweetServiceImpl implements Service {
@@ -10,10 +10,10 @@ public class TweetServiceImpl implements Service {
   private CrdDao<Tweet, Long> dao;
   private Validator<Tweet> tweetValidator;
 
-  public TweetServiceImpl(CrdDao<Tweet, Long> dao) {
+/*  public TweetServiceImpl(CrdDao<Tweet, Long> dao) {
     this.dao = dao;
     this.tweetValidator = new ca.jrvs.apps.twitter.service.validation.Tweet();
-  }
+  }*/
 
   public TweetServiceImpl(CrdDao<Tweet, Long> dao,
       Validator<Tweet> tweetValidator) {
@@ -31,8 +31,13 @@ public class TweetServiceImpl implements Service {
    */
   @Override
   public Tweet postTweet(Tweet tweet) {
+    if (Validator.isNull(tweet)) {
+      throw new IllegalArgumentException("tweet's text is null");
+    }
     if (!tweetValidator.isValid(tweet)) {
-      throw new IllegalArgumentException("tweet's text is null or too long");
+      ca.jrvs.apps.twitter.validation.Tweet.logger.debug(tweet.toString());
+      throw new IllegalArgumentException(
+          "tweet's text is above max length of " + ca.jrvs.apps.twitter.validation.Tweet.MAX_TEXT_LENGTH + " characters");
     }
     Tweet postedTweet = dao.create(tweet);
     return postedTweet;
@@ -55,7 +60,7 @@ public class TweetServiceImpl implements Service {
               + "returned fields are to be displayed");
     }
     Tweet foundTweet = dao.findById(Long.parseLong(id));
-    ca.jrvs.apps.twitter.service.validation.Tweet.logger.debug(
+    ca.jrvs.apps.twitter.validation.Tweet.logger.debug(
         "TweetServiceImpl#showTweet\nfoundTweet.toString()\n");
 
     return foundTweet;

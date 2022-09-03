@@ -1,8 +1,8 @@
 package ca.jrvs.apps.twitter.model;
 
-import static ca.jrvs.apps.twitter.service.validation.Tweet.CREATED_AT_PATTERN;
-import static ca.jrvs.apps.twitter.service.validation.Tweet.EMPTY_ID;
-import static ca.jrvs.apps.twitter.service.validation.Tweet.EMPTY_STRING;
+import static ca.jrvs.apps.twitter.validation.Tweet.CREATED_AT_PATTERN;
+import static ca.jrvs.apps.twitter.validation.Tweet.EMPTY_ID;
+import static ca.jrvs.apps.twitter.validation.Tweet.EMPTY_STRING;
 
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -50,15 +50,34 @@ public class Tweet implements JsonParser{
   //
   private Coordinates coordinates;
   //
-  private int retweetCount;
+  private Integer retweetCount;
   //
-  private int favoriteCount;
+  private Integer favoriteCount;
   //
-  private boolean favorited;
+  private Boolean favorited;
   //
-  private boolean retweeted;
+  private Boolean retweeted;
 
   public Tweet(String createdAt, Long id, String idStr, String text, Entities entities,
+      Coordinates coordinates, Integer retweetCount, Integer favoriteCount, Boolean favorited,
+      Boolean retweeted) {
+    this.createdAt =
+        createdAt == null ? null : ZonedDateTime.parse(createdAt, twitterDatetimeFormat);
+//        ZonedDateTime.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME);
+
+    // TODO based on Twitter api contract, id always== idStr: then, derive one from the other
+    this.idStr = idStr;
+    this.id = Long.parseLong(idStr);
+    this.text = text;
+    this.entities = entities;
+    this.coordinates = coordinates;
+    this.retweetCount = retweetCount;
+    this.favoriteCount = favoriteCount;
+    this.favorited = favorited;
+    this.retweeted = retweeted;
+  }
+
+/*  public Tweet(String createdAt, Long id, String idStr, String text, Entities entities,
       Coordinates coordinates, int retweetCount, int favoriteCount, boolean favorited,
       boolean retweeted) {
     this.createdAt =
@@ -75,7 +94,7 @@ public class Tweet implements JsonParser{
     this.favoriteCount = favoriteCount;
     this.favorited = favorited;
     this.retweeted = retweeted;
-  }
+  }*/
 
   public Tweet(String text) {
     this(null, null, EMPTY_ID, text, null, null, 0, 0, false, false);

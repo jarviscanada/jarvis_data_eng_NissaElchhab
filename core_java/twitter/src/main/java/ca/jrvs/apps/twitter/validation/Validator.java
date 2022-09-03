@@ -1,4 +1,4 @@
-package ca.jrvs.apps.twitter.service.validation;
+package ca.jrvs.apps.twitter.validation;
 
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
 

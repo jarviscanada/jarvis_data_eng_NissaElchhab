@@ -2,7 +2,7 @@ package ca.jrvs.apps.twitter.model.dto;
 
 import ca.jrvs.apps.twitter.model.Coordinates;
 import ca.jrvs.apps.twitter.model.Entities;
-import ca.jrvs.apps.twitter.service.validation.Tweet;
+import ca.jrvs.apps.twitter.validation.Tweet;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.LongNode;
 import java.io.IOException;
-import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,10 +113,10 @@ public class TweetDeserializer extends StdDeserializer<Tweet> {
     Long id = (Long) getNumber("id");
     String idStr = getString("id_str");
     String text = getString("text");
-    int retweetCount = (Integer) getNumber("retweet_count");
-    int favoriteCount = (Integer) getNumber("favorite_count");
-    boolean favorited = getBoolean("favorited");
-    boolean retweeted = getBoolean("retweeted");
+    Integer retweetCount = (Integer) getNumber("retweet_count");
+    Integer favoriteCount = (Integer) getNumber("favorite_count");
+    Boolean favorited = getBoolean("favorited");
+    Boolean retweeted = getBoolean("retweeted");
     Entities entities = geObject("entities", Entities.class);
     Coordinates coordinates = geObject("coordinates", Coordinates.class);
 
@@ -150,8 +149,8 @@ public class TweetDeserializer extends StdDeserializer<Tweet> {
     }
   }
 
-  private boolean getBoolean(String key) {
-    return (Boolean) ((BooleanNode) this.node.get(key)).asBoolean();
+  private Boolean getBoolean(String key) {
+    return ((BooleanNode) this.node.get(key)).asBoolean();
   }
 
   private <T> T geObject(String key, Class<T> clazzOfKey) {
