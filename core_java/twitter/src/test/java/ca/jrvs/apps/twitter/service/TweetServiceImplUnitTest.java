@@ -19,19 +19,32 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 
 public class TweetServiceImplUnitTest {
 
   @Rule
   public MockitoRule mockitoRule = MockitoJUnit.rule();
+
   @Mock
   Coordinates mockCoordinates;
   @Mock
   Tweet mockTweet;
+
+  @Mock
+  private Validator<Coordinates> mockCoordinatesValidator;
+  @Mock
+  private CrdDao<Tweet, Long> mockDao;
+  @Mock
+  private Validator<Tweet> mockTweetValidator;
+  @InjectMocks
+  private TweetServiceImpl mockTweetService;
+
   private String tweetText;
   private String tooLongTweetText;
   private String tweetAsJsonStr;
@@ -41,14 +54,6 @@ public class TweetServiceImplUnitTest {
   private float tweetLat;
   private float invalidLongitude;
   private float invalidLatitude;
-  @Mock
-  private CrdDao<Tweet, Long> mockDao;
-  @Mock
-  private Validator<Tweet> mockTweetValidator;
-  @Mock
-  private Validator<Coordinates> mockCoordinatesValidator;
-  @InjectMocks
-  private TweetServiceImpl mockTweetService;
 
   @Before
   public void setUp() throws Exception {

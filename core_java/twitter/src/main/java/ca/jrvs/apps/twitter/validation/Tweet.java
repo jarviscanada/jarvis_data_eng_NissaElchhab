@@ -21,13 +21,13 @@ public class Tweet extends ca.jrvs.apps.twitter.model.Tweet implements
 
   @Override
   public boolean isValid(ca.jrvs.apps.twitter.model.Tweet tweet) {
-    return isNotNull(tweet) && isTextValid(tweet)  && coordinatesValidator.isValid(
+    return Validator.isNotNull(tweet) && isTextValid(tweet)  && coordinatesValidator.isValid(
         tweet.getCoordinates());
   }
 
   private boolean isTextValid(ca.jrvs.apps.twitter.model.Tweet tweet) {
     String text = tweet.getText();
-    return isNotNull(text) &&
+    return Validator.isNotNull(text) &&
         Validator.isValueBetweenInclusive(text.length(), MIN_TEXT_LENGTH, MAX_TEXT_LENGTH);
   }
 }

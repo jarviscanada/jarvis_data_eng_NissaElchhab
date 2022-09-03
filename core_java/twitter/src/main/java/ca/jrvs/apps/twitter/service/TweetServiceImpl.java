@@ -2,7 +2,10 @@ package ca.jrvs.apps.twitter.service;
 
 import ca.jrvs.apps.twitter.dao.CrdDao;
 import ca.jrvs.apps.twitter.model.Tweet;
+import ca.jrvs.apps.twitter.model.dto.JsonParser;
 import ca.jrvs.apps.twitter.validation.Validator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.IOException;
 import java.util.List;
 
 public class TweetServiceImpl implements Service {
@@ -37,7 +40,8 @@ public class TweetServiceImpl implements Service {
     if (!tweetValidator.isValid(tweet)) {
       ca.jrvs.apps.twitter.validation.Tweet.logger.debug(tweet.toString());
       throw new IllegalArgumentException(
-          "tweet's text is above max length of " + ca.jrvs.apps.twitter.validation.Tweet.MAX_TEXT_LENGTH + " characters");
+          "tweet's text is above max length of "
+              + ca.jrvs.apps.twitter.validation.Tweet.MAX_TEXT_LENGTH + " characters");
     }
     Tweet postedTweet = dao.create(tweet);
     return postedTweet;
@@ -63,6 +67,25 @@ public class TweetServiceImpl implements Service {
     ca.jrvs.apps.twitter.validation.Tweet.logger.debug(
         "TweetServiceImpl#showTweet\nfoundTweet.toString()\n");
 
+    Tweet filtered = filterTweet(foundTweet, fields);
+    return filtered;
+  }
+
+  /**
+   * Search a tweet by ID
+   *
+   * @param id tweet id
+   * @return Tweet object which is returned by the Twitter API
+   * @throws IllegalArgumentException if id or fields param is invalid
+   */
+  public Tweet showTweet(String id) {
+    if (Validator.isNull(id)) {
+      throw new IllegalArgumentException("Tweet id is null");
+    }
+    Tweet foundTweet = dao.findById(Long.parseLong(id));
+    ca.jrvs.apps.twitter.validation.Tweet.logger.debug(
+        "TweetServiceImpl#showTweet\nfoundTweet.toString()\n");
+
     return foundTweet;
   }
 
@@ -76,5 +99,15 @@ public class TweetServiceImpl implements Service {
   @Override
   public List<Tweet> deleteTweets(String[] ids) {
     return null;
+  }
+
+  private Tweet filterTweet(Tweet tweet, String[] fields) {
+    Tweet filtered = null;
+    try {
+      filtered = JsonParser.parseJsonTweetWithFilter(tweet.toJson(), fields);
+    } catch (IOException e) {
+      throw new RuntimeException("filterTweet parseJsonTweetWithFilter", e);
+    }
+    return filtered;
   }
 }

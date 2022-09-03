@@ -117,8 +117,8 @@ public class TweetDeserializer extends StdDeserializer<Tweet> {
     Integer favoriteCount = (Integer) getNumber("favorite_count");
     Boolean favorited = getBoolean("favorited");
     Boolean retweeted = getBoolean("retweeted");
-    Entities entities = geObject("entities", Entities.class);
-    Coordinates coordinates = geObject("coordinates", Coordinates.class);
+    Entities entities = geObject("/entities", Entities.class);
+    Coordinates coordinates = geObject("/coordinates", Coordinates.class);
 
     Tweet tweet = new Tweet();
     tweet.setCreatedAt(createdAt);

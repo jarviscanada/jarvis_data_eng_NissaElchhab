@@ -15,7 +15,7 @@ public class Coordinates extends ca.jrvs.apps.twitter.model.Coordinates implemen
 
   @Override
   public boolean isValid(ca.jrvs.apps.twitter.model.Coordinates coordx) {
-    return isNotNull(coordx) && isCoordinatesValid(coordx);
+    return Validator.isNotNull(coordx) && isCoordinatesValid(coordx);
   }
 
   private boolean isCoordinatesValid(ca.jrvs.apps.twitter.model.Coordinates coordx) {
