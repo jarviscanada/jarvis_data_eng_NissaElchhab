@@ -126,6 +126,9 @@ public class TweetServiceImpl implements Service {
    * @return
    */
   public Tweet deleteTweet(String id) {
+    if (Validator.isNull(id)) {
+      throw new IllegalArgumentException("Tweet string id is null");
+    }
     Tweet tweet = dao.deleteById(Long.parseLong(id));
     ca.jrvs.apps.twitter.validation.Tweet.logger.debug(
         "TweetServiceImpl#deleteTweet\ndeletedTweet.toString()\n");
