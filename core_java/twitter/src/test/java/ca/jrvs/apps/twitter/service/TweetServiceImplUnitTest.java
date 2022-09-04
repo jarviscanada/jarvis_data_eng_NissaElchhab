@@ -1,8 +1,10 @@
 package ca.jrvs.apps.twitter.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.any;
@@ -13,17 +15,16 @@ import ca.jrvs.apps.twitter.model.Coordinates;
 import ca.jrvs.apps.twitter.model.Tweet;
 import ca.jrvs.apps.twitter.validation.Validator;
 import java.time.ZonedDateTime;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 
 public class TweetServiceImplUnitTest {
@@ -215,12 +216,13 @@ public class TweetServiceImplUnitTest {
   @Test
   public void showTweetHappyPathSomeFields() {
     given(mockDao.findById(anyLong())).willReturn(tweetFromJsonStr);
-    Tweet responseTweet = mockTweetService.showTweet("1097607853932564480", new String[]{});
+    Tweet responseTweet = mockTweetService.showTweet("1097607853932564480",
+        new String[]{"id_str", "text"});
     assertNotNull(responseTweet);
     Assertions.assertThat(responseTweet.getText())
         .containsPattern("#TestTestTest Hello From Api at");
-    assertEquals(tweetLong, responseTweet.getCoordinates().longitude(), 0.0001);
-    assertEquals(tweetLat, responseTweet.getCoordinates().latitude(), 0.0001);
+    assertNull(responseTweet.getCoordinates());
+    assertNull(responseTweet.getCreatedAt());
     assertNotNull(responseTweet.getIdStr());
   }
 
@@ -232,8 +234,26 @@ public class TweetServiceImplUnitTest {
 
   @Test
   public void deleteTweets() {
-    fail();
-  }
+     /*   given(mockTweet.toString()).willReturn("mockTweet#toString()");
+    given(mockTweet.getId()).willReturn(1234567890123456789L);
+    given(mockTweet.getIdStr()).willReturn("1234567890123456789");
+    given(mockTweet.getCreatedAt()).willReturn(createdAt);
+    given(mockTweet.getText()).willReturn(tweetText);
+    given(mockTweet.getCoordinates()).willReturn(mockCoordinates);
+    given(mockCoordinates.longitude()).willReturn(tweetLong);
+    given(mockCoordinates.latitude()).willReturn(tweetLat);*/
+    Tweet fromJsonStr = Tweet.from(tweetAsJsonStr);
+    given(mockDao.create(any(Tweet.class))).willReturn(fromJsonStr);
+    given(mockTweetValidator.isValid(any(Tweet.class))).willReturn(true);
+    given(mockCoordinatesValidator.isValid(any(Coordinates.class))).willReturn(true);
+
+    Tweet responseTweet = mockTweetService.postTweet(fromJsonStr);
+    assertNotNull(responseTweet);
+    assertEquals(tweetText, responseTweet.getText());
+    assertEquals(tweetLong, responseTweet.getCoordinates().longitude(), 0.0001);
+    assertEquals(tweetLat, responseTweet.getCoordinates().latitude(), 0.0001);
+    assertNotNull(responseTweet.getIdStr());
+    }
 
   @Test
   public void validatedTweetCoordinatesOutOfBoundsShouldFail() {

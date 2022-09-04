@@ -4,9 +4,11 @@ import ca.jrvs.apps.twitter.dao.CrdDao;
 import ca.jrvs.apps.twitter.model.Tweet;
 import ca.jrvs.apps.twitter.model.dto.JsonParser;
 import ca.jrvs.apps.twitter.validation.Validator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class TweetServiceImpl implements Service {
 
@@ -67,8 +69,7 @@ public class TweetServiceImpl implements Service {
     ca.jrvs.apps.twitter.validation.Tweet.logger.debug(
         "TweetServiceImpl#showTweet\nfoundTweet.toString()\n");
 
-    Tweet filtered = filterTweet(foundTweet, fields);
-    return filtered;
+    return filterTweet(foundTweet, fields);
   }
 
   /**
@@ -98,7 +99,15 @@ public class TweetServiceImpl implements Service {
    */
   @Override
   public List<Tweet> deleteTweets(String[] ids) {
-    return null;
+    List<Tweet> deleted;
+    if (Validator.isNull(ids)) {
+      throw new IllegalArgumentException("Tweet List is null");
+    }
+    return Arrays.stream(ids)
+        .filter(Objects::nonNull)
+        .parallel()
+        .map(this::deleteTweet)
+        .collect(Collectors.toList());
   }
 
   private Tweet filterTweet(Tweet tweet, String[] fields) {
@@ -109,5 +118,17 @@ public class TweetServiceImpl implements Service {
       throw new RuntimeException("filterTweet parseJsonTweetWithFilter", e);
     }
     return filtered;
+  }
+
+  /**
+   * deletes a tweet a idStr and returns it if successful,
+   * @param id a non-null string
+   * @return
+   */
+  private Tweet deleteTweet(String id) {
+    Tweet tweet = dao.deleteById(Long.parseLong(id));
+    ca.jrvs.apps.twitter.validation.Tweet.logger.debug(
+        "TweetServiceImpl#deleteTweet\ndeletedTweet.toString()\n");
+    return tweet;
   }
 }

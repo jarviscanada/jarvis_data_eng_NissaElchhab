@@ -2,7 +2,7 @@ package ca.jrvs.apps.twitter.model.dto;
 
 import ca.jrvs.apps.twitter.model.Coordinates;
 import ca.jrvs.apps.twitter.model.Entities;
-import ca.jrvs.apps.twitter.validation.Tweet;
+import ca.jrvs.apps.twitter.model.Tweet;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
@@ -14,17 +14,40 @@ import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.LongNode;
 import java.io.IOException;
+import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TweetDeserializer extends StdDeserializer<Tweet> {
+public class TweetDeserializer extends StdDeserializer<ca.jrvs.apps.twitter.model.Tweet> {
 
-  public static final String[] DEFAULT_FIELDS = {""};
+  public static final String[] DEFAULT_FIELDS = {
+      "created_at",
+      "id",
+      "id_str",
+      "text",
+      "retweet_count",
+      "favorite_count",
+      "favorited",
+      "retweeted",
+      "entities",
+      "coordinates"};
   private static final Logger logger = LoggerFactory.getLogger(TweetDeserializer.class);
   private final ObjectMapper om = new ObjectMapper();
+  // Tweet properties
+  // TODO either use introspection...
+  // or introduce java.util.Properties to use properties string name as identifier
+  String createdAt = null;
+  Long id = null;
+  String idStr = null;
+  String text = null;
+  Integer retweetCount = null;
+  Integer favoriteCount = null;
+  Boolean favorited = null;
+  Boolean retweeted = null;
+  Entities entities = null;
+  Coordinates coordinates = null;
   private JsonNode node;
   private String[] fields;
-
 
   public TweetDeserializer() {
     super(ca.jrvs.apps.twitter.model.Tweet.class);
@@ -32,7 +55,11 @@ public class TweetDeserializer extends StdDeserializer<Tweet> {
 
   public TweetDeserializer(String[] fields) {
     super(ca.jrvs.apps.twitter.model.Tweet.class);
-    this.fields = fields;
+    if (fields == null || fields.length == 0) {
+      this.fields = DEFAULT_FIELDS;
+    } else {
+      this.fields = fields;
+    }
     logger.debug("FROM TweetDeserializer#TweetDeserializer: fields values:\n" + fields.toString());
   }
 
@@ -99,7 +126,8 @@ public class TweetDeserializer extends StdDeserializer<Tweet> {
    * @return Deserialized value
    */
   @Override
-  public Tweet deserialize(JsonParser jsonParser, DeserializationContext ctxt)
+  public ca.jrvs.apps.twitter.model.Tweet deserialize(JsonParser jsonParser,
+      DeserializationContext ctxt)
       throws IOException, JsonProcessingException {
     // See documentation above
     if (jsonParser.getCurrentToken() == JsonToken.START_OBJECT) {
@@ -109,29 +137,40 @@ public class TweetDeserializer extends StdDeserializer<Tweet> {
     node = jsonParser.getCodec().readTree(jsonParser);
     // TODO note ideally we should use a HashMap<property, value> both here and in...
     // ... new tweet constructor with a switch to enable for extensibility
-    String createdAt = getString("created_at");
-    Long id = (Long) getNumber("id");
-    String idStr = getString("id_str");
-    String text = getString("text");
-    Integer retweetCount = (Integer) getNumber("retweet_count");
-    Integer favoriteCount = (Integer) getNumber("favorite_count");
-    Boolean favorited = getBoolean("favorited");
-    Boolean retweeted = getBoolean("retweeted");
-    Entities entities = geObject("/entities", Entities.class);
-    Coordinates coordinates = geObject("/coordinates", Coordinates.class);
 
-    Tweet tweet = new Tweet();
-    tweet.setCreatedAt(createdAt);
-    tweet.setId(id);
-    tweet.setIdStr(idStr);
-    tweet.setText(text);
-    tweet.setRetweetCount(retweetCount);
-    tweet.setFavoriteCount(favoriteCount);
-    tweet.setRetweeted(retweeted);
-    tweet.setFavorited(favorited);
-    tweet.setEntities(entities);
-    tweet.setCoordinates(coordinates);
-    return tweet;
+    if (fieldsContains("created_at")) {
+      createdAt = getString("created_at");
+    }
+    if (fieldsContains("id")) {
+      id = (Long) getNumber("id");
+    }
+    if (fieldsContains("id_str")) {
+      idStr = getString("id_str");
+    }
+    if (fieldsContains("text")) {
+      text = getString("text");
+    }
+    if (fieldsContains("retweet_count")) {
+      retweetCount = (Integer) getNumber("retweet_count");
+    }
+    if (fieldsContains("favorite_count")) {
+      favoriteCount = (Integer) getNumber("favorite_count");
+    }
+    if (fieldsContains("favorited")) {
+      favorited = getBoolean("favorited");
+    }
+    if (fieldsContains("retweeted")) {
+      retweeted = getBoolean("retweeted");
+    }
+    if (fieldsContains("entities")) {
+      entities = geObject("/entities", Entities.class);
+    }
+    if (fieldsContains("coordinates")) {
+      coordinates = geObject("/coordinates", Coordinates.class);
+    }
+
+    return new Tweet(createdAt, id, idStr, text, entities, coordinates, retweetCount, favoriteCount,
+        favorited, retweeted);
   }
 
   private String getString(String key) {
@@ -163,4 +202,22 @@ public class TweetDeserializer extends StdDeserializer<Tweet> {
     }
     return object;
   }
+
+  private boolean fieldsContains(String s) {
+    return Arrays.stream(this.fields).anyMatch(field -> field.equalsIgnoreCase(s));
+  }
+/*  protected ca.jrvs.apps.twitter.model.Tweet getTweet() {
+    tweet.setCreatedAt(createdAt);
+    tweet.setId(id);
+    tweet.setIdStr(idStr);
+    tweet.setText(text);
+    tweet.setRetweetCount(retweetCount);
+    tweet.setFavoriteCount(favoriteCount);
+    tweet.setRetweeted(retweeted);
+    tweet.setFavorited(favorited);
+    tweet.setEntities(entities);
+    tweet.setCoordinates(coordinates);
+  }*/
+
+
 }
