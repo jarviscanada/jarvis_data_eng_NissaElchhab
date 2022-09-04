@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
@@ -15,7 +14,11 @@ import ca.jrvs.apps.twitter.model.Coordinates;
 import ca.jrvs.apps.twitter.model.Tweet;
 import ca.jrvs.apps.twitter.validation.Validator;
 import java.time.ZonedDateTime;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
@@ -233,7 +236,7 @@ public class TweetServiceImplUnitTest {
   }
 
   @Test
-  public void deleteTweets() {
+  public void deleteATweetSuccess() {
      /*   given(mockTweet.toString()).willReturn("mockTweet#toString()");
     given(mockTweet.getId()).willReturn(1234567890123456789L);
     given(mockTweet.getIdStr()).willReturn("1234567890123456789");
@@ -243,17 +246,90 @@ public class TweetServiceImplUnitTest {
     given(mockCoordinates.longitude()).willReturn(tweetLong);
     given(mockCoordinates.latitude()).willReturn(tweetLat);*/
     Tweet fromJsonStr = Tweet.from(tweetAsJsonStr);
-    given(mockDao.create(any(Tweet.class))).willReturn(fromJsonStr);
-    given(mockTweetValidator.isValid(any(Tweet.class))).willReturn(true);
-    given(mockCoordinatesValidator.isValid(any(Coordinates.class))).willReturn(true);
+    given(mockDao.deleteById(fromJsonStr.getId())).willReturn(fromJsonStr);
+    Tweet responseTweet = mockTweetService.deleteTweet(fromJsonStr.getIdStr());
 
-    Tweet responseTweet = mockTweetService.postTweet(fromJsonStr);
     assertNotNull(responseTweet);
-    assertEquals(tweetText, responseTweet.getText());
-    assertEquals(tweetLong, responseTweet.getCoordinates().longitude(), 0.0001);
-    assertEquals(tweetLat, responseTweet.getCoordinates().latitude(), 0.0001);
+    assertEquals(fromJsonStr.getText(), responseTweet.getText());
+    assertEquals(fromJsonStr.getCoordinates().longitude(),
+        responseTweet.getCoordinates().longitude(), 0.0001);
+    assertEquals(fromJsonStr.getCoordinates().latitude(), responseTweet.getCoordinates().latitude(),
+        0.0001);
     assertNotNull(responseTweet.getIdStr());
+  }
+
+  @Test(expected = RuntimeException.class)
+  public void deleteATweetNotFound() {
+    Long inexistantOrWrongTweetId = 0L;
+    String inexistantOrWrongTweetIdStr = inexistantOrWrongTweetId.toString();
+    given(mockDao.deleteById(inexistantOrWrongTweetId)).willThrow(RuntimeException.class);
+    Tweet responseTweet = mockTweetService.deleteTweet(inexistantOrWrongTweetIdStr);
+  }
+
+  @Test
+  public void deleteManyUniqueTweetIdsSuccessfully() {
+    Long baseId = tweetFromJsonStr.getId();
+    List<Integer> intIds = Arrays.asList(0, 10, 6, 4, 8, 2, 1, 9, 5, 3, 7, 42, 11, 13);
+    // set up a List of different tweets with randomized no null gaps
+    List<Tweet> fromJsonStrs = new ArrayList<>();
+    for (Integer i : intIds) {
+      Tweet t = Tweet.from(tweetAsJsonStr);
+      t.setId(baseId + i);
+      t.setIdStr(t.getId().toString());
+      t.setText("Text for Id: " + t.getIdStr() + "iteration: " + i.toString());
+      fromJsonStrs.add(t);
+      given(mockDao.deleteById(t.getId())).willReturn(t);
     }
+    String[] ids = new String[fromJsonStrs.size()];
+    fromJsonStrs.stream()
+        .map(Tweet::getIdStr)
+        .collect(Collectors.toList())
+        .toArray(ids);
+    // verification of String[] ids
+    List<Tweet> responseTweets = mockTweetService.deleteTweets(ids);
+
+    assertNotNull(responseTweets);
+    assertEquals(fromJsonStrs.size(), responseTweets.size());
+    assertThat(responseTweets.stream().map(Tweet::getId).collect(Collectors.toList()))
+        .isEqualTo(fromJsonStrs.stream().map(Tweet::getId).collect(Collectors.toList()));
+  }
+
+
+  @Test
+  public void deleteManyUniqueTweetIdsWithGapsSuccessfully() {
+    Long baseId = tweetFromJsonStr.getId();
+    List<Integer> intIds = Arrays.asList(null, 0, 10, null, 6, 4, 8, null, 2, 1, 9, null, null, 5,
+        3, 7, 42, null, 11, 13);
+    // set up a List of different tweets with randomized no null gaps
+    List<Tweet> fromJsonStrs = new ArrayList<>();
+    for (Integer i : intIds) {
+      if (i == null) {
+        fromJsonStrs.add(null);
+        continue;
+      }
+      Tweet t = Tweet.from(tweetAsJsonStr);
+      t.setId(baseId + i);
+      t.setIdStr(t.getId().toString());
+      t.setText("Text for Id: " + t.getIdStr() + "iteration: " + i.toString());
+      fromJsonStrs.add(t);
+      given(mockDao.deleteById(t.getId())).willReturn(t);
+    }
+    String[] ids = new String[fromJsonStrs.size()];
+    fromJsonStrs.stream()
+        .map(t -> t == null ? null : t.getIdStr())
+        .collect(Collectors.toList())
+        .toArray(ids);
+    // verification of String[] ids
+    List<Tweet> responseTweets = mockTweetService.deleteTweets(ids);
+
+    assertNotNull(responseTweets);
+    assertEquals(fromJsonStrs.stream().filter(Objects::nonNull).collect(Collectors.toList()).size(),
+        responseTweets.size());
+    assertThat(responseTweets.stream().map(Tweet::getId).collect(Collectors.toList()))
+        .isEqualTo(fromJsonStrs.stream().filter(Objects::nonNull).map(Tweet::getId)
+            .collect(Collectors.toList()));
+  }
+
 
   @Test
   public void validatedTweetCoordinatesOutOfBoundsShouldFail() {

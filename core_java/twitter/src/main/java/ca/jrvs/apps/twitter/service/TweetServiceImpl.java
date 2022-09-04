@@ -125,7 +125,7 @@ public class TweetServiceImpl implements Service {
    * @param id a non-null string
    * @return
    */
-  private Tweet deleteTweet(String id) {
+  public Tweet deleteTweet(String id) {
     Tweet tweet = dao.deleteById(Long.parseLong(id));
     ca.jrvs.apps.twitter.validation.Tweet.logger.debug(
         "TweetServiceImpl#deleteTweet\ndeletedTweet.toString()\n");
