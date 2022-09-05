@@ -12,8 +12,15 @@ import org.slf4j.LoggerFactory;
 class ArgsParser {
 
   private static final Logger logger = LoggerFactory.getLogger(ArgsParser.class);
+  public final String NO_NEXT_ARGUMENT = "";
   private static int nextArgPos;
-  private static Map<String, String> help = new HashMap<>();
+  private static final Map<String, String> help = new HashMap<>();
+
+  public String separators;
+  private int expectedArgc;
+  // TODO change to enums, Maps, and namedArguments as well
+  // TODO validation constraints should be associated with the parameter/enum class
+  private Deque<Deque<String>> positionalArgs;
 
   static {
     help.put("POST", "Usage: TwitterCLIApp post \"tweet_text\" \"latitude:longitude\"");
@@ -22,29 +29,14 @@ class ArgsParser {
     help.put("HELP", "Usage: TwitterCLIApp post \"tweet_text\" \"latitude:longitude\"");
   }
 
-  public final String NO_NEXT_ARGUMENT = "";
-  public String separators;
-  private int expectedArgc;
-  // TODO change to enums, Maps, and namedArguments as well
-  // TODO validation constraints should be associated with the parameter/enum class
-  private String[] argv;
-  private Deque<Deque<String>> positionalArgs;
-
-
   public ArgsParser() {
   }
 
-  public static int getNextArgPos() {
-    return nextArgPos;
-  }
-
-  public static void setNextArgPos(int nextArgPos) {
-    ArgsParser.nextArgPos = nextArgPos;
-  }
 
   public void configure(String[] argv, int expectedArgc, String separators) {
-    this.positionalArgs = expand(argv);
     this.separators = separators;
+    this.expectedArgc = expectedArgc;
+    this.positionalArgs = expand(argv);
     nextArgPos = 0;
   }
 
@@ -101,10 +93,16 @@ class ArgsParser {
    * @return
    */
   String getArg() {
-    if (positionalArgs.peek() != null && positionalArgs.peek().size() >= 1) {
+    if (positionalArgs.peek() != null && positionalArgs.peek().size() == 1) {
       logger.debug(" positionalArgs: " + positionalArgs.peek());
       return positionalArgs.pollFirst().pollFirst();
     }
+
+    if (positionalArgs.peek() != null && positionalArgs.peek().size() == 2) {
+      logger.debug(" positionalArgs: " + positionalArgs.peek());
+      return positionalArgs.peekFirst().pollFirst();
+    }
+
     logger.warn("Reached the end of positional arguments: No Next argument.");
     return NO_NEXT_ARGUMENT;
 
@@ -112,16 +110,28 @@ class ArgsParser {
 
 
   private Deque<Deque<String>> expand(String[] argv) {
+    int indexOfFirstArgument = 1; // to skip argv[0] i.e the command
     Deque<Deque<String>> positionalArgv = new ArrayDeque<>();
-    for (int i = 0; i < argv.length; ++i) {
+    for (int i = 1; i < argv.length; ++i) {
       if (argv[i].contains(separators)) {
         Deque<String> subArgv = new ArrayDeque<>(Arrays.asList(argv[i].split(separators)));
         positionalArgv.add(subArgv);
+      } else {
+        positionalArgv.add(new ArrayDeque<>(Collections.singletonList(argv[i])));
       }
-      positionalArgv.add(new ArrayDeque<>(Collections.singletonList(argv[i])));
     }
     return positionalArgv;
   }
+
+
+  public static int getNextArgPos() {
+    return nextArgPos;
+  }
+
+  public static void setNextArgPos(int nextArgPos) {
+    ArgsParser.nextArgPos = nextArgPos;
+  }
+
 
   // getters, setters
 
@@ -133,12 +143,21 @@ class ArgsParser {
     this.expectedArgc = expectedArgc;
   }
 
-  public String[] getPositionalArgv() {
-    return argv;
+
+  public String getSeparators() {
+    return separators;
   }
 
-  public void setPositionalArgv(String[] positionalArgv) {
-    this.argv = positionalArgv;
+  public void setSeparators(String separators) {
+    this.separators = separators;
   }
 
+
+  public Deque<Deque<String>> getPositionalArgs() {
+    return positionalArgs;
+  }
+
+  public void setPositionalArgs(Deque<Deque<String>> positionalArgs) {
+    this.positionalArgs = positionalArgs;
+  }
 }
