@@ -1,9 +1,18 @@
 package ca.jrvs.apps.twitter.controller;
 
 import ca.jrvs.apps.twitter.model.Tweet;
+import ca.jrvs.apps.twitter.service.Service;
 import java.util.List;
 
 public class TweetController implements Controller{
+
+  private Service service;
+  private ArgsParser argsParser;
+
+  public TweetController(Service service, ArgsParser argsParser) {
+    this.service = service;
+    this.argsParser = argsParser;
+  }
 
   /**
    * Parse user argument and post a tweet by calling service classes
@@ -14,6 +23,7 @@ public class TweetController implements Controller{
    */
   @Override
   public Tweet postTweet(String[] args) {
+
     return null;
   }
 
