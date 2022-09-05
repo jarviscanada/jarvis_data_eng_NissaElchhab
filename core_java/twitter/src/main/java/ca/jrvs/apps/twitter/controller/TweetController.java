@@ -2,12 +2,9 @@ package ca.jrvs.apps.twitter.controller;
 
 import ca.jrvs.apps.twitter.model.Tweet;
 import ca.jrvs.apps.twitter.service.Service;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-public class TweetController implements Controller{
+public class TweetController implements Controller {
 
   private Service service;
 
@@ -25,10 +22,10 @@ public class TweetController implements Controller{
   @Override
   public Tweet postTweet(String[] args) {
     ArgsParser argsParser = new ArgsParser();
-    argsParser.configure(args, 3, ":");
+    argsParser.configure(args, 2, ":");
     String text = argsParser.getArg();
-    Float longitude = Float.parseFloat(argsParser.getArg());
     Float latitude = Float.parseFloat(argsParser.getArg());
+    Float longitude = Float.parseFloat(argsParser.getArg());
 
     Tweet tweet = new Tweet(text, longitude, latitude);
     return service.postTweet(tweet);
@@ -43,7 +40,14 @@ public class TweetController implements Controller{
    */
   @Override
   public Tweet showTweet(String[] args) {
-    return null;
+    ArgsParser argsParser = new ArgsParser();
+    argsParser.configure(args, 1, 2, ":");
+    String tweetId = argsParser.getArg();
+    String[] fields = null;
+    if (argsParser.hasOptionalArguments()) {
+      fields = argsParser.getArgAsStringArray();
+    }
+    return service.showTweet(tweetId, fields);
   }
 
   /**

@@ -11,81 +11,54 @@ import org.slf4j.LoggerFactory;
 
 class ArgsParser {
 
+  public static final int MAX_ARGUMENTS_COUNT = Integer.MAX_VALUE;
   private static final Logger logger = LoggerFactory.getLogger(ArgsParser.class);
-  public final String NO_NEXT_ARGUMENT = "";
-  private static int nextArgPos;
   private static final Map<String, String> help = new HashMap<>();
 
-  public String separators;
-  private int expectedArgc;
+  static {
+    help.put("POST", "Usage: TwitterCLIApp post \"tweet_text\" \"latitude:longitude\"");
+    help.put("SHOW", "Usage: TwitterCLIApp show tweet_id [field1,fields2]");
+    help.put("DELETE", "Usage: TwitterCLIApp delete [id1,id2,..]");
+    help.put("HELP", "Usage: TwitterCLIApp post|show|delete [options]");
+  }
+
+  private final String NO_NEXT_ARGUMENT = "";
+  private final String ARRAY_OPEN_DELIM = "[";
+  private final String ARRAY_CLOSE_DELIM = "]";
+  private final String ARRAY_ELEM_DELIM = ",";
+
+  private String separators;
+  private int expectedMinArgc;
+  private int expectedMaxArgc;
   // TODO change to enums, Maps, and namedArguments as well
   // TODO validation constraints should be associated with the parameter/enum class
   private Deque<Deque<String>> positionalArgs;
 
-  static {
-    help.put("POST", "Usage: TwitterCLIApp post \"tweet_text\" \"latitude:longitude\"");
-    help.put("SHOW", "Usage: TwitterCLIApp post \"tweet_text\" \"latitude:longitude\"");
-    help.put("DELETE", "Usage: TwitterCLIApp post \"tweet_text\" \"latitude:longitude\"");
-    help.put("HELP", "Usage: TwitterCLIApp post \"tweet_text\" \"latitude:longitude\"");
-  }
 
   public ArgsParser() {
   }
 
-
-  public void configure(String[] argv, int expectedArgc, String separators) {
+  public void configure(String[] argv, int expectedMinArgc, int expectedMaxArgc,
+      String separators) {
+    if (expectedMinArgc > expectedMaxArgc || argv.length < expectedMinArgc + 1
+        || argv.length > expectedMaxArgc + 1) { // arv[0] is the command argument
+      throw new IllegalArgumentException(
+          "Unexpected number of parameters.\nHelp:\n" + help.get("HELP"));
+    }
     this.separators = separators;
-    this.expectedArgc = expectedArgc;
+    this.expectedMinArgc = expectedMinArgc;
+    this.expectedMaxArgc = expectedMaxArgc;
     this.positionalArgs = expand(argv);
-    nextArgPos = 0;
   }
 
-  public void configure(String[] argv, int expectedArgc) {
-    configure(argv, expectedArgc, " "); // empty space
+  public void configure(String[] argv, int expectedMinArgc, String separators) {
+    configure(argv, expectedMinArgc, expectedMinArgc, separators);
   }
 
-  /**
-   * validates argument list
-   *
-   * @param argv argument vector
-   * @return true if arguments are  valid
-   */
-  public void validate(String[] argv) {
-    switch (argv[0].toUpperCase()) {
-      case "POST": {
-        if (argv.length != expectedArgc) {
-          throw new IllegalArgumentException(help.get("POST"));
-        }
-        if (!argv[2].contains(separators)) {
-          throw new IllegalArgumentException(help.get("POST"));
-        }
-        break;
-      }
-
-      case "SHOW": {
-        if (argv.length != expectedArgc) {
-          throw new IllegalArgumentException(help.get("SHOW"));
-        }
-        if (!argv[2].contains(separators)) {
-          throw new IllegalArgumentException(help.get("SHOW"));
-        }
-
-        break;
-      }
-
-      case "DELETE": {
-        if (argv.length != expectedArgc) {
-          throw new IllegalArgumentException(help.get("DELETE"));
-        }
-        if (!argv[2].contains(separators)) {
-          throw new IllegalArgumentException(help.get("DELETE"));
-        }
-        break;
-      }
-      default:
-        throw new IllegalArgumentException(help.get("HELP"));
-    } //switch
+  public void configure(String[] argv, int expectedMinArgc) {
+    configure(argv, expectedMinArgc, expectedMinArgc, " "); // empty space
   }
+
 
   /**
    * returns next arg from the positional args
@@ -105,7 +78,23 @@ class ArgsParser {
 
     logger.warn("Reached the end of positional arguments: No Next argument.");
     return NO_NEXT_ARGUMENT;
+  }
 
+  /**
+   * returns next arg from the positional args
+   *
+   * @return
+   */
+  String[] getArgAsStringArray() {
+    String str = getArg().trim(); // expected shape: "[s1,s2,...,sn]" NOTE NO SPACES for now
+    if (str.startsWith(ARRAY_OPEN_DELIM) && str.endsWith(ARRAY_CLOSE_DELIM)) {
+      str = str.substring(1, str.length() - 1); // chomp both [ and ]
+    } else {
+      throw new IllegalArgumentException(
+          "Wrong format for array of fields.\n"
+              + " Likely missing opening or closing bracket(s).\n" + help.get("SHOW"));
+    }
+    return str.split(ARRAY_ELEM_DELIM);
   }
 
 
@@ -124,23 +113,69 @@ class ArgsParser {
   }
 
 
-  public static int getNextArgPos() {
-    return nextArgPos;
+  public boolean hasOptionalArguments() {
+    return expectedMinArgc != expectedMaxArgc;
   }
 
-  public static void setNextArgPos(int nextArgPos) {
-    ArgsParser.nextArgPos = nextArgPos;
+  public String[] arrayify() {
+    return null;
   }
 
+  private boolean isArgumentCountValid() {
+    return false;
+  }
+
+  /**
+   * validates argument list
+   *
+   * @param argv argument vector
+   * @return true if arguments are  valid
+   */
+  public void validate(String[] argv) {
+    switch (argv[0].toUpperCase()) {
+      case "POST": {
+        if (argv.length != expectedMinArgc + 1) {
+          throw new IllegalArgumentException(help.get("POST"));
+        }
+        if (!argv[2].contains(separators)) {
+          throw new IllegalArgumentException(help.get("POST"));
+        }
+        break;
+      }
+
+      case "SHOW": {
+        if (argv.length != expectedMinArgc + 1) {
+          throw new IllegalArgumentException(help.get("SHOW"));
+        }
+        if (!argv[2].contains(separators)) {
+          throw new IllegalArgumentException(help.get("SHOW"));
+        }
+
+        break;
+      }
+
+      case "DELETE": {
+        if (argv.length != expectedMinArgc + 1) {
+          throw new IllegalArgumentException(help.get("DELETE"));
+        }
+        if (!argv[2].contains(separators)) {
+          throw new IllegalArgumentException(help.get("DELETE"));
+        }
+        break;
+      }
+      default:
+        throw new IllegalArgumentException("Unrecognizable command.\nHelp:\n" + help.get("HELP"));
+    } //switch
+  }
 
   // getters, setters
 
-  public int getExpectedArgc() {
-    return expectedArgc;
+  public int getExpectedMinArgc() {
+    return expectedMinArgc;
   }
 
-  public void setExpectedArgc(int expectedArgc) {
-    this.expectedArgc = expectedArgc;
+  public void setExpectedMinArgc(int expectedMinArgc) {
+    this.expectedMinArgc = expectedMinArgc;
   }
 
 
