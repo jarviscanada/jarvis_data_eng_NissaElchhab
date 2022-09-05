@@ -59,6 +59,9 @@ public class TweetController implements Controller {
    */
   @Override
   public List<Tweet> deleteTweet(String[] args) {
-    return null;
-  }
+    ArgsParser argsParser = new ArgsParser();
+    argsParser.configure(args, 1);
+    String tweetId = argsParser.getArg();
+    String[] ids = argsParser.getArgAsStringArray();
+    return service.deleteTweets(ids);  }
 }
