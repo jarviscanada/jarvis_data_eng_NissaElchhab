@@ -2,16 +2,19 @@ package ca.jrvs.apps.twitter.controller;
 
 import ca.jrvs.apps.twitter.model.Tweet;
 import ca.jrvs.apps.twitter.service.Service;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class TweetController implements Controller{
 
   private Service service;
   private ArgsParser argsParser;
 
-  public TweetController(Service service, ArgsParser argsParser) {
+  public TweetController(Service service) {
     this.service = service;
-    this.argsParser = argsParser;
+    this.argsParser = new ArgsParser();
   }
 
   /**
@@ -23,8 +26,13 @@ public class TweetController implements Controller{
    */
   @Override
   public Tweet postTweet(String[] args) {
+    argsParser.configure(args, 3, ":");
+    String text = argsParser.getArg();
+    Float longitude = Float.parseFloat(argsParser.getArg());
+    Float latitude = Float.parseFloat(argsParser.getArg());
 
-    return null;
+    Tweet tweet = new Tweet(text, longitude, latitude);
+    return service.postTweet(tweet);
   }
 
   /**
