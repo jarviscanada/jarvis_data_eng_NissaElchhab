@@ -4,6 +4,8 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,13 +13,22 @@ class ArgsParser {
 
   private static final Logger logger = LoggerFactory.getLogger(ArgsParser.class);
   private static int nextArgPos;
+  private static Map<String, String> help = new HashMap<>();
+
+  static {
+    help.put("POST", "Usage: TwitterCLIApp post \"tweet_text\" \"latitude:longitude\"");
+    help.put("SHOW", "Usage: TwitterCLIApp post \"tweet_text\" \"latitude:longitude\"");
+    help.put("DELETE", "Usage: TwitterCLIApp post \"tweet_text\" \"latitude:longitude\"");
+    help.put("HELP", "Usage: TwitterCLIApp post \"tweet_text\" \"latitude:longitude\"");
+  }
+
   public final String NO_NEXT_ARGUMENT = "";
   public String separators;
   private int expectedArgc;
-  private String[] argv;
-  private Deque<Deque<String>> positionalArgs;
   // TODO change to enums, Maps, and namedArguments as well
   // TODO validation constraints should be associated with the parameter/enum class
+  private String[] argv;
+  private Deque<Deque<String>> positionalArgs;
 
 
   public ArgsParser() {
@@ -32,13 +43,6 @@ class ArgsParser {
   }
 
   public void configure(String[] argv, int expectedArgc, String separators) {
-    if (argv.length != expectedArgc) {
-      throw new IllegalArgumentException(
-          "Argument count:" + argv.length + " is invalid");
-    }
-    if (!isValid(argv)) {
-      throw new IllegalArgumentException("Argument(s) invalid");
-    }
     this.positionalArgs = expand(argv);
     this.separators = separators;
     nextArgPos = 0;
@@ -48,15 +52,47 @@ class ArgsParser {
     configure(argv, expectedArgc, " "); // empty space
   }
 
-
   /**
    * validates argument list
    *
    * @param argv argument vector
    * @return true if arguments are  valid
    */
-  boolean isValid(String[] argv) {
-    return true;
+  public void validate(String[] argv) {
+    switch (argv[0].toUpperCase()) {
+      case "POST": {
+        if (argv.length != expectedArgc) {
+          throw new IllegalArgumentException(help.get("POST"));
+        }
+        if (!argv[2].contains(separators)) {
+          throw new IllegalArgumentException(help.get("POST"));
+        }
+        break;
+      }
+
+      case "SHOW": {
+        if (argv.length != expectedArgc) {
+          throw new IllegalArgumentException(help.get("SHOW"));
+        }
+        if (!argv[2].contains(separators)) {
+          throw new IllegalArgumentException(help.get("SHOW"));
+        }
+
+        break;
+      }
+
+      case "DELETE": {
+        if (argv.length != expectedArgc) {
+          throw new IllegalArgumentException(help.get("DELETE"));
+        }
+        if (!argv[2].contains(separators)) {
+          throw new IllegalArgumentException(help.get("DELETE"));
+        }
+        break;
+      }
+      default:
+        throw new IllegalArgumentException(help.get("HELP"));
+    } //switch
   }
 
   /**

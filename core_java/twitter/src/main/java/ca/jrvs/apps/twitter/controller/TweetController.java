@@ -10,11 +10,9 @@ import java.util.Map;
 public class TweetController implements Controller{
 
   private Service service;
-  private ArgsParser argsParser;
 
   public TweetController(Service service) {
     this.service = service;
-    this.argsParser = new ArgsParser();
   }
 
   /**
@@ -26,6 +24,7 @@ public class TweetController implements Controller{
    */
   @Override
   public Tweet postTweet(String[] args) {
+    ArgsParser argsParser = new ArgsParser();
     argsParser.configure(args, 3, ":");
     String text = argsParser.getArg();
     Float longitude = Float.parseFloat(argsParser.getArg());
