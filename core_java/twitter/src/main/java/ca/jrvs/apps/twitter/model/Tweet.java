@@ -239,16 +239,16 @@ public class Tweet implements JsonParser {
   @Override
   public String toString() {
     return "Tweet{" +
-        "createdAt=" + createdAt +
-        ", id=" + id +
-        ", idStr='" + idStr + '\'' +
-        ", text='" + text + '\'' +
-        ", entities=" + entities.toString() +
-        ", coordinates=" + coordinates.toString() +
-        ", retweetCount=" + retweetCount +
-        ", favoriteCount=" + favoriteCount +
-        ", favorited=" + favorited +
-        ", retweeted=" + retweeted +
+        "createdAt=" + (createdAt == null ? "createdAt==null" : createdAt) +
+        ", id=" + (id == null ? "id==null" : id) +
+        ", idStr='" + (idStr == null ? "idStr==null" : idStr) + '\'' +
+        ", text='" + (text == null ? "text==null" : text) + '\'' +
+        ", entities=" + (entities == null ? "entities==null" : entities.toString()) +
+        ", coordinates=" + (coordinates == null ? "coordinates==null" : coordinates.toString()) +
+        ", retweetCount=" + (retweetCount == null ? "retweetCount==null" : retweetCount) +
+        ", favoriteCount=" + (favoriteCount == null ? "favoriteCount==null" : favoriteCount) +
+        ", favorited=" + (favorited == null ? "favorited==null" : favorited) +
+        ", retweeted=" + (retweeted == null ? "retweeted==null" : retweeted) +
         '}';
   }
 }

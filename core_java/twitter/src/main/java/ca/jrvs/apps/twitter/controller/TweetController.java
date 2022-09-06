@@ -7,9 +7,16 @@ import java.util.List;
 public class TweetController implements Controller {
 
   private Service service;
+  private ArgsParser argsParser;
 
   public TweetController(Service service) {
     this.service = service;
+    argsParser = new ArgsParser();
+  }
+
+  public TweetController(Service service, ArgsParser argsParser) {
+    this.service = service;
+    this.argsParser = argsParser;
   }
 
   /**
@@ -21,7 +28,6 @@ public class TweetController implements Controller {
    */
   @Override
   public Tweet postTweet(String[] args) {
-    ArgsParser argsParser = new ArgsParser();
     argsParser.configure(args, 2, ":");
     String text = argsParser.getArg();
     Float latitude = Float.parseFloat(argsParser.getArg());
@@ -40,7 +46,6 @@ public class TweetController implements Controller {
    */
   @Override
   public Tweet showTweet(String[] args) {
-    ArgsParser argsParser = new ArgsParser();
     argsParser.configure(args, 1, 2, ":");
     String tweetId = argsParser.getArg();
     String[] fields = null;
@@ -59,9 +64,7 @@ public class TweetController implements Controller {
    */
   @Override
   public List<Tweet> deleteTweet(String[] args) {
-    ArgsParser argsParser = new ArgsParser();
     argsParser.configure(args, 1);
-    String tweetId = argsParser.getArg();
     String[] ids = argsParser.getArgAsStringArray();
     return service.deleteTweets(ids);  }
 }

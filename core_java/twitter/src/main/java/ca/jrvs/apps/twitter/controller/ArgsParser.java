@@ -101,7 +101,7 @@ class ArgsParser {
   private Deque<Deque<String>> expand(String[] argv) {
     int indexOfFirstArgument = 1; // to skip argv[0] i.e the command
     Deque<Deque<String>> positionalArgv = new ArrayDeque<>();
-    for (int i = 1; i < argv.length; ++i) {
+    for (int i = indexOfFirstArgument; i < argv.length; ++i) {
       if (argv[i].contains(separators)) {
         Deque<String> subArgv = new ArrayDeque<>(Arrays.asList(argv[i].split(separators)));
         positionalArgv.add(subArgv);
