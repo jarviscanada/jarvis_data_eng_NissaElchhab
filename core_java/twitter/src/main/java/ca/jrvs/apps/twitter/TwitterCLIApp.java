@@ -15,9 +15,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
+public
 class TwitterCLIApp {
 
   public static final String USAGE = "TwitterCLIAPP post|show|delete [options]";
@@ -30,21 +33,8 @@ class TwitterCLIApp {
   }
 
   public static void main(String[] args) {
-    // oauth secrets
-    final String CONSUMER_KEY = System.getenv("consumerKey");
-    final String CONSUMER_KEY_SECRET = System.getenv("consumerKeySecret");
-    final String ACCESS_TOKEN = System.getenv("accessToken");
-    final String ACCESS_TOKEN_SECRET = System.getenv("accessTokenSecret");
-
-    // dependencies
-    HttpHelper httpHelper = new TwitterHttpHelper(CONSUMER_KEY, CONSUMER_KEY_SECRET, ACCESS_TOKEN,
-        ACCESS_TOKEN_SECRET);
-    CrdDao<Tweet, Long> dao = new TweetDao(httpHelper);
-    Validator<Tweet> validator = new ca.jrvs.apps.twitter.validation.Tweet();
-    Service service = new TweetServiceImpl(dao, validator);
-    Controller controller = new TweetController(service);
-    TwitterCLIApp app = new TwitterCLIApp(controller);
-
+    ApplicationContext ctx = new AnnotationConfigApplicationContext(TwitterCLIApp.class);
+    TwitterCLIApp app = ctx.getBean(TwitterCLIApp.class);
     app.run(args);
   }
 
