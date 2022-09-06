@@ -3,12 +3,15 @@ package ca.jrvs.apps.twitter.controller;
 import ca.jrvs.apps.twitter.model.Tweet;
 import ca.jrvs.apps.twitter.service.Service;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
+@org.springframework.stereotype.Controller
 public class TweetController implements Controller {
 
   private Service service;
   private ArgsParser argsParser;
 
+  @Autowired
   public TweetController(Service service) {
     this.service = service;
     argsParser = new ArgsParser();

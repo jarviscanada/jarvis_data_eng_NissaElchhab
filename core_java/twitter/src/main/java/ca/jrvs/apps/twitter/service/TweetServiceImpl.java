@@ -9,7 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 
+@org.springframework.stereotype.Service
 public class TweetServiceImpl implements Service {
 
   private CrdDao<Tweet, Long> dao;
@@ -20,6 +22,7 @@ public class TweetServiceImpl implements Service {
     this.tweetValidator = new ca.jrvs.apps.twitter.service.validation.Tweet();
   }*/
 
+  @Autowired
   public TweetServiceImpl(CrdDao<Tweet, Long> dao,
       Validator<Tweet> tweetValidator) {
     this.dao = dao;

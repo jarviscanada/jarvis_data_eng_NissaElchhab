@@ -3,7 +3,9 @@ package ca.jrvs.apps.twitter.validation;
 import ca.jrvs.apps.twitter.model.Coordinates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class Tweet extends ca.jrvs.apps.twitter.model.Tweet implements
     Validator<ca.jrvs.apps.twitter.model.Tweet> {
 

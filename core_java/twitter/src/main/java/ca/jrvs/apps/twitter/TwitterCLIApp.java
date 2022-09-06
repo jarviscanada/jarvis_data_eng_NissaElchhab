@@ -14,13 +14,17 @@ import ca.jrvs.apps.twitter.validation.Validator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 class TwitterCLIApp {
 
   public static final String USAGE = "TwitterCLIAPP post|show|delete [options]";
   public static Logger logger = LoggerFactory.getLogger(TwitterCLIApp.class);
   private Controller controller;
 
+  @Autowired
   public TwitterCLIApp(Controller controller) {
     this.controller = controller;
   }

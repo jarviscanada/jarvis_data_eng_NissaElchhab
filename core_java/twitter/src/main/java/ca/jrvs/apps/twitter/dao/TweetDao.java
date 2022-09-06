@@ -6,12 +6,16 @@ import ca.jrvs.apps.twitter.dao.helper.dto.HttpVerb;
 import ca.jrvs.apps.twitter.dao.helper.dto.TwitterApi;
 import ca.jrvs.apps.twitter.model.Tweet;
 import java.net.URI;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class TweetDao implements CrdDao<Tweet, Long> {
 
   private final HttpHelper httpHelper;
   private static final TwitterApi twitterApi = new TwitterApi();
 
+  @Autowired
   public TweetDao(HttpHelper httpHelper) {
     this.httpHelper = httpHelper;
   }

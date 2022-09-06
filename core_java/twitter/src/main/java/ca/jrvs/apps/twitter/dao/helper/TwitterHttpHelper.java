@@ -18,7 +18,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TwitterHttpHelper implements HttpHelper {
 
   //  TODO public static final String DEFAULT_POST_BODY = "";
@@ -42,6 +45,18 @@ public class TwitterHttpHelper implements HttpHelper {
 
   public TwitterHttpHelper(OAuthConsumer oAuthConsumer) {
     this(oAuthConsumer, new DefaultHttpClient());
+  }
+
+  @Autowired
+  public TwitterHttpHelper() {
+    final String CONSUMER_KEY = System.getenv("consumerKey");
+    final String CONSUMER_KEY_SECRET = System.getenv("consumerKeySecret");
+    final String ACCESS_TOKEN = System.getenv("accessToken");
+    final String ACCESS_TOKEN_SECRET = System.getenv("accessTokenSecret");
+    this.oAuthConsumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_KEY_SECRET);
+    this.oAuthConsumer.setTokenWithSecret(ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+//    this.httpClient = HttpClientBuilder.create().build();
+    this.httpClient = new DefaultHttpClient();
   }
 
   /**
