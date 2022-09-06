@@ -86,7 +86,7 @@ public class TweetDaoIntegrationTest {
     tweet.setText(tweetText);
     tweet.setCoordinates(new Coordinates(tweetLong, tweetLat));
     Tweet createdTweet = this.tweetDao.create(tweet);
-    TimeUnit.SECONDS.sleep(30);
+    TimeUnit.SECONDS.sleep(10);
     Tweet deletedTweet = this.tweetDao.deleteById(createdTweet.getId());
     assertThat(deletedTweet).isEqualToComparingFieldByFieldRecursively(createdTweet);
   }
