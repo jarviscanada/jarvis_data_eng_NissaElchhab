@@ -27,8 +27,6 @@ import org.junit.Test;
 
 public class TweetControllerIntegTest {
 
-
-
   private String exampleInputJsonTweet;
   private Tweet exampleExpectedObjectTweet;
   private Tweet exampleInputObjectTweet;
@@ -177,47 +175,92 @@ public class TweetControllerIntegTest {
 
     Tweet deletedTweet = tweetService.deleteTweets(new String[]{postedTweet.getIdStr()}).get(0);
     Assertions.assertThat(deletedTweet).isEqualToComparingFieldByFieldRecursively(postedTweet);
-
   }
 
+  @Test
+  public void shouldShowTweetWithAllFields() {
+    final String CONSUMER_KEY = System.getenv("consumerKey");
+    final String CONSUMER_KEY_SECRET = System.getenv("consumerKeySecret");
+    final String ACCESS_TOKEN = System.getenv("accessToken");
+    final String ACCESS_TOKEN_SECRET = System.getenv("accessTokenSecret");
+    HttpHelper httpHelper = new TwitterHttpHelper(CONSUMER_KEY, CONSUMER_KEY_SECRET, ACCESS_TOKEN,
+        ACCESS_TOKEN_SECRET);
+    CrdDao<Tweet, Long> tweetDao = new TweetDao(httpHelper);
+    Validator<Tweet> tweetValidator = new ca.jrvs.apps.twitter.validation.Tweet();
+    Service tweetService = new TweetServiceImpl(tweetDao, tweetValidator);
+    Controller tweetController = new TweetController(tweetService);
 
-//  public void showTweet() {
-//    String[] argv = {"SHOW", tweetIdStr, "[text,favorited,id,id_str]"};
-//    String[] fields = new String[]{"text", "favorited", "id", "id_str"};
-//    Tweet sampleTweet = new Tweet(tweetText, validCoordx.longitude(), validCoordx.latitude());
-//    sampleTweet.setIdStr(tweetIdStr);
-//    sampleTweet.setId(tweetId);
-//    sampleTweet.setFavorited(true);
-//
-//    Tweet shownTweet = tweetController.showTweet(argv);
-//
-//    Assertions.assertThat(shownTweet.getIdStr()).isEqualTo(sampleTweet.getIdStr());
-//    Assertions.assertThat(shownTweet.getId()).isEqualTo(sampleTweet.getId());
-//    Assertions.assertThat(shownTweet.getText()).isEqualTo(sampleTweet.getText());
-//    Assertions.assertThat(shownTweet.isFavorited()).isEqualTo(sampleTweet.isFavorited());
-//    Assertions.assertThat(shownTweet.getCoordinates()).isEqualTo(sampleTweet.getCoordinates());
-//    Assertions.assertThat(shownTweet.getRetweetCount()).isEqualTo(0);
-//    Assertions.assertThat(shownTweet.getFavoriteCount()).isEqualTo(0);
-//    Assertions.assertThat(shownTweet.isRetweeted()).isFalse();
-//    Assertions.assertThat(shownTweet.getCreatedAt()).isNull();
-//    Assertions.assertThat(shownTweet.getEntities()).isNull();
-//  }
-//
-//
-//  public void deleteTweets() {
-//    String[] args = {"1", "2", "3"};
-//    Tweet sampleTweet1 = new Tweet(tweetText + " 1");
-//    sampleTweet1.setIdStr("1");
-//    Tweet sampleTweet2 = new Tweet(tweetText + " 2");
-//    sampleTweet1.setIdStr("2");
-//    Tweet sampleTweet3 = new Tweet(tweetText + " 3");
-//    sampleTweet1.setIdStr("3");
-//    String[] ids = new String[]{"2", "3", "1"};
-//
-//    List<Tweet> deletedTweets = tweetController.deleteTweet(ids);
-//
-//    Assertions.assertThat(deletedTweets.size()).isEqualTo(3);
-//  }
+    String tweetText = "#TestTestTest Hello From Api at " + System.currentTimeMillis();
+    Coordinates validCoordx = new Coordinates(10.10f, 14.14f);
 
+    // post a tweet
+    Tweet tweet = new Tweet(tweetText, validCoordx.longitude(), validCoordx.latitude());
+    Tweet postedTweet = tweetService.postTweet(tweet);
+    Assertions.assertThat(postedTweet).isNotNull();
 
+    // show the tweet with all fields
+    String[] argv = new String[]{"show", postedTweet.getIdStr()};
+    Tweet showTweetFull = tweetController.showTweet(argv);
+
+    Assertions.assertThat(showTweetFull.getIdStr()).isNotNull();
+    Assertions.assertThat(showTweetFull.getId()).isNotNull();
+    Assertions.assertThat(showTweetFull.getIdStr()).isEqualTo(postedTweet.getId().toString());
+    Assertions.assertThat(showTweetFull.getText()).isEqualTo(postedTweet.getText());
+    Assertions.assertThat(showTweetFull.getCoordinates().longitude())
+        .isEqualTo( validCoordx.longitude());
+    Assertions.assertThat(showTweetFull.getCoordinates().latitude())
+        .isEqualTo( validCoordx.latitude());
+    Assertions.assertThat(showTweetFull.isFavorited()).isEqualTo(postedTweet.isFavorited());
+    Assertions.assertThat(showTweetFull.getRetweetCount()).isEqualTo(0);
+    Assertions.assertThat(showTweetFull.getFavoriteCount()).isEqualTo(0);
+    Assertions.assertThat(showTweetFull.isRetweeted()).isFalse();
+    Assertions.assertThat(showTweetFull.getCreatedAt()).isNotNull();
+    Assertions.assertThat(showTweetFull.getEntities()).isNotNull();
+
+    Tweet deletedTweet = tweetService.deleteTweets(new String[]{postedTweet.getIdStr()}).get(0);
+    Assertions.assertThat(deletedTweet).isEqualToComparingFieldByFieldRecursively(postedTweet);
+  }
+
+  @Test
+  public void shouldShowTweetWithSomeFields() {
+    final String CONSUMER_KEY = System.getenv("consumerKey");
+    final String CONSUMER_KEY_SECRET = System.getenv("consumerKeySecret");
+    final String ACCESS_TOKEN = System.getenv("accessToken");
+    final String ACCESS_TOKEN_SECRET = System.getenv("accessTokenSecret");
+    HttpHelper httpHelper = new TwitterHttpHelper(CONSUMER_KEY, CONSUMER_KEY_SECRET, ACCESS_TOKEN,
+        ACCESS_TOKEN_SECRET);
+    CrdDao<Tweet, Long> tweetDao = new TweetDao(httpHelper);
+    Validator<Tweet> tweetValidator = new ca.jrvs.apps.twitter.validation.Tweet();
+    Service tweetService = new TweetServiceImpl(tweetDao, tweetValidator);
+    Controller tweetController = new TweetController(tweetService);
+
+    String tweetText = "#TestTestTest Hello From Api at " + System.currentTimeMillis();
+    Coordinates validCoordx = new Coordinates(10.10f, 14.14f);
+
+    // post a tweet
+    Tweet tweet = new Tweet(tweetText, validCoordx.longitude(), validCoordx.latitude());
+    Tweet postedTweet = tweetService.postTweet(tweet);
+    Assertions.assertThat(postedTweet).isNotNull();
+
+    // show the tweet with all fields
+    String[] argv = new String[]{"show", postedTweet.getIdStr(), "[text,favorited,id_str]"};
+    Tweet showTweetFull = tweetController.showTweet(argv);
+
+    Assertions.assertThat(showTweetFull.getIdStr()).isNotNull();
+//    Assertions.assertThat(showTweetFull.getId()).isNull();
+    Assertions.assertThat(showTweetFull.getIdStr()).isEqualTo(postedTweet.getId().toString());
+    Assertions.assertThat(showTweetFull.getText()).isEqualTo(postedTweet.getText());
+    Assertions.assertThat(showTweetFull.getCoordinates()).isNull();
+    Assertions.assertThat(showTweetFull.isFavorited()).isNotNull();
+    Assertions.assertThat(showTweetFull.isFavorited()).isEqualTo(postedTweet.isFavorited());
+    Assertions.assertThat(showTweetFull.getRetweetCount()).isNull();
+    Assertions.assertThat(showTweetFull.getFavoriteCount()).isNull();
+    Assertions.assertThat(showTweetFull.isRetweeted()).isNull();
+    Assertions.assertThat(showTweetFull.getCreatedAt()).isNull();
+    Assertions.assertThat(showTweetFull.getEntities()).isNull();
+
+    // delete created tweet
+    Tweet deletedTweet = tweetService.deleteTweets(new String[]{postedTweet.getIdStr()}).get(0);
+    Assertions.assertThat(deletedTweet).isEqualToComparingFieldByFieldRecursively(postedTweet);
+  }
 }

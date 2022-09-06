@@ -48,8 +48,8 @@ public class TweetController implements Controller {
   public Tweet showTweet(String[] args) {
     argsParser.configure(args, 1, 2, ":");
     String tweetId = argsParser.getArg();
-    String[] fields = null;
-    if (argsParser.hasOptionalArguments()) {
+    String[] fields = new String[]{};
+    if (args.length == 3 && argsParser.hasOptionalArguments()) {
       fields = argsParser.getArgAsStringArray();
     }
     return service.showTweet(tweetId, fields);

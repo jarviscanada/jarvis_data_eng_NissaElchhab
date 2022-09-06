@@ -201,7 +201,7 @@ public class Tweet implements JsonParser {
   }
 
   @JsonProperty("retweet_count")
-  public int getRetweetCount() {
+  public Integer getRetweetCount() {
     return retweetCount;
   }
 
@@ -210,7 +210,7 @@ public class Tweet implements JsonParser {
   }
 
   @JsonProperty("favorite_count")
-  public int getFavoriteCount() {
+  public Integer getFavoriteCount() {
     return favoriteCount;
   }
 
@@ -219,7 +219,7 @@ public class Tweet implements JsonParser {
   }
 
   @JsonProperty("favorited")
-  public boolean isFavorited() {
+  public Boolean isFavorited() {
     return favorited;
   }
 
@@ -228,7 +228,7 @@ public class Tweet implements JsonParser {
   }
 
   @JsonProperty("retweeted")
-  public boolean isRetweeted() {
+  public Boolean isRetweeted() {
     return retweeted;
   }
 
