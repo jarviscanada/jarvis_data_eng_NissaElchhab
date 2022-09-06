@@ -263,4 +263,6 @@ public class TweetControllerIntegTest {
     Tweet deletedTweet = tweetService.deleteTweets(new String[]{postedTweet.getIdStr()}).get(0);
     Assertions.assertThat(deletedTweet).isEqualToComparingFieldByFieldRecursively(postedTweet);
   }
+
+
 }
