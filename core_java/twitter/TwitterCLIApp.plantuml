@@ -1,0 +1,92 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class ArgsParser {
+   positionalArgs: Deque<Deque<String>>
+   arg: String
+   expectedMinArgc: int
+   argAsStringArray: String[]
+   argumentCountValid: boolean
+   separators: String
+}
+interface Controller << interface >>
+class Coordinates
+class Coordinates {
+   coordinates: float[]
+   type: String
+}
+interface CrdDao<T, ID> << interface >>
+class Entities
+class Entities {
+   hashtags: List<Hashtag>
+   userMentions: List<UserMention>
+}
+class Hashtag
+class Hashtag {
+   indices: List<Integer>
+   text: String
+}
+interface HttpHelper << interface >>
+enum HttpMethod << enumeration >>
+enum HttpStatusCode << enumeration >> {
+   statusCode: int
+}
+enum HttpVerb << enumeration >>
+interface JsonParser << interface >>
+interface Service << interface >>
+class Tweet {
+   coordinates: Coordinates
+   entities: Entities
+   favoriteCount: Integer
+   idStr: String
+   id: Long
+   text: String
+   favorited: boolean
+   retweeted: boolean
+   createdAt: String
+   retweetCount: Integer
+}
+class Tweet
+class TweetArgsParserConfig {
+   list: List<String>
+   Separator: String
+}
+class TweetController
+class TweetDao
+class TweetDeserializer {
+   fields: String[]
+}
+class TweetServiceImpl
+class TwitterApi
+class TwitterCLIApp
+class TwitterCLIComponentScan
+class TwitterCLISpringBoot
+class TwitterHttpHelper
+class UserMention {
+   indices: List<Integer>
+   name: String
+   screenName: String
+   idStr: String
+   id: Long
+}
+class UserMention
+interface Validator<T> << interface >>
+
+Coordinates              -[#000082,plain]-^  Coordinates             
+Coordinates              -[#008200,dashed]-^  JsonParser              
+Coordinates              -[#008200,dashed]-^  Validator               
+Entities                 -[#008200,dashed]-^  JsonParser              
+Hashtag                  -[#008200,dashed]-^  JsonParser              
+Tweet                    -[#008200,dashed]-^  JsonParser              
+Tweet                    -[#000082,plain]-^  Tweet                   
+Tweet                    -[#008200,dashed]-^  Validator               
+TweetController          -[#008200,dashed]-^  Controller              
+TweetDao                 -[#008200,dashed]-^  CrdDao                  
+TweetServiceImpl         -[#008200,dashed]-^  Service                 
+TwitterHttpHelper        -[#008200,dashed]-^  HttpHelper              
+UserMention              -[#008200,dashed]-^  JsonParser              
+Validator                -[#595959,dashed]->  JsonParser              
+@enduml

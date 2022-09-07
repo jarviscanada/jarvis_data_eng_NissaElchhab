@@ -1,84 +1,374 @@
 # Introduction
 
-(50-100 words)
-What does this app do?
-What technoglies you have used? (e.g. Twitter REST API, HTTP client, mvn, Java libs, docker etc..)
+### What does this app do?
+The TwitterCLI app serves as a CLI (Command Line Interface) client to the Twitter APIv1.1
+Through this app, the user (a person or another app/service) can display a tweet, select which
+fields of the tweet are displayed, post a new tweet with some options (for the time being Point
+coordinates in the form of a latitude,longitude tuple), and delete one or many tweets in one go,
+through tweet ids.
 
-Implement a Java app which can CRUD a Twitter post via Twitter REST API.
+### What technologies have been used?
+The app development rests on many layers and the tools that help handle them:
 
-use twitter API v2: most up to date, only one available as of now in all dev tiers, including
-Essentials
-use oauth1a: simpler than oath2, yet gives access to Twitter API v2
-oauth flow: client Grant Flow, i.e [micro]service to [micro]service
-this app is trustworthy enough to use that simpler and faster flow
+###### The Twitter API
+- Represented here by the Twitter REST API v1.1., which offers Twitter CRUD-like functionality (
+  twitter doesn't offer an update option, for the time being).
 
-Create:
-Create a tweet with a geotag and output the created tweet object (simplified version) in JSON
-format.
-Print error message (or exception) if tweet_text length is over 140 characters or geo tag is invalid
-(latitude or longitude is out of range)
+- The API requires, for traditional security reasons (or AAA, for Authentication Authorization and
+  Accountability) to interact with it through OAuth authorization (authz) protocol.
 
-TwitterApp "post" "tweet_text" "latitude:longitude"
+- The authentication (authn) for this level of application (a service using the API) happens through
+  shared secrets for the API key among other things. The app in this version uses the developer's
+  own Twitter account authentication, access and identity.
+
+- Because of that, the OAuth flow used will be the OAuth Client Grant Flow.
+- OAuth Client Grant Flow is ideal for authz between (micro)service to (micro)service, when they are
+  trustworthy enough to use that simpler and faster flow.
+
+- Twitter offers and expansive and high quality documentation with examples to use its API.
+  It also offers a free-tier for developers to test their apps interacting with the platform.
+
+- This interaction uses HTTP protocol and its semantics, particularly HTTP GET, POST and DELETE
+
+###### HTTP Client
+The HTTP client chosen to interact with the Twitter API is
+Apache's Commons HttpClient [https://hc.apache.org/httpclient-legacy/index.html]
+
+It offers a simple model and ready-to use classes to interact with the most common HTTP tasks.
+Most
+
+###### Java libraries and frameworks
+In order to represent the many twitter entities and their relationships, a Java OOP model is a
+perfect application.
+Combined with Spring Boot for an easier to maintain architecture and with Apache
+Commons for useful utilities, Java brings here a notable added value, especially considering that
+Twitter API keeps evolving.
+
+###### Project Management Tools
+Maven was chosen in part because it's industry standard, and, on the other hand, because its plugins
+help build UberJars, or self-contained applications.
+
+###### Testing
+- Junit4 was chosen because it is an industry standard, with a simple semantics.
+- Besides that, Mockito was chosen as the mocking library, and used mostly it's BDD semantics
+  because of their expressive and fluent API.
+- AssertJ was used to enhance the assertion library and add more expressive and specific assertions.
+
+###### Tools, IDEs and misc.
+- Jetbrains' IntelliJ IDEA was the go-to IDE.
+- Postman was used to try Twitter API examples, verify them in closer detail, test and gather results
+  from specific cases and gather sample API interactions to be used in tests.
+
+# Quick Start and usage:
+
+### From the stand-alone app:
+```
+twitterClIApp post|show|delete [options]
+```
+
+- Post/Create a tweet with latitude and longitude information:
+```
+twitterClIApp "post" "tweet_text" "latitude:longitude"
+```
+
+- Read/Show a tweet by its id, and display the full JSON response:
+
+```
+twitterClIApp show tweet_id 
+```
+- Read/Show a tweet by its id, and restrict the displayed fields to `field1` and `field2`:
+```
+twitterClIApp show tweet_id [field1,fields2]
+```
+
+- Delete one or a collection of tweets by their id(s):
+
+```
+USAGE: twitterClIApp delete [id1,id2,..]
+```
+
+### Using the dockerized app:
+
+- Show a tweet by its id `1234567890123456789`
+```
+docker run --rm \
+-e consumerKey=YOUR_VALUE \
+-e consumerSecret=YOUR_VALUE \
+-e accessToken=YOUR_VALUE \
+-e tokenSecret=YOUR_VALUE \
+jrvs/twitterCliApp show "1234567890123456789"
+```
+
+Sample JSON output:
+
+```
+{
+"created_at" : "Fri Jun 26 17:32:16 +0000 2020",
+"id" : 1234567890123456789,
+"id_str" : "1234567890123456789",
+"text" : "test post",
+"entities" : {
+   "hashtags" : [ ],
+   "user_mentions" : [ ]
+  },
+"coordinates" : {
+  "coordinates" : [ 79.0, 43.0 ],
+  "type" : "Point"
+  },
+"retweet_count" : 0,
+"favorite_count" : 0,
+"favorited" : false,
+"retweeted" : false
+}
+```
+
+- Show only some selected fields for the same tweet:
+
+```
+docker run --rm \
+-e consumerKey=YOUR_VALUE \
+-e consumerSecret=YOUR_VALUE \
+-e accessToken=YOUR_VALUE \
+-e tokenSecret=YOUR_VALUE \
+jrvs/twitterCliApp show "1234567890123456789" "[id,text,coordinates]"
+```
+
+Sample JSON output:
+
+```
+{
+"id" : 1234567890123456789,
+"text" : "test post",
+"coordinates" : {
+  "coordinates" : [ 79.0, 43.0 ],
+  "type" : "Point"
+  }
+}
+```
+
+
+- Delete the same tweet by id:
+
+```
+docker run --rm \
+-e consumerKey=YOUR_VALUE \
+-e consumerSecret=YOUR_VALUE \
+-e accessToken=YOUR_VALUE \
+-e tokenSecret=YOUR_VALUE \
+jrvs/twitterCliApp delete ["1234567890123456789"]
+```
+
+Sample JSON output:
+
+```
+{
+"created_at" : "Fri Jun 26 17:32:16 +0000 2020",
+"id" : 1234567890123456789,
+"id_str" : "1234567890123456789",
+"text" : "test post",
+"entities" : {
+  "hashtags" : [ ],
+  "user_mentions" : [ ]
+  },
+"coordinates" : {
+  "coordinates" : [ 79.0, 43.0 ],
+  "type" : "Point"
+  },
+"retweet_count" : 0,
+"favorite_count" : 0,
+"favorited" : false,
+"retweeted" : false
+}
+```
+
+# Requirements
+###### Tweet creation:
+Creates a tweet with a geotag (latitude and longitude), then:
+- On success, output the created and returned tweet object in JSON format.
+- On failure, Print error message (or exception) if tweet_text length is over 140 characters,
+  or if geotag is invalid (latitude or longitude is out of range)
+
+`twitterCliApp "post" "tweet_text" "latitude:longitude"`
 
 Arguments:
-tweet_text - tweet_text cannot exceed 140 UTF-8 encoded characters.
-latitude:longitude - Geo location.
+- tweet_text: tweet_text cannot exceed 140 UTF-8 encoded characters.
+- `latitude:longitude`: Geo location.
 
-Show/Read (with options)
-Lookup a tweet by ID and print the tweet object in JSON format.
-Print error message (or exception) if `tweet_id` is invalid
+
+###### Show/Read (with options)
+Lookup a tweet by ID string, then:
+If found: print the tweet object in JSON format.
+otherwise, print error message (or exception) if `tweet_id` is invalid
 (e.g. non-digit characters, out of range) or optional `[field1,filed2]` is invalid.
 
-Show all fields in JSON document if [field1,fields2] is empty.
-Otherwise, only show user specified [fields] in the JSON document.
-Print error message (or exception) if `tweet_id` is invalid (e.g. non-digit characters, out of
-range)
+Show all fields in JSON if [field1,fields2,...,fieldN] is empty.
+Otherwise, only show user specified [fields...] in the JSON document.
 
-TwitterApp show tweet_id [field1,fields2]
+Print error message (or exception) if `tweet_id` is invalid.
+E.g. : non-digit characters, out of range...
 
-Arguments:
-tweet_id - Tweet ID. Same as id_str in the tweet object
-[field1,fields2]  - A comma-separated list of top-level fields from the tweet object
-(similar to SELECT clause in SQL)
-
-Delete:
-Delete a list of tweets by id and output deleted tweet id and print deleted tweet object.
-
-USAGE: TwitterApp delete [id1,id2,..]
+`twitterCliApp show tweet_id [field1,fields2]`
 
 Arguments:
-tweet_ids - A comma-separated list of tweets.
+- tweet_id: Tweet ID. Same as id_str in the tweet object
+- `[field1,fields2]`: A comma-separated list of top-level fields from the tweet object
+  (similar to SELECT clause in SQL)
 
-# Quick Start
+###### Delete a list of tweets (including one tweet):
+Deletes a list of tweets by id, then:
+- outputs the deleted tweet objects JSON representation.
 
-- Usage:
-    - TwitterApp post|show|delete [options]
-
-Post/Create:
-TwitterApp "post" "tweet_text" "latitude:longitude"
-
-Arguments:
-tweet_text - tweet_text cannot exceed 140 UTF-8 encoded characters.
-latitude:longitude - Geo location.
-
-Read/Show
-TwitterApp show tweet_id [field1,fields2]
+`twitterCliApp delete [id1,id2,..]`
 
 Arguments:
-tweet_id - Tweet ID. Same as id_str in the tweet object
-[field1,fields2]  - A comma-separated list of top-level fields from the tweet object
-(similar to SELECT clause in SQL)
+-tweet_ids: A comma-separated list of tweet ids.
 
-Delete:
+# Design
+## App architecture
+### UML diagram
+!["UML Diagram for TwitterCLI App"](TwitterCLIApp.png "UML Diagram for TwitterCLI App")
 
-USAGE: TwitterApp delete [id1,id2,..]
+### Application components
 
-Arguments:
-tweet_ids - A comma-separated list of tweets.
+###### Http and authentication/authorization components
+The HttpService component and interface handle HTTP connectivity, setting up OAuth from the environmental 
+variables.
+The values of the authentication/authorization keys are generated on the Twitter
+Developer dashboard.
 
-- how to package your app using mvn?
-- how to run your app with docker?
+- In OAuth context, each API request has to be signed by passing several generated keys and tokens
+  in an authorization header.
+  These consist of:
+- API key and secret: OAuth consumer key and OAuth consumer secret.
+  These can be considered as the username and password that represents a Twitter developer app when
+  making API requests.
+- Access token and secret: OAuth access token and OAuth access token secret
+  An access token and access token secret are user-specific credentials used to authenticate
+  OAuth 1.0a API requests. They represent the Twitter account the request is made on behalf of.
 
+HttpService handles and hides all these details, and hands the Apache Commons HttpClient a ready-
+to use HTTP connection context.
+
+###### App/main/entry-point
+This is the entry-point for the app.
+The main app sets up the Spring Context with the Spring
+components configuration and starts the main app where the components have been injected by Spring
+Boot IoC
+
+###### Controller
+The controller later handles cli interface first line of validations, extracting the relevant arguments
+from the command line, casting them or transforming them into the correct data structure to
+be consumer by the service, and choosing the right service to invoke based on the command options
+
+###### Service
+The service component handles the app business logic. In this app, business logic is not
+complicated, but the service component runs a few validations to ensure the tweet data is in the
+correct format and within the specific limits. for example, it ensures that the longitude and
+the latitude values are in the correct number format and within the GeoJson range (as documented in
+Twitter data dictionary).
+
+###### Validation
+To decouple validation functions in this layer and allow future extensions, validations have been
+regrouped in this component.
+
+###### DAO
+The Data Access Object component (and pattern) in this project acts as an intermediary between
+the service/business logic layer, and external data storage and/or sources, such as secondary
+storage, REST API, GraphQl API, an RDBMS or a NoSQL Database.
+
+###### DTO or DTO-like serialization and deserialization
+This project is simple enough that at this stage it doesn't require to use a DTO data pattern.
+However, because JSON serialization and deserialization is a cross-cutting concern, the methods
+and abstract methods associated with JSON processing have been regrouped into this interface.
+
+## Models
+### Tweet model
+The tweet model is based on Twitter's Data Dictionary for Twitter API V1.1
+It is a simplified version, for practical reasons (time constraint on the project).
+However, it is also designed to be extensible, mirror the Twitter Data Model JSON structure,
+and adds utility methods to make using the model easier, as well as abiding by OOP fundamentals
+of encapsulation.
+
+All Tweet's model property has been declared with primitive wrapper classes for two purposes:
+- use `null` to express lack of information about the property
+- make the work of JSON marshalling/unmarshalling more consistent
+- put to work Java standard library's utilities for primitive wrapper classes, especially when it
+  comes to conversion and validation
+- allow future refactoring into Collections and lambdas, as these favour Object types
+  instead of primitive types
+
+The encapsulation afforded to use a more expressive representation of some twitter data types,
+like the `created_at` field, returned as one string, but here modelled as a `ZonedDateTime` class
+to make time and date manipulation simpler in the future.
+
+### Object Model:
+The JSON Object Model is a pragmatic simplification of the Twitter Data Dictionary v1.1:
+https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/tweet
+
+- id (default):	int64 (note: the int64 53bits restriction and issues for Javascript/ECMAScript
+  does not apply to Java)
+- id_str (default): string (must be equal to id in value)
+
+- text (default):   string (For specific and restrictions from Twitter:
+  https://github.com/twitter/twitter-text)
+
+- created_at:  date (ISO 8601)
+
+- entities : object of {
+  - hashtags: list of hashtags[ ]
+  - user_mentions: list of [ ]
+    }
+
+- coordinates: object of {
+  - coordinates: list of
+    - [ longitude: float32
+    - latitude: float32 ]
+  - type: string, always `"Point"` in this project }
+
+- retweet_count: 0
+- favorite_count: 0
+- favorited: false
+- retweeted: false
+
+
+###### Tweet ID
+Example: `{"id": 10765432100123456789, "id_str": "10765432100123456789"}`
+
+## Spring
+The Spring version of the app manages dependencies by using the pattern of DI (Dependency Injection).
+DI is also known as IoC, for Inversion of Control.
+The dependencies are managed by creating a Spring Context, configuring it, and declaring
+dependencies as Components (including as Service, Repository, etc...). The annotations used to
+declare dependencies as components also allow the Spring Context to choose the correct dependency
+to inject into the relevant Object when it's declared.
+
+# Test
+Testing the app using Junit and mockito:
+
+- Gather tweet examples from specific inputs and their resulting outputs
+- Use Junit to set up test fixtures and samples
+- Use Mockito to mock similar expected return of methods and objects to narrow down on Subject Under
+  Test (SUT) for unit tests, using the shape of the twitter object and twitter Data Dictionary v1.1
+  to make the mock as close to reality as possible.
+- Use example fixtures and feed that data to SUTs in Integration tests
+- Use Junit facilities to test for expected exceptions
+- In both cases, use assertions to compare the actual result with the expected result
+- Naming the methods accurately and adding comments is necessary, especially to describe mocks
+  because they only contain partial truth about the model and its behaviour
+- For most of the project's classes, TDD has been followed, by writing tests first and the expected
+  result or behaviour, then making the SUT behave as expected to turn the test green, from red.
+
+## Deployment
+Through dockerizing the app:
+
+- Using UberJar, maven plugin and a Dockerfile
+- maven + maven plugin packages the app
+- running Docker build with the Dockerfile's instruction builds a new image
+- The image is uploaded to Docker repository
+
+Running the app with docker:
+
+```
 docker pull jrvs/twitter_app
 
 docker run --rm \
@@ -86,392 +376,17 @@ docker run --rm \
 -e consumerSecret=YOUR_VALUE \
 -e accessToken=YOUR_VALUE \
 -e tokenSecret=YOUR_VALUE \
-jrvs/twitter_app post "test post" "43:79"
+jrvs/twittercli post "test post" "43:79"
+```
 
-Sample JSON output:
-{
-"created_at" : "Fri Jun 26 17:32:16 +0000 2020",
-"id" : 1276568976764686343,
-"id_str" : "1276568976764686343",
-"text" : "test post",
-"entities" : {
-"hashtags" : [ ],
-"user_mentions" : [ ]
-},
-"coordinates" : {
-"coordinates" : [ 79.0, 43.0 ],
-"type" : "Point"
-},
-"retweet_count" : 0,
-"favorite_count" : 0,
-"favorited" : false,
-"retweeted" : false
-}
-
-docker run --rm \
--e consumerKey=YOUR_VALUE \
--e consumerSecret=YOUR_VALUE \
--e accessToken=YOUR_VALUE \
--e tokenSecret=YOUR_VALUE \
-jrvs/twitter_app show 1276568976764686343
-
-Sample JSON Ouput:
-{
-"created_at" : "Fri Jun 26 17:32:16 +0000 2020",
-"id" : 1276568976764686343,
-"id_str" : "1276568976764686343",
-"text" : "test post",
-"entities" : {
-"hashtags" : [ ],
-"user_mentions" : [ ]
-},
-"coordinates" : {
-"coordinates" : [ 79.0, 43.0 ],
-"type" : "Point"
-},
-"retweet_count" : 0,
-"favorite_count" : 0,
-"favorited" : false,
-"retweeted" : false
-}
-
-#Print only selected fields (this is an optional feature)
-docker run --rm \
--e consumerKey=YOUR_VALUE \
--e consumerSecret=YOUR_VALUE \
--e accessToken=YOUR_VALUE \
--e tokenSecret=YOUR_VALUE \
-jrvs/twitter_app show 1276568976764686343 "id,text,coordinates"
-{
-"id" : 1276568976764686343,
-"text" : "test post",
-"coordinates" : {
-"coordinates" : [ 79.0, 43.0 ],
-"type" : "Point"
-}
-}
-
-docker run --rm \
--e consumerKey=YOUR_VALUE \
--e consumerSecret=YOUR_VALUE \
--e accessToken=YOUR_VALUE \
--e tokenSecret=YOUR_VALUE \
-jrvs/twitter_app delete 1200145224103841792
-
-Sample JSON output:
-{
-"created_at" : "Fri Jun 26 17:32:16 +0000 2020",
-"id" : 1276568976764686343,
-"id_str" : "1276568976764686343",
-"text" : "test post",
-"entities" : {
-"hashtags" : [ ],
-"user_mentions" : [ ]
-},
-"coordinates" : {
-"coordinates" : [ 79.0, 43.0 ],
-"type" : "Point"
-},
-"retweet_count" : 0,
-"favorite_count" : 0,
-"favorited" : false,
-"retweeted" : false
-}
-
-# Design
-
-## UML diagram
-
-## explain each component(app/main, controller, service, DAO) (30-50 words each)
-
-app/main
-
-controller
-
-service
-
-DAO
-
-## Models
-
-Talk about tweet model
------------------------
-
-Authn: OAuth 1.0a
-https://developer.twitter.com/en/docs/authentication/oauth-1-0a
-https://developer.twitter.com/en/docs/authentication/oauth-1-0a/percent-encoding-parameters
-
-You have to sign each API request by passing several generated keys and tokens in an authorization
-header. To start, you can generate several keys and tokens in your Twitter developer app’s details
-page, including the following:
-API key and secret:
-
-oauth_consumer_key
-
-oauth_consumer_secret
-
-Think of these as the user name and password that represents your Twitter developer app when making
-API requests.
-Access token and secret:
-
-oauth_token
-
-oauth_token_secret
-
-An access token and access token secret are user-specific credentials used to authenticate OAuth
-1.0a API requests. They specify the Twitter account the request is made on behalf of.
-
-You can generate your own access token and token secret if you would like your app to make requests
-on behalf of the same Twitter account associated with your developer account on the Twitter
-developer app's details page.
-
-If you'd like to generate access tokens for a different user, see "Making requests on behalf of
-users" below.
-
-
-----------------------------------
-
-
-
-
-Object Model:
----------------
-https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/tweet
-
-id (default)    string
-
-text (default)   string
-https://github.com/twitter/twitter-text/
-
-author_id string
-
-conversation_id string The Tweet ID of the original Tweet of the conversation (which includes direct
-replies, replies of replies).
-
-created_at date (ISO 8601)
-
-geo object Contains details about the location tagged by the user in this Tweet, if they specified
-one.
-
-"geo": {
-"coordinates": {
-"type": "Point",
-"coordinates": [
--73.99960455,
-40.74168819
-]
-},
-"place_id": "01a9a39529b27f36"
-}
-
-source string
-
-
-
-
-
-
-
-Using Twitter APIv2
-----------------------
-example:
-
-curl --request
-GET 'https://api.twitter.com/2/tweets?ids=1212092628029698048&tweet.fields=attachments,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,source,text,withheld&expansions=referenced_tweets.id'
---header 'Authorization: Bearer $BEARER_TOKEN'
-
-{
-"data": [
-{
-"id": "1212092628029698048",
-"text": "We believe the best future version of our API will come from building it with YOU. Here’s
-to another great year with everyone who builds on the Twitter platform. We can’t wait to continue
-working with you in the new year. https://t.co/yvxdK6aOo2",
-"possibly_sensitive": false,
-"referenced_tweets": [
-{
-"type": "replied_to",
-"id": "1212092627178287104"
-}
-],
-"entities": {
-"urls": [
-{
-"start": 222,
-"end": 245,
-"url": "https://t.co/yvxdK6aOo2",
-"expanded_url": "https://twitter.com/LovesNandos/status/1211797914437259264/photo/1",
-"display_url": "pic.twitter.com/yvxdK6aOo2"
-}
-],
-"annotations": [
-{
-"start": 144,
-"end": 150,
-"probability": 0.626,
-"type": "Product",
-"normalized_text": "Twitter"
-}
-]
-},
-"author_id": "2244994945",
-"public_metrics": {
-"retweet_count": 8,
-"reply_count": 2,
-"like_count": 40,
-"quote_count": 1
-},
-"lang": "en",
-"created_at": "2019-12-31T19:26:16.000Z",
-"source": "Twitter Web App",
-"in_reply_to_user_id": "2244994945",
-"attachments": {
-"media_keys": [
-"16_1211797899316740096"
-]
-},
-"context_annotations": [
-{
-"domain": {
-"id": "119",
-"name": "Holiday",
-"description": "Holidays like Christmas or Halloween"
-},
-"entity": {
-"id": "1186637514896920576",
-"name": " New Years Eve"
-}
-},
-{
-"domain": {
-"id": "119",
-"name": "Holiday",
-"description": "Holidays like Christmas or Halloween"
-},
-"entity": {
-"id": "1206982436287963136",
-"name": "Happy New Year: It’s finally 2020 everywhere!",
-"description": "Catch fireworks and other celebrations as people across the globe enter the new year.\nPhoto via @GettyImages "
-}
-},
-{
-"domain": {
-"id": "46",
-"name": "Brand Category",
-"description": "Categories within Brand Verticals that narrow down the scope of Brands"
-},
-"entity": {
-"id": "781974596752842752",
-"name": "Services"
-}
-},
-{
-"domain": {
-"id": "47",
-"name": "Brand",
-"description": "Brands and Companies"
-},
-"entity": {
-"id": "10045225402",
-"name": "Twitter"
-}
-},
-{
-"domain": {
-"id": "119",
-"name": "Holiday",
-"description": "Holidays like Christmas or Halloween"
-},
-"entity": {
-"id": "1206982436287963136",
-"name": "Happy New Year: It’s finally 2020 everywhere!",
-"description": "Catch fireworks and other celebrations as people across the globe enter the new year.\nPhoto via @GettyImages "
-}
-}
-]
-}
-],
-"includes": {
-"tweets": [
-{
-"possibly_sensitive": false,
-"referenced_tweets": [
-{
-"type": "replied_to",
-"id": "1212092626247110657"
-}
-],
-"text": "These launches would not be possible without the feedback you provided along the way, so
-THANK YOU to everyone who has contributed your time and ideas. Have more feedback? Let us know
-⬇️ https://t.co/Vxp4UKnuJ9",
-"entities": {
-"urls": [
-{
-"start": 187,
-"end": 210,
-"url": "https://t.co/Vxp4UKnuJ9",
-"expanded_url": "https://twitterdevfeedback.uservoice.com/forums/921790-twitter-developer-labs",
-"display_url": "twitterdevfeedback.uservoice.com/forums/921790-…",
-"images": [
-{
-"url": "https://pbs.twimg.com/news_img/1261301555787108354/9yR4UVsa?format=png&name=orig",
-"width": 100,
-"height": 100
-},
-{
-"url": "https://pbs.twimg.com/news_img/1261301555787108354/9yR4UVsa?format=png&name=150x150",
-"width": 100,
-"height": 100
-}
-],
-"status": 200,
-"title": "Twitter Developer Feedback",
-"description": "Share your feedback for the Twitter developer platform",
-"unwound_url": "https://twitterdevfeedback.uservoice.com/forums/921790-twitter-developer-labs"
-}
-]
-},
-"author_id": "2244994945",
-"public_metrics": {
-"retweet_count": 3,
-"reply_count": 1,
-"like_count": 17,
-"quote_count": 0
-},
-"lang": "en",
-"created_at": "2019-12-31T19:26:16.000Z",
-"source": "Twitter Web App",
-"in_reply_to_user_id": "2244994945",
-"id": "1212092627178287104"
-}
-]
-}
-}
-
-#### Tweet ID
-
-{"id": 10765432100123456789, "id_str": "10765432100123456789"}
-In Twitter APIs up to version 1.1, you should always use the string representation of the number to
-avoid losing accuracy.
-In newer versions of the API, all large integer values are represented as strings by default.
-https://developer.twitter.com/en/docs/twitter-ids
-
-####     
-
-## Spring
-
-- How you managed the dependencies using Spring?
-
-# Test
-
-How did you test you app using Junit and mockito?
-
-## Deployment
-
-How did you dockerize your app.
 
 # Improvements
-
-- Imporvement 1
-- Imporvement 2
-- Imporvement 3
+- Replace `null` with Optional
+  this will allow clarifying the business logic when it comes to optional values or successful API
+  response (not throwing an exception) that is otherwise inconsistent with the app model.
+- It will also help narrow down on the `NullPointerException` induced by bugs, and make testing
+  simpler or more expressive.
+- Use more lambdas and streaming, as Twitter API responses could be significantly large, and using
+  lambdas can help simplify handling these.
+- Use multithreading, for the same data size growth concern, as tweets are independent objects and
+  their processing can take advantage from making the tasks parallel.
