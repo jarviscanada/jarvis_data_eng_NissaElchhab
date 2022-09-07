@@ -163,15 +163,14 @@ public class TweetServiceImplUnitTest {
 
   @Test
   public void postTweetHappyPath() {
- /*   given(mockTweet.toString()).willReturn("mockTweet#toString()");
+    given(mockTweet.toString()).willReturn("mockTweet#toString()");
     given(mockTweet.getId()).willReturn(1234567890123456789L);
     given(mockTweet.getIdStr()).willReturn("1234567890123456789");
-    given(mockTweet.getCreatedAt()).willReturn(createdAt);
     given(mockTweet.getText()).willReturn(tweetText);
     given(mockTweet.getCoordinates()).willReturn(mockCoordinates);
     given(mockCoordinates.longitude()).willReturn(tweetLong);
-    given(mockCoordinates.latitude()).willReturn(tweetLat);*/
-    Tweet fromJsonStr = Tweet.from(tweetAsJsonStr);
+    given(mockCoordinates.latitude()).willReturn(tweetLat);
+    Tweet fromJsonStr = new Tweet("Hello World");
 
     given(mockDao.create(any(Tweet.class))).willReturn(fromJsonStr);
     given(mockTweetValidator.isValid(any(Tweet.class))).willReturn(true);
@@ -179,9 +178,7 @@ public class TweetServiceImplUnitTest {
 
     Tweet responseTweet = mockTweetService.postTweet(fromJsonStr);
     assertNotNull(responseTweet);
-    assertEquals(tweetText, responseTweet.getText());
-    assertEquals(tweetLong, responseTweet.getCoordinates().longitude(), 0.0001);
-    assertEquals(tweetLat, responseTweet.getCoordinates().latitude(), 0.0001);
+    assertEquals("Hello World", responseTweet.getText());
     assertNotNull(responseTweet.getIdStr());
   }
 
