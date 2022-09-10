@@ -9,14 +9,18 @@ import ca.jrvs.practice.ListNode;
 public class ReverseLinkedList {
 
   /**
-   * Definition for singly-linked list. public class ListNode { int val; ListNode next; ListNode()
+   * Definition for singly-linked list.
+   * public class ListNode { int val; ListNode next; ListNode()
    * {} ListNode(int val) { this.val = val; } ListNode(int val, ListNode next) { this.val = val;
-   * this.next = next; } }
+   * this.next = next; }
+   * }
    */
   class Solution {
 
     /**
-     * procedural loop version
+     * in O(n):
+     * Linked List traversal/search/compare within one iteration level
+     * iteration
      * https://leetcode.com/submissions/detail/795937700/
      *
      * @param head
@@ -42,7 +46,7 @@ public class ReverseLinkedList {
     }
 
     /**
-     * recursive version
+     * recursion
      * @param head
      * @return
      */
