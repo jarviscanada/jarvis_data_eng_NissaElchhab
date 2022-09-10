@@ -1,7 +1,5 @@
 package ca.jrvs.practice.codingChallenge;
 
-import ca.jrvs.practice.ListNode;
-
 /**
  * Ticket:
  * https://www.notion.so/jarvisdev/Nissa-Coding-Challenges-4-questions-per-week-4f714ddda1c740deb052485e3ddf9576?p=8372f77aea2948a7b8a9892c65af1d42&pm=s
