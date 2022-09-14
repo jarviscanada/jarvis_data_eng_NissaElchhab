@@ -1,0 +1,195 @@
+{
+  "education": [
+    {
+      "awards_achievements": [
+        "Cursus includes 9 real-world projects"
+      ],
+      "degree": "Diploma, Level 6 qualification on the European Qualification Framework",
+      "department": "Software Developer - Full Stack (Développeur·se d’application)",
+      "duration": "2018-2021",
+      "school_name": "OpenClassrooms"
+    },
+    {
+      "awards_achievements": [
+        "Honours Diploma, Grade: 3.5",
+        "Dean's Honour Roll"
+      ],
+      "degree": "Honours Diploma Telecommunications Engineering Technology",
+      "department": "School of Applied Sciences and Technology, Telecommunications and Electronics Engineering Technology",
+      "duration": "2007-2009",
+      "school_name": "NAIT (Northern Alberta Institute of Technology)"
+    },
+    {
+      "awards_achievements": null,
+      "degree": "Bachelor in Business Administration, Marketing major",
+      "department": "School of Management (Casablanca)",
+      "duration": "1999-2003",
+      "school_name": "Groupe ISCAE"
+    }
+  ],
+  "github_repo_root_url": "https://github.com/jarviscanada/jarvis_data_eng_NissaElchhab",
+  "highlighted_projects": [
+    {
+      "description": "Designed, developed tested, and cloud-hosted an API that looks for nearby volunteer services or offers of help and serves that data to an authenticated frontend using HTTPS.",
+      "git_url": "https://github.com/RtillaWork/P_8_BE",
+      "name": "Build a geolocalized aid platform for your neighborhood: Backend in Rails API mode"
+    },
+    {
+      "description": "Built in React and LeafletJs a frontend platform, as a map that communicates with an API to link people needing help with volunteers in the vicinity.",
+      "git_url": "https://github.com/RtillaWork/P_8_FE",
+      "name": "Build a geolocalized aid platform for your neighborhood: Frontend in React/Javascript/leafletjs"
+    },
+    {
+      "description": "Combined React, Ruby on Rails, and Unsplash API to create an application that tracks users' fitness habits",
+      "git_url": "https://github.com/RtillaWork/P_6",
+      "name": "Track your fitness habits"
+    }
+  ],
+  "jarvis_projects": [
+    {
+      "description": "Suspendisse a tincidunt odio. Suspendisse posuere luctus aliquet. Quisque magna tellus, tempor vitae arcu sed, volutpat scelerisque lacus. Aliquam varius pulvinar dapibus. Ut a tincidunt sem. Aenean sollicitudin fringilla erat ut imperdiet. Phasellus fermentum, enim vitae laoreet elementum, eros nisl hendrerit lorem.",
+      "git_url": "/linux_sql",
+      "name": "Cluster Monitor"
+    },
+    {
+      "description": [
+        "Twitter App: Curabitur laoreet tristique leo, eget suscipit nisi. Sed in sodales ex. Maecenas vitae tincidunt dui, et eleifend quam.",
+        "JDBC App: Curabitur laoreet tristique leo, eget suscipit nisi. Sed in sodales ex. Maecenas vitae tincidunt dui, et eleifend quam.",
+        "Grep App: Curabitur laoreet tristique leo, eget suscipit nisi. Sed in sodales ex. Maecenas vitae tincidunt dui, et eleifend quam."
+      ],
+      "git_url": "/core_java",
+      "name": "Core Java Apps"
+    },
+    {
+      "description": "",
+      "git_url": "/springboot",
+      "name": "Springboot App"
+    },
+    {
+      "description": "",
+      "git_url": "/python_data_anlytics",
+      "name": "Python Data Analytics"
+    },
+    {
+      "description": "",
+      "git_url": "/hadoop",
+      "name": "Hadoop"
+    },
+    {
+      "description": "",
+      "git_url": "/spark",
+      "name": "Spark"
+    },
+    {
+      "description": "",
+      "git_url": "/cloud_devops",
+      "name": "Cloud/DevOps"
+    }
+  ],
+  "name": "Nissa Elchhab",
+  "others": [
+    {
+      "bullets": [
+        "Google IT support, Coursera (2020)",
+        "How to use OpenVAS for vulnerability assessment, Cybrary (2020)",
+        "Splunk basics, RangeForce (2020)",
+        "Cisco Certified Network Associate, Cisco (2013)"
+      ],
+      "title": "Certificates"
+    },
+    {
+      "bullets": [
+        "French: Native proficiency",
+        "English: Bilingual proficiency",
+        "Arabic: Professional proficiency"
+      ],
+      "title": "Languages"
+    },
+    {
+      "bullets": [
+        "Learning Morse and preparing for a Ham(Amateur Radio) certification",
+        "Exploring embedded hardware such as Raspberry Pi and BBC Micro::Bit"
+      ],
+      "title": "Activities/Hobbies"
+    }
+  ],
+  "professional_experience": [
+    {
+      "company": "Jarvis",
+      "description": "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis.",
+      "duration": "2022-present",
+      "title": "Software Developer"
+    },
+    {
+      "company": "XYZ Company",
+      "description": "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis.",
+      "duration": "2019",
+      "title": "Tutor"
+    },
+    {
+      "company": "Jarvis",
+      "description": "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis.",
+      "duration": "2022-present",
+      "title": "Software Developer"
+    },
+    {
+      "company": "XYZ Company",
+      "description": "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis.",
+      "duration": "2019",
+      "title": "Tutor"
+    },
+    {
+      "company": "Jarvis",
+      "description": "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis.",
+      "duration": "2022-present",
+      "title": "Software Developer"
+    },
+    {
+      "company": "XYZ Company",
+      "description": "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis.",
+      "duration": "2019",
+      "title": "Tutor"
+    },
+    {
+      "company": "Jarvis",
+      "description": "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis.",
+      "duration": "2022-present",
+      "title": "Software Developer"
+    },
+    {
+      "company": "XYZ Company",
+      "description": "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis.",
+      "duration": "2019",
+      "title": "Tutor"
+    }
+  ],
+  "skills": {
+    "competent": [
+      "Spring Boot",
+      "Docker",
+      "Postman (API tool)",
+      "HTML5/Css3",
+      "Rest API"
+    ],
+    "familiar": [
+      "C/C++",
+      "OWASP / Nmap",
+      "UML",
+      "JUnit",
+      "Cloud services (Gcloud, Microsoft Azure)",
+      "Virtualization (Linux KVM, VMware ESXi)"
+    ],
+    "proficient": [
+      "Java",
+      "Linux/Bash",
+      "RDBMS/PostgreSQL",
+      "Agile/Scrum",
+      "Git",
+      "Github",
+      "Javascript (ES6)",
+      "Golang",
+      "Ruby on Rails"
+    ]
+  },
+  "summary": "Software developer, Java, React, Golang, Rails (jr.), OpenClassrooms' graduate (EU bachelor equivalent as a software developer) and passionate about software quality and well-engineered solutions that take into account green, efficient tech, and social responsibility. I was, previously, a member of the Tier 3 Network Assurance and Provisioning Team at Telus, as a Telecom Network Technician. Besides that, I hold a diploma as a Telecom/electronics Technologist and a Bachelor in Business Administration with a Marketing major. I believe that lean, secure, and Open Source software can bring a unique added value to all the stakeholders, and clearer communication and can enable optimized and agile solutions to market needs. My other interests are Information Security and Infosec education."
+}

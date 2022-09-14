@@ -5,7 +5,7 @@ github_repo_root_url: https://github.com/jarviscanada/jarvis_data_eng_NissaElchh
 
 # Introduce yourself, your academic and professional background.
 # What excites you about the software industry and your passion. At least 80 words
-summary: Software developer, Java, React, Golang, Rails (jr.), OpenClassrooms' graduate (EU bachelor equivalent as a software developer) and passionate about software quality and well engineered solutions that take into account green, efficient tech and social responsability. I was, previously, a member of the Tier 3 Network Assurance and Provisionning Team at Telus, as a Telecom Network Technician. Besides that, I hold a diploma as a Telecom/electronics Technologist and a Bachelor in Business Administration with a Marketing major. I believe that lean, secure and Open Source software can bring a unique added value to all the stakeholders, clearer communication and can enable optimized and agile solutions to market needs. My other interests are Information Security and Infosec education.
+summary: Software developer, Java, React, Golang, Rails (jr.), OpenClassrooms' graduate (EU bachelor equivalent as a software developer) and passionate about software quality and well-engineered solutions that take into account green, efficient tech, and social responsibility. I was, previously, a member of the Tier 3 Network Assurance and Provisioning Team at Telus, as a Telecom Network Technician. Besides that, I hold a diploma as a Telecom/electronics Technologist and a Bachelor in Business Administration with a Marketing major. I believe that lean, secure, and Open Source software can bring a unique added value to all the stakeholders, and clearer communication and can enable optimized and agile solutions to market needs. My other interests are Information Security and Infosec education.
 
 # Group your skills by level.
 # Your skills can be anything software related (e.g. language, frameworks, methodologies, software, etc.).
@@ -35,7 +35,7 @@ skills:
     - UML
     - JUnit
     - Cloud services (Gcloud, Microsoft Azure)
-    - Virtuialization (Linux KVM, VMware ESXi)
+    - Virtualization (Linux KVM, VMware ESXi)
 
 # List of Jarvis projects
 jarvis_projects:
@@ -74,13 +74,13 @@ highlighted_projects:
     #URL is optional
     git_url: "https://github.com/RtillaWork/P_8_BE"
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: Designed, developped tested and cloud-hosted an API that looks for nearby volunteer services or offer of help and serves that data to an authenticated frontend and using HTTPS.
+    description: Designed, developed tested, and cloud-hosted an API that looks for nearby volunteer services or offers of help and serves that data to an authenticated frontend using HTTPS.
   - name: "Build a geolocalized aid platform for your neighborhood: Frontend in React/Javascript/leafletjs"
     git_url: "https://github.com/RtillaWork/P_8_FE"
     description: Built in React and LeafletJs a frontend platform, as a map that communicates with an API to link people needing help with volunteers in the vicinity.
   - name: "Track your fitness habits"
     git_url: "https://github.com/RtillaWork/P_6"
-    description: "Combined React, Ruby on Rails and Unsplash API to create an application that tracks users' fitness habits"
+    description: "Combined React, Ruby on Rails, and Unsplash API to create an application that tracks users' fitness habits"
 
 
 #List of professional experience
@@ -131,7 +131,7 @@ professional_experience:
 
 
 
-#List of edcuation
+#List of education
 education: 
   - school_name: "OpenClassrooms"
     duration: "2018-2021"
@@ -151,6 +151,7 @@ education:
     duration: "1999-2003"
     degree: "Bachelor in Business Administration, Marketing major"
     department: "School of Management (Casablanca)"
+    awards_achievements:
 
 #Optional section
 others:
@@ -159,7 +160,7 @@ others:
     #list of items
     bullets:
       - "Google IT support, Coursera (2020)"
-      - "How to use OpenVAS for vulnerability assessement, Cybrary (2020)"
+      - "How to use OpenVAS for vulnerability assessment, Cybrary (2020)"
       - "Splunk basics, RangeForce (2020)"
       - "Cisco Certified Network Associate, Cisco (2013)"
   - title: "Languages"
