@@ -45,7 +45,7 @@ jarvis_projects:
     git_url: "/linux_sql"
     # The project description allows hiring managers to understand your project and technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: 
+    description: ""
   - name: "Core Java Apps"
     git_url: "/core_java"
     description:
@@ -61,7 +61,7 @@ highlighted_projects:
     #URL is optional
     git_url: "https://github.com/RtillaWork/P_8_BE"
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: For the Bakdend and API, I designed, developed tested, and cloud-hosted an API that looks for nearby volunteer services or offers of help and serves that data to an authenticated frontend using HTTPS. As for the frontend (https://github.com/RtillaWork/P_8_FE), it was built in React and LeafletJs, as a map, that communicates with the API to link users' needing help with volunteers in the vicinity.
+    description: "For the Bakdend and API, I designed, developed tested, and cloud-hosted an API that looks for nearby volunteer services or offers of help and serves that data to an authenticated frontend using HTTPS. As for the frontend (https://github.com/RtillaWork/P_8_FE), it was built in React and LeafletJs, as a map, that communicates with the API to link users' needing help with volunteers in the vicinity."
   - name: "Build a webscraper and dowloader of online library catalogs and open public library resources"
     git_url: "https://github.com/RtillaWork/gogetitarchy"
     description: "Built a webscraper of public library resources, particularily ArchiveGrid and OCLC with Go and Gocolly to facilitate exploratory research, downloading references and eventually as a simpler command line search engine. Created a C++ utility to clean and extract preliminary data."
@@ -75,11 +75,11 @@ professional_experience:
     company: "Jarvis"
     duration: "2022-present"
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: ""
+    description: "Worked under the mentorship of a Senior developer and a Scrum Master to translate user stories to readable and maintanable Java code to perform the required tasks. Wrote unit and integration tests to document and assert application correctness. Refered to documentation to tacle edge cases and collaborated with other teammates to share useful documentation and tutorials. "
   - title: "Self-employed, Software Developer (Go, C++)"
     company: "Self-employed"
     duration: "2022"
-    description: ""
+    description: "Worked with a client, a phD student, to research, design and create a webscrapping application in Golang that helped accelerate the client research by specific keywords and using a simple CLI interface to launch and download relevant research documents from online public library catalogues "
   - title: "Telecommunications Network Technician, Tier 3 Service Delivery and Assurance"
     company: "TELUS Communications"
     duration: "2009-2019"
