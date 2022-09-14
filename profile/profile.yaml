@@ -5,7 +5,7 @@ github_repo_root_url: https://github.com/jarviscanada/jarvis_data_eng_NissaElchh
 
 # Introduce yourself, your academic and professional background.
 # What excites you about the software industry and your passion. At least 80 words
-summary: Software developer, Java, React, Golang, Rails (jr.), OpenClassrooms' graduate (EU bachelor equivalent as a software developer) and passionate about software quality and well-engineered solutions that take into account green, efficient tech, and social responsibility. I was, previously, a member of the Tier 3 Network Assurance and Provisioning Team at Telus, as a Telecom Network Technician. Besides that, I hold a diploma as a Telecom/electronics Technologist and a Bachelor in Business Administration with a Marketing major. I believe that lean, secure, and Open Source software can bring a unique added value to all the stakeholders, and clearer communication and can enable optimized and agile solutions to market needs. My other interests are Information Security and Infosec education.
+summary: I am a Junior Software Developer, with experience in Java, React, Golang and Ruby on Rails. I graduated from OpenClassrooms with a E.U bachelor equivalent. I am passionate about software quality and well-engineered solutions that take into account green or efficient tech, and social responsibility. I was, previously, a member of the Tier 3 Network Assurance and Provisioning Team at Telus, as a Telecom Network Technician. Besides that, I hold a diploma as a Telecom/electronics Technologist and a Bachelor in Business Administration with a Marketing major. I believe that lean, secure, and Open Source software can bring a unique added value to all the stakeholders, and clearer communication and can enable optimized and agile solutions to market needs. My other interests are Information Security and science education.
 
 # Group your skills by level.
 # Your skills can be anything software related (e.g. language, frameworks, methodologies, software, etc.).
@@ -13,6 +13,7 @@ skills:
   # At least 5 skills
   proficient:
     - Java
+    - Maven
     - Linux/Bash
     - RDBMS/PostgreSQL
     - Agile/Scrum
@@ -25,16 +26,17 @@ skills:
   competent:
     - Spring Boot
     - Docker
-    - Postman (API tool)
-    - HTML5/Css3
-    - Rest API
+    - Postman (API testing and design)
+    - HTML5/CSS3
+    - REST API
+    - Testing using JUnit and related libraries 
   # At least 5 skills
   familiar:
     - C/C++
-    - OWASP / Nmap
-    - UML
-    - JUnit
-    - Cloud services (Gcloud, Microsoft Azure)
+    - OWASP / Kali Linux / Wireshark
+    - UML / ERD
+    - Cloud services (Google Cloud, Microsoft Azure)
+    - SSL/TLS/OAuth
     - Virtualization (Linux KVM, VMware ESXi)
 
 # List of Jarvis projects
@@ -43,45 +45,26 @@ jarvis_projects:
     git_url: "/linux_sql"
     # The project description allows hiring managers to understand your project and technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: Suspendisse a tincidunt odio. Suspendisse posuere luctus aliquet. Quisque magna tellus, tempor vitae arcu sed, volutpat scelerisque lacus. Aliquam varius pulvinar dapibus. Ut a tincidunt sem. Aenean sollicitudin fringilla erat ut imperdiet. Phasellus fermentum, enim vitae laoreet elementum, eros nisl hendrerit lorem.
+    description: 
   - name: "Core Java Apps"
     git_url: "/core_java"
     description:
-      - "Twitter App: Curabitur laoreet tristique leo, eget suscipit nisi. Sed in sodales ex. Maecenas vitae tincidunt dui, et eleifend quam."
-      - "JDBC App: Curabitur laoreet tristique leo, eget suscipit nisi. Sed in sodales ex. Maecenas vitae tincidunt dui, et eleifend quam."
-      - "Grep App: Curabitur laoreet tristique leo, eget suscipit nisi. Sed in sodales ex. Maecenas vitae tincidunt dui, et eleifend quam."
-  - name: "Springboot App"
-    git_url: "/springboot"
-    description: ""
-  - name: "Python Data Analytics"
-    git_url: "/python_data_anlytics"
-    description: ""
-  - name: "Hadoop"
-    git_url: "/hadoop"
-    description: ""
-  - name: "Spark"
-    git_url: "/spark"
-    description: ""
-  - name: "Cloud/DevOps"
-    git_url: "/cloud_devops"
-    description: ""
+      - "Twitter App: ."
+      - "JDBC App: ."
+      - "Grep App: ."
 
 # List of personal or academic projects
 # Feel free to add more projects
 highlighted_projects:
     #project name
-  - name: "Build a geolocalized aid platform for your neighborhood: Backend in Rails API mode"
+  - name: "Build a geolocalized aid platform for your neighborhood: Backend in Ruby on Rails API mode, running on Azure VM with ngnix and HTTPS/TLS; Frontend in React/Javascript/leafletjs"
     #URL is optional
     git_url: "https://github.com/RtillaWork/P_8_BE"
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: Designed, developed tested, and cloud-hosted an API that looks for nearby volunteer services or offers of help and serves that data to an authenticated frontend using HTTPS.
-  - name: "Build a geolocalized aid platform for your neighborhood: Frontend in React/Javascript/leafletjs"
-    git_url: "https://github.com/RtillaWork/P_8_FE"
-    description: Built in React and LeafletJs a frontend platform, as a map that communicates with an API to link people needing help with volunteers in the vicinity.
-  - name: "Track your fitness habits"
-    git_url: "https://github.com/RtillaWork/P_6"
-    description: "Combined React, Ruby on Rails, and Unsplash API to create an application that tracks users' fitness habits"
-
+    description: For the Bakdend and API, I designed, developed tested, and cloud-hosted an API that looks for nearby volunteer services or offers of help and serves that data to an authenticated frontend using HTTPS. As for the frontend (https://github.com/RtillaWork/P_8_FE), it was built in React and LeafletJs, as a map, that communicates with the API to link users' needing help with volunteers in the vicinity.
+  - name: "Build a webscraper and dowloader of online library catalogs and open public library resources"
+    git_url: "https://github.com/RtillaWork/gogetitarchy"
+    description: "Built a webscraper of public library resources, particularily ArchiveGrid and OCLC with Go and Gocolly to facilitate exploratory research, downloading references and eventually as a simpler command line search engine. Created a C++ utility to clean and extract preliminary data."
 
 #List of professional experience
 #The job description allows hiring managers to understand your job and the technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
@@ -92,44 +75,19 @@ professional_experience:
     company: "Jarvis"
     duration: "2022-present"
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis."
-  - title: "Tutor"
-    company: "XYZ Company"
-    duration: "2019"
-    description: "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis."
-  #Write your Jarvis role as a professional experience rather than training.
-  - title: "Software Developer"
-    company: "Jarvis"
-    duration: "2022-present"
-    # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis."
-  - title: "Tutor"
-    company: "XYZ Company"
-    duration: "2019"
-    description: "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis."
-  #Write your Jarvis role as a professional experience rather than training.
-  - title: "Software Developer"
-    company: "Jarvis"
-    duration: "2022-present"
-    # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis."
-  - title: "Tutor"
-    company: "XYZ Company"
-    duration: "2019"
-    description: "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis."
-  #Write your Jarvis role as a professional experience rather than training.
-  - title: "Software Developer"
-    company: "Jarvis"
-    duration: "2022-present"
-    # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis."
-  - title: "Tutor"
-    company: "XYZ Company"
-    duration: "2019"
-    description: "Donec mattis sed justo et sagittis. Vestibulum lacinia nulla ipsum. Curabitur imperdiet nibh vitae leo lacinia laoreet. Nullam accumsan, lectus ut maximus ultricies, augue justo egestas mi, vel bibendum felis."
-
-
-
+    description: ""
+  - title: "Self-employed, Software Developer (Go, C++)"
+    company: "Self-employed"
+    duration: "2022"
+    description: ""
+  - title: "Telecommunications Network Technician, Tier 3 Service Delivery and Assurance"
+    company: "TELUS Communications"
+    duration: "2009-2019"
+    description: "Tier 3 Service Delivery and Assurance for POTS and Fibre voice and data services. Performed  Service Delivery and Assurance related to trouble analysis and resolution; documented and provisioned services (triple-play) on copper, fibre, SS7, SIP, and Long Distance), Collaborated with the Voice Test Team, QA, other departments and other International carriers to solve complex Trouble Tickets."
+  - title: "Junior Computer Network Technician"
+    company: "Adil Réseaux (Morocco)"
+    duration: "2003-2005"
+    description: "Assist researching cost-effective solutions for, and setting up Microsoft networks for SOHO, Assist in securing LANs using Windows' Group Policies in an AD setup, Translate relevant documentation from English to French for local customers, Assist in training users in Microsoft products, basic Redhat Linux, Mac OS X, and basic internet applications"
 
 #List of education
 education: 
@@ -142,10 +100,9 @@ education:
       - "Cursus includes 9 real-world projects"
   - school_name: "NAIT (Northern Alberta Institute of Technology)"
     duration: "2007-2009"
-    degree: "Honours Diploma Telecommunications Engineering Technology"
+    degree: "Honour Diploma Telecommunications Engineering Technology"
     department: "School of Applied Sciences and Technology, Telecommunications and Electronics Engineering Technology"
     awards_achievements:
-      - "Honours Diploma, Grade: 3.5"
       - "Dean's Honour Roll"
   - school_name: "Groupe ISCAE"
     duration: "1999-2003"
