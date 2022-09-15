@@ -41,13 +41,13 @@
   ],
   "jarvis_projects": [
     {
-      "description": "This app, which consists of a server and local agents, assists cluster admin teams to survey, collect, store and monitor cluster nodes. It uses standard Linux commands and `/sys` filesystem to collect a node's configuration and real-time information. The server collects and stores that data in a PostgreSQL database for documentation and querying. The app is deployed through a lightweight Docker container and uses bash shell's scripting language.",
+      "description": "This app, which consists of a server and node agents, assists cluster admin team to survey, collect, store and monitor cluster nodes. It uses standard Linux commands and `/sys` filesystem to collect a node's configuration and real-time information. The server collects and stores that data in a PostgreSQL database for documentation and querying. The app is deployed through a lightweight Docker container and uses bash shell's scripting language.",
       "git_url": "https://github.com/jarviscanada/jarvis_data_eng_NissaElchhab/tree/main/linux_sql",
       "name": "Cluster Monitor"
     },
     {
       "description": [
-        "Twitter App: This Java-based Twitter app offers a simple CLI tool to interact with the Twitter API. It allows posting a tweet with geolocation, reading a tweet's JSON object, a deleting one or many tweets. The app uses OAuth to authorize Twitter interactions, is architectured around a 3-tiered model for ease of extensibility, and comes with an extensive suite of tests based on JUnit, Mockito, and AssertJ. The Twitter CLI is packaged in a Docker container as a Spring application",
+        "Twitter App: This Java-based Twitter app offers a simple CLI tool to interact with the Twitter API. It allows posting a tweet with geolocation, reading a tweet's JSON object, and deleting one or many tweets. The app uses OAuth to authorize Twitter interactions, is architectured as a Spring app with components for future extensibility, and comes with an extensive suite of tests based on JUnit, Mockito, and AssertJ. The Twitter CLI is packaged in a Docker container and uses Maven as a project management and comprehension tool.",
         "JDBC App: This app allows accessing the RDBMS in a programmatic way instead of SQL. This makes the data from the database accessible to end users who are not comfortable with SQL, helps isolate the database from the end users for security purpose, and create the building blocks for future APIs and possibly a different front-end interface instead of a text/CLI one only.",
         "Grep App: This app aims to implement a simple grep-like app in Java. The Java artifact is packaged in a Docker container for ease of deployment and makes use of Java regex utilities. It also uses streams and lambdas for a cleaner code, among other benefits. It can be run from the command line with as close of an experience and results as the Linux's grep (our reference for this project is the GNU Grep."
       ],
