@@ -60,3 +60,4 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_NissaElchh
 - English: Bilingual proficiency
 - Learning Morse and preparing for a Ham(Amateur Radio) certification
 - Exploring embedded hardware such as Raspberry Pi
+- Enjoying the arts of photography, and admiring ancient and modern art+architecture
