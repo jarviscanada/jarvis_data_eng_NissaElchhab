@@ -42,16 +42,16 @@ skills:
 # List of Jarvis projects
 jarvis_projects:
   - name: "Cluster Monitor"
-    git_url: "/linux_sql"
+    git_url: "https://github.com/jarviscanada/jarvis_data_eng_NissaElchhab/tree/main/linux_sql"
     # The project description allows hiring managers to understand your project and technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: ""
+    description: "This app, that consists of a server and local agents, assists cluster admin teams to survey, collect, store and monitor a cluster nodes. It uses standard Linux commands and /sys filesystem to collect a node's configuration and realtime information. The server collects and stores that data in a PostgreSQL database for documentation and querying. The app is deployed through a lightweight Docker container and uses bash shell's scripting language."
   - name: "Core Java Apps"
-    git_url: "/core_java"
+    git_url: "https://github.com/jarviscanada/jarvis_data_eng_NissaElchhab/tree/main/core_java"
     description:
-      - "Twitter App: ."
-      - "JDBC App: ."
-      - "Grep App: ."
+      - "Twitter App: This Java-based Twitter app offers a simple CLI tool to interact with the twitter API. It allows to post a tweet with a geolocation, reading a tweet's JSON object, a deleting one or many tweets. The app uses OAuth to authorize twitter interactions, is architectured around a 3-tiered model for ease of extensibility, and comes with an extensive suite of tests based on JUnit, Mockito and AssertJ. The Twitter CLI is packaged in a Docker container as a Spring application"
+      - "JDBC App: This app allows accessing the RDBMS in a programmatic way instead of SQL. This makes the data from the database accessible to end users who are not comfortable with SQL, helps isolate the database from the end users for security purpose, and create the building blocks for future APIs and possibly a different front-end interface instead of a text/CLI one only."
+      - "Grep App: This app aims to implement a simple grep-like app in Java. The Java artifact is packaged in a Docker container for ease of deployement, and makes use of Java regex utilities. It also uses streams and lambdas for a cleaner code, among other benefits. It can be run from the command line with as close of an experience and results as the Linux's grep (our reference for this project is the GNU Grep."
 
 # List of personal or academic projects
 # Feel free to add more projects
