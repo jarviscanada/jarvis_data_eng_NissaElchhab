@@ -45,7 +45,7 @@ jarvis_projects:
     git_url: "https://github.com/jarviscanada/jarvis_data_eng_NissaElchhab/tree/main/linux_sql"
     # The project description allows hiring managers to understand your project and the technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: "This app, which consists of a server and local agents, assists cluster admin teams to survey, collect, store and monitor cluster nodes. It uses standard Linux commands and "/sys" filesystem to collect a node's configuration and real-time information. The server collects and stores that data in a PostgreSQL database for documentation and querying. The app is deployed through a lightweight Docker container and uses bash shell's scripting language."
+    description: "This app, which consists of a server and local agents, assists cluster admin teams to survey, collect, store and monitor cluster nodes. It uses standard Linux commands and `/sys` filesystem to collect a node's configuration and real-time information. The server collects and stores that data in a PostgreSQL database for documentation and querying. The app is deployed through a lightweight Docker container and uses bash shell's scripting language."
   - name: "Core Java Apps"
     git_url: "https://github.com/jarviscanada/jarvis_data_eng_NissaElchhab/tree/main/core_java"
     description:
@@ -127,4 +127,4 @@ others:
   - title: "Activities/Hobbies"
     bullets:
       - "Learning Morse and preparing for a Ham(Amateur Radio) certification"
-      - "Exploring embedded hardware such as Raspberry Pi.
+      - "Exploring embedded hardware such as Raspberry Pi"
