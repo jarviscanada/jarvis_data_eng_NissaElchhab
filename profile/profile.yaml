@@ -1,0 +1,131 @@
+# Preferred name (Characters only)
+name: "Nissa Elchhab"
+# Your GitHub repo root URL
+github_repo_root_url: https://github.com/jarviscanada/jarvis_data_eng_NissaElchhab
+
+# Introduce yourself, your academic and professional background.
+# What excites you about the software industry and your passion. At least 80 words
+summary: I am a Junior Software Developer, with experience in Java, React, Golang, and Ruby on Rails. I graduated from OpenClassrooms with a E.U bachelor's equivalent. I am passionate about software quality and well-engineered solutions that take into account green or efficient tech, and social responsibility. I was, previously, a member of the Tier 3 Network Assurance and Provisioning Team at Telus, as a Telecom Network Technician. Besides that, I hold a diploma as a Telecom/electronics Technologist and a Bachelor in Business Administration with a Marketing major. I believe that lean, secure, and Open Source software can bring a unique added value to all the stakeholders, and clearer communication and can enable optimized and agile solutions to market needs. My other interests are Information Security and science education.
+
+# Group your skills by level.
+# Your skills can be anything software related (e.g. language, frameworks, methodologies, software, etc.).
+skills:
+  # At least 5 skills
+  proficient:
+    - Java
+    - Maven
+    - Linux/Bash
+    - RDBMS/PostgreSQL
+    - Agile/Scrum
+    - Git
+    - Github
+    - Javascript (ES6)
+    - Golang
+    - Ruby on Rails
+  # At least 5 skills
+  competent:
+    - Spring Boot
+    - Docker
+    - Postman (API testing and design)
+    - HTML5/CSS3
+    - REST API
+    - Testing using JUnit and related libraries 
+  # At least 5 skills
+  familiar:
+    - C/C++
+    - OWASP / Kali Linux / Wireshark
+    - UML / ERD
+    - Cloud services (Google Cloud, Microsoft Azure)
+    - SSL/TLS/OAuth
+    - Virtualization (Linux KVM, VMware ESXi)
+
+# List of Jarvis projects
+jarvis_projects:
+  - name: "Cluster Monitor"
+    git_url: "https://github.com/jarviscanada/jarvis_data_eng_NissaElchhab/tree/main/linux_sql"
+    # The project description allows hiring managers to understand your project and the technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
+    # The project description must start with an action verb (https://bit.ly/3guO98u)
+    description: "This app, which consists of a server and node agents, assists cluster admin team to survey, collect, store and monitor cluster nodes. It uses standard Linux commands and `/sys` filesystem to collect a node's configuration and real-time information. The server collects and stores that data in a PostgreSQL database for documentation and querying. The app is deployed through a lightweight Docker container and uses bash shell's scripting language."
+  - name: "Core Java Apps"
+    git_url: "https://github.com/jarviscanada/jarvis_data_eng_NissaElchhab/tree/main/core_java"
+    description:
+      - "Twitter App: This Java-based Twitter app offers a simple CLI tool to interact with the Twitter API. It allows posting a tweet with geolocation, reading a tweet's JSON object, and deleting one or many tweets. The app uses OAuth to authorize Twitter interactions, is architectured as a Spring app with components for future extensibility, and comes with an extensive suite of tests based on JUnit, Mockito, and AssertJ. The Twitter CLI is packaged in a Docker container and uses Maven as a project management and comprehension tool."
+      - "JDBC App: This app allows accessing the RDBMS in a programmatic way instead of SQL. This makes the data from the database accessible to end users who are not comfortable with SQL, helps isolate the database from the end users for security purpose, and create the building blocks for future APIs and possibly a different front-end interface instead of a text/CLI one only."
+      - "Grep App: This app aims to implement a simple grep-like app in Java. The Java artifact is packaged in a Docker container for ease of deployment and makes use of Java regex utilities. It also uses streams and lambdas for a cleaner code, among other benefits. It can be run from the command line with as close of an experience and results as the Linux's grep (our reference for this project is the GNU Grep."
+
+# List of personal or academic projects
+# Feel free to add more projects
+highlighted_projects:
+    #project name
+  - name: "Build a geolocalized aid platform for your neighborhood: Backend in Ruby on Rails API mode, running on Azure VM with nginx and HTTPS/TLS; Frontend in React/Javascript/leafletjs"
+    #URL is optional
+    git_url: "https://github.com/RtillaWork/P_8_BE"
+    # The project description must start with an action verb (https://bit.ly/3guO98u)
+    description: "For the Bakdend and API, I designed, developed tested, and cloud-hosted an API that looks for nearby volunteer services or offers of help and serves that data to an authenticated frontend using HTTPS. As for the frontend (https://github.com/RtillaWork/P_8_FE), it was built in React and LeafletJs, as a map, that communicates with the API to link users' needing help with volunteers in the vicinity."
+  - name: "Build a web scraper and downloader of online library catalogs and open public library resources"
+    git_url: "https://github.com/RtillaWork/gogetitarchy"
+    description: "Built a web scraper of public library resources, particularly ArchiveGrid and OCLC with Go and Gocolly to facilitate exploratory research, downloading references, and eventually as a simpler command line search engine. Created a C++ utility to clean and extract preliminary data"
+
+#List of professional experience
+#The job description allows hiring managers to understand your job and the technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
+#The description must be more than 25 words. If your experience is not software related, please focus on soft skills and achievements (e.g. team collaboration, problem-solving, improvements, communication).
+professional_experience:
+  #Write your Jarvis role as a professional experience rather than training.
+  - title: "Software Developer"
+    company: "Jarvis"
+    duration: "2022-present"
+    # The project description must start with an action verb (https://bit.ly/3guO98u)
+    description: "Worked under the mentorship of a Senior developer and a Scrum Master to translate user stories to readable and maintainable Java code to perform the required tasks. Wrote unit and integration tests to document and assert application correctness. Referred to documentation to tackle edge cases and collaborated with other teammates to share useful documentation and tutorials. "
+  - title: "Self-employed, Software Developer (Go, C++)"
+    company: "Self-employed"
+    duration: "2022"
+    description: "Researched, and developed for a client, a Ph.D. student, a web scraping application in Golang that helped them accelerate their research by specific keywords and using a simple CLI interface to search and download relevant research documents from online public library catalogs"
+  - title: "Telecommunications Network Technician, Tier 3 Service Delivery and Assurance"
+    company: "TELUS Communications"
+    duration: "2009-2019"
+    description: "Performed Service Delivery and Assurance related to trouble analysis and resolution; documented and provisioned services (triple-play) on copper, fibre, SS7, SIP, and Long Distance; Collaborated extensively with the Voice Test Team, QA, other departments, and other international carriers to solve complex Trouble Tickets."
+  - title: "Junior Computer Network Technician"
+    company: "Adil Réseaux (Morocco)"
+    duration: "2003-2005"
+    description: "Assisted in researching cost-effective solutions, and setting up, configuring, and securing Microsoft networks for SOHO; Assisted translating relevant documentation from English to French for local customers, as well as in training users"
+
+#List of education
+education: 
+  - school_name: "OpenClassrooms"
+    duration: "2018-2021"
+    degree: "Diploma, Level 6 qualification on the European Qualification Framework"
+    department: "Software Developer - Full Stack (Développeur·se d’application)"
+    # optional
+    awards_achievements: 
+      - "Cursus includes 9 real-world projects"
+  - school_name: "NAIT (Northern Alberta Institute of Technology)"
+    duration: "2007-2009"
+    degree: "Honour Diploma Telecommunications Engineering Technology"
+    department: "School of Applied Sciences and Technology, Telecommunications and Electronics Engineering Technology"
+    awards_achievements:
+      - "Dean's Honour Roll"
+  - school_name: "Groupe ISCAE"
+    duration: "1999-2003"
+    degree: "Bachelor in Business Administration, Marketing major"
+    department: "School of Management (Casablanca)"
+    awards_achievements:
+
+#Optional section
+others:
+    #category
+  - title: "Certificates"
+    #list of items
+    bullets:
+      - "Google IT support, Coursera (2020)"
+      - "How to use OpenVAS for vulnerability assessment, Cybrary (2020)"
+      - "Splunk basics, RangeForce (2020)"
+      - "Cisco Certified Network Associate, Cisco (2013)"
+  - title: "Languages"
+    bullets:
+      - "French: Native proficiency"
+      - "English: Bilingual proficiency"
+  - title: "Activities/Hobbies"
+    bullets:
+      - "Learning Morse and preparing for a Ham(Amateur Radio) certification"
+      - "Exploring embedded hardware such as Raspberry Pi"
+      - "Enjoying the arts of photography, and admiring ancient and modern art+architecture"
