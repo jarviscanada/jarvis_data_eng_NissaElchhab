@@ -5,7 +5,7 @@ github_repo_root_url: https://github.com/jarviscanada/jarvis_data_eng_NissaElchh
 
 # Introduce yourself, your academic and professional background.
 # What excites you about the software industry and your passion. At least 80 words
-summary: I am a Junior Software Developer, with experience in Java, React, Golang and Ruby on Rails. I graduated from OpenClassrooms with a E.U bachelor equivalent. I am passionate about software quality and well-engineered solutions that take into account green or efficient tech, and social responsibility. I was, previously, a member of the Tier 3 Network Assurance and Provisioning Team at Telus, as a Telecom Network Technician. Besides that, I hold a diploma as a Telecom/electronics Technologist and a Bachelor in Business Administration with a Marketing major. I believe that lean, secure, and Open Source software can bring a unique added value to all the stakeholders, and clearer communication and can enable optimized and agile solutions to market needs. My other interests are Information Security and science education.
+summary: I am a Junior Software Developer, with experience in Java, React, Golang, and Ruby on Rails. I graduated from OpenClassrooms with a E.U bachelor's equivalent. I am passionate about software quality and well-engineered solutions that take into account green or efficient tech, and social responsibility. I was, previously, a member of the Tier 3 Network Assurance and Provisioning Team at Telus, as a Telecom Network Technician. Besides that, I hold a diploma as a Telecom/electronics Technologist and a Bachelor in Business Administration with a Marketing major. I believe that lean, secure, and Open Source software can bring a unique added value to all the stakeholders, and clearer communication and can enable optimized and agile solutions to market needs. My other interests are Information Security and science education.
 
 # Group your skills by level.
 # Your skills can be anything software related (e.g. language, frameworks, methodologies, software, etc.).
@@ -43,28 +43,28 @@ skills:
 jarvis_projects:
   - name: "Cluster Monitor"
     git_url: "https://github.com/jarviscanada/jarvis_data_eng_NissaElchhab/tree/main/linux_sql"
-    # The project description allows hiring managers to understand your project and technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
+    # The project description allows hiring managers to understand your project and the technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: "This app, that consists of a server and local agents, assists cluster admin teams to survey, collect, store and monitor a cluster nodes. It uses standard Linux commands and /sys filesystem to collect a node's configuration and realtime information. The server collects and stores that data in a PostgreSQL database for documentation and querying. The app is deployed through a lightweight Docker container and uses bash shell's scripting language."
+    description: "This app, which consists of a server and local agents, assists cluster admin teams to survey, collect, store and monitor cluster nodes. It uses standard Linux commands and "/sys" filesystem to collect a node's configuration and real-time information. The server collects and stores that data in a PostgreSQL database for documentation and querying. The app is deployed through a lightweight Docker container and uses bash shell's scripting language."
   - name: "Core Java Apps"
     git_url: "https://github.com/jarviscanada/jarvis_data_eng_NissaElchhab/tree/main/core_java"
     description:
-      - "Twitter App: This Java-based Twitter app offers a simple CLI tool to interact with the twitter API. It allows to post a tweet with a geolocation, reading a tweet's JSON object, a deleting one or many tweets. The app uses OAuth to authorize twitter interactions, is architectured around a 3-tiered model for ease of extensibility, and comes with an extensive suite of tests based on JUnit, Mockito and AssertJ. The Twitter CLI is packaged in a Docker container as a Spring application"
+      - "Twitter App: This Java-based Twitter app offers a simple CLI tool to interact with the Twitter API. It allows posting a tweet with geolocation, reading a tweet's JSON object, a deleting one or many tweets. The app uses OAuth to authorize Twitter interactions, is architectured around a 3-tiered model for ease of extensibility, and comes with an extensive suite of tests based on JUnit, Mockito, and AssertJ. The Twitter CLI is packaged in a Docker container as a Spring application"
       - "JDBC App: This app allows accessing the RDBMS in a programmatic way instead of SQL. This makes the data from the database accessible to end users who are not comfortable with SQL, helps isolate the database from the end users for security purpose, and create the building blocks for future APIs and possibly a different front-end interface instead of a text/CLI one only."
-      - "Grep App: This app aims to implement a simple grep-like app in Java. The Java artifact is packaged in a Docker container for ease of deployement, and makes use of Java regex utilities. It also uses streams and lambdas for a cleaner code, among other benefits. It can be run from the command line with as close of an experience and results as the Linux's grep (our reference for this project is the GNU Grep."
+      - "Grep App: This app aims to implement a simple grep-like app in Java. The Java artifact is packaged in a Docker container for ease of deployment and makes use of Java regex utilities. It also uses streams and lambdas for a cleaner code, among other benefits. It can be run from the command line with as close of an experience and results as the Linux's grep (our reference for this project is the GNU Grep."
 
 # List of personal or academic projects
 # Feel free to add more projects
 highlighted_projects:
     #project name
-  - name: "Build a geolocalized aid platform for your neighborhood: Backend in Ruby on Rails API mode, running on Azure VM with ngnix and HTTPS/TLS; Frontend in React/Javascript/leafletjs"
+  - name: "Build a geolocalized aid platform for your neighborhood: Backend in Ruby on Rails API mode, running on Azure VM with nginx and HTTPS/TLS; Frontend in React/Javascript/leafletjs"
     #URL is optional
     git_url: "https://github.com/RtillaWork/P_8_BE"
     # The project description must start with an action verb (https://bit.ly/3guO98u)
     description: "For the Bakdend and API, I designed, developed tested, and cloud-hosted an API that looks for nearby volunteer services or offers of help and serves that data to an authenticated frontend using HTTPS. As for the frontend (https://github.com/RtillaWork/P_8_FE), it was built in React and LeafletJs, as a map, that communicates with the API to link users' needing help with volunteers in the vicinity."
-  - name: "Build a webscraper and dowloader of online library catalogs and open public library resources"
+  - name: "Build a web scraper and downloader of online library catalogs and open public library resources"
     git_url: "https://github.com/RtillaWork/gogetitarchy"
-    description: "Built a webscraper of public library resources, particularily ArchiveGrid and OCLC with Go and Gocolly to facilitate exploratory research, downloading references and eventually as a simpler command line search engine. Created a C++ utility to clean and extract preliminary data."
+    description: "Built a web scraper of public library resources, particularly ArchiveGrid and OCLC with Go and Gocolly to facilitate exploratory research, downloading references, and eventually as a simpler command line search engine. Created a C++ utility to clean and extract preliminary data"
 
 #List of professional experience
 #The job description allows hiring managers to understand your job and the technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
@@ -75,19 +75,19 @@ professional_experience:
     company: "Jarvis"
     duration: "2022-present"
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: "Worked under the mentorship of a Senior developer and a Scrum Master to translate user stories to readable and maintanable Java code to perform the required tasks. Wrote unit and integration tests to document and assert application correctness. Refered to documentation to tacle edge cases and collaborated with other teammates to share useful documentation and tutorials. "
+    description: "Worked under the mentorship of a Senior developer and a Scrum Master to translate user stories to readable and maintainable Java code to perform the required tasks. Wrote unit and integration tests to document and assert application correctness. Referred to documentation to tackle edge cases and collaborated with other teammates to share useful documentation and tutorials. "
   - title: "Self-employed, Software Developer (Go, C++)"
     company: "Self-employed"
     duration: "2022"
-    description: "Worked with a client, a phD student, to research, design and create a webscrapping application in Golang that helped accelerate the client research by specific keywords and using a simple CLI interface to launch and download relevant research documents from online public library catalogues "
+    description: "Researched, and developed for a client, a Ph.D. student, a web scraping application in Golang that helped them accelerate their research by specific keywords and using a simple CLI interface to search and download relevant research documents from online public library catalogs"
   - title: "Telecommunications Network Technician, Tier 3 Service Delivery and Assurance"
     company: "TELUS Communications"
     duration: "2009-2019"
-    description: "Tier 3 Service Delivery and Assurance for POTS and Fibre voice and data services. Performed  Service Delivery and Assurance related to trouble analysis and resolution; documented and provisioned services (triple-play) on copper, fibre, SS7, SIP, and Long Distance), Collaborated with the Voice Test Team, QA, other departments and other International carriers to solve complex Trouble Tickets."
+    description: "Performed Service Delivery and Assurance related to trouble analysis and resolution; documented and provisioned services (triple-play) on copper, fibre, SS7, SIP, and Long Distance; Collaborated extensively with the Voice Test Team, QA, other departments, and other international carriers to solve complex Trouble Tickets."
   - title: "Junior Computer Network Technician"
     company: "Adil Réseaux (Morocco)"
     duration: "2003-2005"
-    description: "Assist researching cost-effective solutions for, and setting up Microsoft networks for SOHO, Assist in securing LANs using Windows' Group Policies in an AD setup, Translate relevant documentation from English to French for local customers, Assist in training users in Microsoft products, basic Redhat Linux, Mac OS X, and basic internet applications"
+    description: "Assisted in researching cost-effective solutions, and setting up, configuring, and securing Microsoft networks for SOHO; Assisted translating relevant documentation from English to French for local customers, as well as in training users"
 
 #List of education
 education: 
@@ -124,8 +124,7 @@ others:
     bullets:
       - "French: Native proficiency"
       - "English: Bilingual proficiency"
-      - "Arabic: Professional proficiency"
   - title: "Activities/Hobbies"
     bullets:
       - "Learning Morse and preparing for a Ham(Amateur Radio) certification"
-      - "Exploring embedded hardware such as Raspberry Pi and BBC Micro::Bit"
+      - "Exploring embedded hardware such as Raspberry Pi.
