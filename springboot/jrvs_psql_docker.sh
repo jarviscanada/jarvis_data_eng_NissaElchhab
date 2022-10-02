@@ -70,6 +70,7 @@ container_name='jrvstrading-psql'
 image_name='postgres:9.6-alpine'
 pgdata_container='/var/lib/postgresql/data'
 pgdata_local='jrvstrading_pgdata'
+port_image='5432'
 port_container='5433'
 network='trading-net'
 port_local=$port_container
@@ -106,20 +107,23 @@ case $cmd in
 	"Volume NOT created. Please check logs with: docker volume ls -a"
 
 	docker run --name $container_name -e POSTGRES_USER="$postgres_user" -e POSTGRES_PASSWORD="$postgres_password" \
-	-e POSTGRES_DB="$postgres_db" -d -v "$pgdata_local":"$pgdata_container" --network "$network" -p $port_local:$port_container $image_name
+	-e POSTGRES_DB="$postgres_db" -d -v "$pgdata_local":"$pgdata_container" --network "$network" -p $port_container:$port_image $image_name
 
     sleep 5s
     echo "Waiting for the container to start..."
 	psql_url="postgresql://$postgres_user:$postgres_password@127.0.0.1:$port_local/$postgres_db"
+	echo "DEBUG:"
+	echo "$psql_url"
 	if [ -f "$ddl_file_path" ]; then  # TODO and if $4 nil
 		echo "Found $ddl_file_path...running DDL file"
-    		psql $psql_url -a -f "$ddl_file_path"
+    		psql "$psql_url" -a -f "$ddl_file_path"
 	elif [ -d "$4" ]; then
-		echo "Files provided: $(ls $4)"
+	  echo "Files provided:"
+		echo "$(ls $4)"
 		for ddl_file_path in $(ls $4);
 		do
-			echo "Found $ddl_file_path...running DDL file"
-    			psql $psql_url -a -f "$ddl_file_path"
+			echo "Running DDL file: $(readlink -e $4/$ddl_file_path)"
+    			psql "$psql_url" -a -f "$(readlink -e $4/$ddl_file_path)"
 		done
 	else
 		echo "Warning: No DDL file to populate database found."
